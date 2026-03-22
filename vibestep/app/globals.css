@@ -47,6 +47,23 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+@keyframes gradientShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+@keyframes ctaGlow {
+  0%,100% { box-shadow: 0 0 25px rgba(139,92,246,0.35), 0 0 50px rgba(139,92,246,0.1); }
+  50%     { box-shadow: 0 0 55px rgba(139,92,246,0.65), 0 0 100px rgba(139,92,246,0.25), 0 0 140px rgba(236,72,153,0.1); }
+}
+@keyframes rotateBorder {
+  from { --angle: 0deg; }
+  to   { --angle: 360deg; }
+}
+@keyframes shimmerSlide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
 
 /* ── Utilities ── */
 @layer utilities {
