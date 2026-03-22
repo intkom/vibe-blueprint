@@ -15,39 +15,49 @@ export function CreateProjectForm() {
   );
 
   return (
-    <form action={formAction} className="flex flex-col gap-6">
+    <form action={formAction} className="flex flex-col gap-5">
       {state.error ? (
-        <p
-          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200"
+        <div
+          className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300 flex items-start gap-2"
           role="alert"
         >
-          {state.error}
-        </p>
+          <span className="mt-0.5 flex-shrink-0">⚠</span>
+          <span>{state.error}</span>
+        </div>
       ) : null}
 
       <div className="flex flex-col gap-2">
         <label
           htmlFor="idea"
-          className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="text-sm font-medium text-white/60 flex items-center gap-2"
         >
           Your idea
+          <span className="text-xs text-white/25 font-normal">· be as descriptive as you like</span>
         </label>
         <textarea
           id="idea"
           name="idea"
           required
           rows={8}
-          placeholder="What are you building? Who is it for? What problem does it solve?"
-          className="resize-y rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm outline-none ring-violet-500 placeholder:text-zinc-400 focus:border-violet-500 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          placeholder="What are you building? Who is it for? What problem does it solve? What tech stack do you want to use?"
+          className="input-dark resize-y leading-relaxed"
+          style={{ minHeight: '180px' }}
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
+        className="btn-primary text-sm py-3 text-center disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
       >
-        {pending ? "Generating steps…" : "Generate & save"}
+        {pending ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Generating 10 steps with Claude…
+          </span>
+        ) : (
+          "Generate build steps →"
+        )}
       </button>
     </form>
   );

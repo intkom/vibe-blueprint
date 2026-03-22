@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { AppHeader } from "@/components/app-header";
+import { Geist } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -8,14 +7,9 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "VibeStep",
-  description: "Capture and organize your project ideas",
+  description: "Turn your vague idea into 10 atomic build steps",
 };
 
 export default function RootLayout({
@@ -24,13 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-black">
-        <AppHeader />
-        <main className="flex flex-1 flex-col">{children}</main>
+    <html lang="en" className={`${geistSans.variable} h-full`}>
+      <body className="min-h-full bg-[#030014] antialiased">
+        {children}
       </body>
     </html>
   );

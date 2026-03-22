@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { AppHeader } from "@/components/app-header";
 
 type ProjectRow = {
   id: string;
@@ -26,13 +27,16 @@ export default async function DashboardPage() {
 
   if (error) {
     return (
-      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-16 sm:px-6">
-        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-          Dashboard
-        </h1>
-        <p className="mt-4 text-red-600 dark:text-red-400">
-          Could not load projects: {error.message}
-        </p>
+      <div className="min-h-screen bg-[#030014] text-white">
+        <AppHeader />
+        <div className="mx-auto w-full max-w-3xl px-6 py-16">
+          <div className="glass rounded-2xl p-8 border border-red-500/20">
+            <h1 className="text-2xl font-bold text-white mb-4">Dashboard</h1>
+            <p className="text-red-400 text-sm">
+              Could not load projects: {error.message}
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -40,61 +44,98 @@ export default async function DashboardPage() {
   const rows = (projects ?? []) as ProjectRow[];
 
   return (
-    <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-            Your projects
-          </h1>
-          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            Signed in as{" "}
-            <span className="font-medium text-zinc-800 dark:text-zinc-200">
-              {user.email}
-            </span>
-          </p>
-          <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-500">
-            Ideas you have captured in VibeStep.
-          </p>
-        </div>
-        <Link
-          href="/create"
-          className="inline-flex w-fit items-center justify-center rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-400"
-        >
-          New idea
-        </Link>
-      </div>
+    <div className="min-h-screen bg-[#030014] text-white relative overflow-hidden">
+      {/* Background orbs */}
+      <div className="orb orb-violet w-[600px] h-[600px] top-[-20%] right-[-10%]" />
+      <div className="orb orb-pink w-[400px] h-[400px] bottom-[20%] left-[-5%]" />
 
-      {rows.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50/80 px-6 py-12 text-center dark:border-zinc-700 dark:bg-zinc-900/40">
-          <p className="text-zinc-600 dark:text-zinc-400">No projects yet</p>
-          <Link
-            href="/create"
-            className="mt-4 inline-block text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
-          >
-            Capture your first idea →
-          </Link>
+      <AppHeader />
+
+      <main className="relative z-10 mx-auto w-full max-w-3xl px-6 py-12">
+        {/* Page header */}
+        <div className="mb-10 animate-fade-in-up">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold tracking-widest text-violet-400/70 uppercase mb-2">
+                Your workspace
+              </p>
+              <h1 className="text-3xl font-black text-white">
+                Your projects
+              </h1>
+              <p className="mt-2 text-sm text-white/40">
+                Signed in as{" "}
+                <span className="text-violet-300/80 font-medium">{user.email}</span>
+              </p>
+            </div>
+            <Link href="/create" className="btn-primary text-sm py-2.5 px-5 whitespace-nowrap self-start sm:self-auto">
+              + New idea
+            </Link>
+          </div>
+
+          {/* Stats bar */}
+          <div className="mt-8 grid grid-cols-3 gap-4">
+            {[
+              { label: 'Total projects', value: rows.length },
+              { label: 'In progress', value: rows.length },
+              { label: 'Completed', value: 0 },
+            ].map((stat) => (
+              <div key={stat.label} className="glass rounded-xl p-4 border border-white/6 text-center">
+                <div className="text-2xl font-black gradient-text-violet">{stat.value}</div>
+                <div className="text-xs text-white/40 mt-1">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      ) : (
-        <ul className="flex flex-col gap-3">
-          {rows.map((project) => (
-            <li key={project.id}>
-              <Link
-                href={`/project/${project.id}`}
-                className="block rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/50"
+
+        {/* Project list */}
+        {rows.length === 0 ? (
+          <div className="animate-fade-in-up delay-200 glass rounded-2xl border border-dashed border-white/10 px-8 py-20 text-center">
+            <div className="text-5xl mb-4">🚀</div>
+            <p className="text-white/50 font-medium mb-2">No projects yet</p>
+            <p className="text-white/25 text-sm mb-8">Your ideas will appear here once you create them.</p>
+            <Link
+              href="/create"
+              className="btn-primary text-sm py-2.5 px-6 inline-block"
+            >
+              Capture your first idea →
+            </Link>
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-3">
+            {rows.map((project, i) => (
+              <li
+                key={project.id}
+                className={`animate-fade-in-up`}
+                style={{ animationDelay: `${0.1 + i * 0.05}s` }}
               >
-                <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">
-                  {project.title?.trim() || "Untitled"}
-                </h2>
-                {project.raw_idea ? (
-                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    {project.raw_idea}
-                  </p>
-                ) : null}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+                <Link
+                  href={`/project/${project.id}`}
+                  className="glass block rounded-2xl border border-white/7 p-5 card-hover group"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-2 h-2 rounded-full bg-violet-400 animate-pulse flex-shrink-0" />
+                        <h2 className="font-bold text-white/90 group-hover:text-white transition-colors truncate">
+                          {project.title?.trim() || "Untitled"}
+                        </h2>
+                      </div>
+                      {project.raw_idea ? (
+                        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-white/35 pl-4">
+                          {project.raw_idea}
+                        </p>
+                      ) : null}
+                    </div>
+                    <span className="flex-shrink-0 text-white/20 group-hover:text-violet-400 transition-colors text-lg mt-0.5">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </main>
     </div>
   );
 }
