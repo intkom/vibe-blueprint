@@ -9,11 +9,12 @@ export function GoogleAuthButton({ label = "Continue with Google" }: { label?: s
 
   async function handleClick() {
     setPending(true);
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin;
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${siteUrl}/auth/callback`,
       },
     });
   }

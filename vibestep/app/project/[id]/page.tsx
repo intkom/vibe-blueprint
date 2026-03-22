@@ -9,8 +9,24 @@ import {
   deserializeToolOutput, isToolType,
   type ValidatorOutput, type StackOutput, type MonetizationOutput,
 } from "@/lib/tools";
+import type { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data: project } = await supabase
+    .from("projects")
+    .select("title")
+    .eq("id", id)
+    .single();
+  const title = project?.title?.trim() || "Project";
+  return {
+    title: `${title} – VibeStep`,
+    description: `Build plan and blueprint for: ${title}`,
+  };
+}
 
 /* ── Phase config ─────────────────────────────────────── */
 const PHASE_COLORS: Record<string, { bg: string; text: string; border: string; label: string }> = {

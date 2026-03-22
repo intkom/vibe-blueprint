@@ -3,6 +3,12 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { AppHeader } from "@/components/app-header";
 import { ProjectCard, IconFolder, type ProjectRow, type StepStats } from "@/components/project-card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard – VibeStep",
+  description: "Manage your startup blueprints and build plans.",
+};
 
 export default async function DashboardPage() {
   const supabase = await createClient();

@@ -8,8 +8,16 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "VibeStep",
-  description: "Turn your vague idea into 10 atomic build steps",
+  title: {
+    default: "VibeStep – Build smarter, faster",
+    template: "%s | VibeStep",
+  },
+  description: "Paste your startup idea. Get the exact tech stack, architecture decisions, and 10 atomic build steps — in 30 seconds. Powered by Claude AI.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  openGraph: {
+    siteName: "VibeStep",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
