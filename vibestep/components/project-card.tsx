@@ -9,6 +9,7 @@ export type ProjectRow = {
   title: string | null;
   raw_idea: string | null;
   created_at?: string | null;
+  updated_at?: string | null;
 };
 
 export type StepStats = {

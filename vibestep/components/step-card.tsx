@@ -123,6 +123,18 @@ export function StepCard({
                 <span style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.2)", fontWeight: 500 }}>
                   Step {step.step_index + 1}
                 </span>
+                {!isLocked && !isStepDone && (
+                  <span style={{
+                    fontSize: "0.58rem", fontWeight: 600, letterSpacing: "0.06em",
+                    color: "rgba(255,255,255,0.18)",
+                    display: "flex", alignItems: "center", gap: 3,
+                  }}>
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    ~2–4 hrs
+                  </span>
+                )}
                 {isActive && (
                   <span style={{
                     fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",

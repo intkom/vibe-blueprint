@@ -4,6 +4,8 @@ import { createClient } from "@/utils/supabase/server";
 import { StepCard } from "@/components/step-card";
 import { AppHeader } from "@/components/app-header";
 import { ExportStepsButton } from "@/components/export-steps-button";
+import { ShareButton } from "@/components/share-button";
+import { ConfettiBurst } from "@/components/confetti-burst";
 import { deserializeMeta, type Warning, type StackRecommendation } from "@/lib/generate-build-steps";
 import {
   deserializeToolOutput, isToolType,
@@ -643,18 +645,22 @@ export default async function ProjectPage({ params }: Props) {
       }} />
 
       <AppHeader />
+      <ConfettiBurst trigger={isComplete} />
 
       <main style={{ position: "relative", zIndex: 10, maxWidth: 780, margin: "0 auto", padding: "40px 24px 80px" }}>
 
-        {/* Back link */}
-        <Link href="/dashboard" style={{
-          display: "inline-flex", alignItems: "center", gap: 7,
-          fontSize: "0.82rem", color: "rgba(255,255,255,0.3)",
-          textDecoration: "none", marginBottom: 28,
-        }}>
-          <IconArrowLeft />
-          Back to dashboard
-        </Link>
+        {/* Back link + actions */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
+          <Link href="/dashboard" style={{
+            display: "inline-flex", alignItems: "center", gap: 7,
+            fontSize: "0.82rem", color: "rgba(255,255,255,0.3)",
+            textDecoration: "none",
+          }}>
+            <IconArrowLeft />
+            Back to dashboard
+          </Link>
+          <ShareButton />
+        </div>
 
         {/* ── Project header ── */}
         <div style={{

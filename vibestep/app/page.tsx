@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /* ── Star field ──────────────────────────────────────────── */
 function StarField() {
@@ -344,6 +344,270 @@ function PricingCard({ tier }: { tier: typeof pricingTiers[0] }) {
   )
 }
 
+/* ── Typewriter demo ──────────────────────────────────────── */
+const DEMO_IDEA = "A habit tracker for athletes — log workouts, streaks, and personal bests. Mobile-first. Syncs with Apple Health. Solo dev, 6-week timeline."
+
+const DEMO_STEPS = [
+  { phase: "Discover", title: "Map athlete pain points & competitor gaps", color: "#60a5fa" },
+  { phase: "Define",   title: "Spec the MVP: streak logic, Apple Health API", color: "#fbbf24" },
+  { phase: "Design",   title: "Wireframe key screens: dashboard, log entry, leaderboard", color: "#ec4899" },
+  { phase: "Build",    title: "Scaffold Next.js + Supabase auth + schema", color: "#a78bfa" },
+  { phase: "Build",    title: "Build workout logging with streak calculation", color: "#a78bfa" },
+  { phase: "Build",    title: "Integrate Apple Health Kit via HealthKit API", color: "#a78bfa" },
+  { phase: "Build",    title: "Build leaderboard & friend streaks feed", color: "#a78bfa" },
+  { phase: "Launch",   title: "Deploy to Vercel, set up Sentry + analytics", color: "#34d399" },
+  { phase: "Launch",   title: "Soft-launch to 10 beta athletes, gather feedback", color: "#34d399" },
+  { phase: "Reflect",  title: "Review retention metrics, prioritise v2 roadmap", color: "#f87171" },
+]
+
+function TypewriterDemo() {
+  const [typed, setTyped] = useState("")
+  const [stepsVisible, setStepsVisible] = useState(0)
+  const [phase, setPhase] = useState<"typing" | "generating" | "revealing" | "done">("typing")
+
+  useEffect(() => {
+    if (phase !== "typing") return
+    if (typed.length < DEMO_IDEA.length) {
+      const t = setTimeout(() => setTyped(DEMO_IDEA.slice(0, typed.length + 1)), 22)
+      return () => clearTimeout(t)
+    } else {
+      const t = setTimeout(() => setPhase("generating"), 600)
+      return () => clearTimeout(t)
+    }
+  }, [typed, phase])
+
+  useEffect(() => {
+    if (phase !== "generating") return
+    const t = setTimeout(() => setPhase("revealing"), 1800)
+    return () => clearTimeout(t)
+  }, [phase])
+
+  useEffect(() => {
+    if (phase !== "revealing") return
+    if (stepsVisible < DEMO_STEPS.length) {
+      const t = setTimeout(() => setStepsVisible(n => n + 1), 220)
+      return () => clearTimeout(t)
+    } else {
+      setPhase("done")
+    }
+  }, [phase, stepsVisible])
+
+  function restart() {
+    setTyped(""); setStepsVisible(0); setPhase("typing")
+  }
+
+  return (
+    <section style={{ position: 'relative', zIndex: 10, padding: '0 2rem 100px', maxWidth: 860, margin: '0 auto' }}>
+      <div style={{ textAlign: 'center', marginBottom: 44 }}>
+        <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(167,139,250,0.55)', textTransform: 'uppercase', marginBottom: 10 }}>
+          Live demo
+        </p>
+        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.02em', margin: '0 0 12px' }}>
+          Watch it work in real time
+        </h2>
+        <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.35)', margin: 0 }}>
+          This is exactly what you&apos;ll see when you submit your idea.
+        </p>
+      </div>
+
+      <div style={{
+        background: 'rgba(8,4,26,0.85)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(139,92,246,0.2)', borderRadius: 20, overflow: 'hidden',
+        boxShadow: '0 32px 64px rgba(0,0,0,0.4)',
+      }}>
+        {/* Window chrome */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8, padding: '14px 18px',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          background: 'rgba(255,255,255,0.02)',
+        }}>
+          {['#f87171','#fbbf24','#34d399'].map(c => (
+            <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.7 }} />
+          ))}
+          <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', marginLeft: 8 }}>vibestep.app/create</span>
+        </div>
+
+        <div style={{ padding: '24px' }}>
+          {/* Idea input */}
+          <div style={{ marginBottom: 20 }}>
+            <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', marginBottom: 8 }}>
+              Your idea
+            </p>
+            <div style={{
+              background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.35)',
+              borderRadius: 12, padding: '14px 16px', minHeight: 72,
+              fontSize: '0.875rem', color: 'rgba(255,255,255,0.85)', lineHeight: 1.65,
+              position: 'relative',
+            }}>
+              {typed}
+              {phase === "typing" && (
+                <span style={{
+                  display: 'inline-block', width: 2, height: '1em',
+                  background: '#a78bfa', marginLeft: 2, verticalAlign: 'text-bottom',
+                  animation: 'pulseGlow 0.8s ease-in-out infinite',
+                }} />
+              )}
+            </div>
+          </div>
+
+          {/* Generating state */}
+          {phase === "generating" && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px',
+              background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)',
+              borderRadius: 12, marginBottom: 16,
+            }}>
+              <span style={{
+                width: 14, height: 14, borderRadius: '50%', flexShrink: 0,
+                border: '2px solid rgba(139,92,246,0.3)', borderTopColor: '#a78bfa',
+                animation: 'spin 0.75s linear infinite', display: 'inline-block',
+              }} />
+              <span style={{ fontSize: '0.82rem', color: 'rgba(167,139,250,0.8)', fontWeight: 500 }}>
+                Claude is thinking…
+              </span>
+            </div>
+          )}
+
+          {/* Steps */}
+          {stepsVisible > 0 && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', margin: 0 }}>
+                  Build steps
+                </p>
+                <span style={{
+                  fontSize: '0.68rem', fontWeight: 600, color: 'rgba(139,92,246,0.7)',
+                  background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)',
+                  padding: '2px 9px', borderRadius: 9999,
+                }}>
+                  {stepsVisible} / {DEMO_STEPS.length} steps
+                </span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {DEMO_STEPS.slice(0, stepsVisible).map((step, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '10px 14px',
+                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: 10,
+                    animation: 'fadeInUp 0.3s ease both',
+                  }}>
+                    <span style={{
+                      width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: `${step.color}18`, border: `1px solid ${step.color}44`,
+                      fontSize: '0.6rem', fontWeight: 800, color: step.color,
+                    }}>{i + 1}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{
+                        fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
+                        color: step.color, marginRight: 8,
+                      }}>{step.phase}</span>
+                      <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)' }}>{step.title}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Replay */}
+          {phase === "done" && (
+            <button
+              onClick={restart}
+              style={{
+                marginTop: 16, width: '100%', padding: '10px', borderRadius: 10,
+                background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.2)',
+                color: 'rgba(167,139,250,0.7)', fontSize: '0.8rem', fontWeight: 600,
+                cursor: 'pointer', transition: 'all 0.2s',
+              }}
+            >
+              ↺ Replay demo
+            </button>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ── FAQ ──────────────────────────────────────────────────── */
+const FAQ_ITEMS = [
+  {
+    q: "How is this different from ChatGPT?",
+    a: "ChatGPT gives you generic advice. VibeStep runs a structured analysis pipeline — it evaluates your specific idea against 7 dimensions, picks a concrete tech stack for your constraints, and outputs steps sequenced for how software actually gets built. No fluff, no hedging.",
+  },
+  {
+    q: "Do I need technical knowledge to use it?",
+    a: "No. You describe your idea in plain English — like you'd explain it to a friend. VibeStep translates that into a technical blueprint you can hand to a developer, or follow yourself if you're technical.",
+  },
+  {
+    q: "How long does generation take?",
+    a: "Around 15–30 seconds. Claude reads your idea, runs the analysis, and returns a full structured output. You'll see a loading indicator while it works.",
+  },
+  {
+    q: "Is my idea kept private?",
+    a: "Yes. Your ideas are stored privately in your account and are never shared with other users or used to train AI models. You can delete any project at any time from your dashboard.",
+  },
+  {
+    q: "What happens when I mark all steps complete?",
+    a: "You'll see a completion celebration — all 10 steps done means you've shipped your MVP. From there you can start a new project, run another tool on the same idea, or export your plan as text.",
+  },
+]
+
+function FaqSection() {
+  const [open, setOpen] = useState<number | null>(null)
+
+  return (
+    <section style={{ position: 'relative', zIndex: 10, padding: '0 2rem 100px', maxWidth: 720, margin: '0 auto' }}>
+      <div style={{ textAlign: 'center', marginBottom: 44 }}>
+        <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(167,139,250,0.55)', textTransform: 'uppercase', marginBottom: 10 }}>
+          FAQ
+        </p>
+        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.02em' }}>
+          Common questions
+        </h2>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {FAQ_ITEMS.map((item, i) => (
+          <div key={i} style={{
+            background: open === i ? 'rgba(139,92,246,0.05)' : 'rgba(255,255,255,0.025)',
+            border: open === i ? '1px solid rgba(139,92,246,0.25)' : '1px solid rgba(255,255,255,0.07)',
+            borderRadius: 14, overflow: 'hidden', transition: 'all 0.2s ease',
+          }}>
+            <button
+              onClick={() => setOpen(open === i ? null : i)}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '18px 22px', background: 'none', border: 'none',
+                cursor: 'pointer', textAlign: 'left', gap: 16,
+              }}
+            >
+              <span style={{ fontSize: '0.925rem', fontWeight: 600, color: 'rgba(255,255,255,0.88)', lineHeight: 1.4 }}>
+                {item.q}
+              </span>
+              <span style={{
+                fontSize: '1rem', color: open === i ? '#a78bfa' : 'rgba(255,255,255,0.3)',
+                flexShrink: 0, transition: 'transform 0.2s ease, color 0.2s ease',
+                transform: open === i ? 'rotate(45deg)' : 'rotate(0deg)',
+                display: 'inline-block',
+              }}>+</span>
+            </button>
+            {open === i && (
+              <div style={{ padding: '0 22px 18px' }}>
+                <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, margin: 0 }}>
+                  {item.a}
+                </p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 /* ── Page ─────────────────────────────────────────────────── */
 export default function Home() {
   return (
@@ -596,6 +860,8 @@ export default function Home() {
         </div>
       </section>
 
+      <TypewriterDemo />
+
       {/* ── Features ── */}
       <section style={{ position: 'relative', zIndex: 10, padding: '0 2rem 100px', maxWidth: 1060, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 52 }}>
@@ -677,6 +943,8 @@ export default function Home() {
           {pricingTiers.map(tier => <PricingCard key={tier.name} tier={tier} />)}
         </div>
       </section>
+
+      <FaqSection />
 
       {/* ── CTA ── */}
       <section style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 2rem 100px' }}>

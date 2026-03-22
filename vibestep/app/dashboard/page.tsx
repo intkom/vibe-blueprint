@@ -2,7 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { AppHeader } from "@/components/app-header";
-import { ProjectCard, IconFolder, type ProjectRow, type StepStats } from "@/components/project-card";
+import { IconFolder, type ProjectRow, type StepStats } from "@/components/project-card";
+import { ProjectList } from "@/components/project-list";
+import { OnboardingModal } from "@/components/onboarding-modal";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,9 +19,9 @@ export default async function DashboardPage() {
 
   const { data: projects, error } = await supabase
     .from("projects")
-    .select("id, title, raw_idea, created_at")
+    .select("id, title, raw_idea, created_at, updated_at")
     .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+    .order("updated_at", { ascending: false });
 
   if (error) {
     return (
@@ -68,8 +70,17 @@ export default async function DashboardPage() {
     return s && s.total > 0 && s.completed === s.total;
   }).length;
 
+  // Build entries for ProjectList
+  const entries = rows.map(project => {
+    const stats = stepStatsMap[project.id] ?? { total: 0, completed: 0 };
+    const pct = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+    const isDone = stats.total > 0 && stats.completed === stats.total;
+    return { project, stats, pct, isDone, toolType: toolTypeMap[project.id] ?? null };
+  });
+
   return (
     <div style={{ minHeight: '100vh', background: '#030014', color: 'white', position: 'relative', overflow: 'hidden' }}>
+      <OnboardingModal />
 
       {/* Gradient mesh */}
       <div aria-hidden="true" style={{
@@ -164,7 +175,6 @@ export default async function DashboardPage() {
             border: '1px dashed rgba(255,255,255,0.1)',
             borderRadius: 20, padding: '80px 32px', textAlign: 'center',
           }}>
-            {/* Illustration */}
             <div style={{ marginBottom: 20 }}>
               <div style={{
                 width: 72, height: 72, borderRadius: '50%', margin: '0 auto 16px',
@@ -203,24 +213,7 @@ export default async function DashboardPage() {
             </div>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: 14 }}>
-            {rows.map((project) => {
-              const stats = stepStatsMap[project.id] ?? { total: 0, completed: 0 };
-              const pct = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
-              const isDone = stats.total > 0 && stats.completed === stats.total;
-
-              return (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  stats={stats}
-                  pct={pct}
-                  isDone={isDone}
-                  toolType={toolTypeMap[project.id] ?? null}
-                />
-              );
-            })}
-          </div>
+          <ProjectList entries={entries} />
         )}
       </main>
     </div>
