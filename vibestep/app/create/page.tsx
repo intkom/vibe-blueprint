@@ -14,7 +14,7 @@ export default function CreatePage() {
         New project
       </h1>
       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-        Give it a title and write your raw idea. You can refine it later.
+        Describe your idea. We&apos;ll generate 10 atomic build steps and save everything.
       </p>
       <div className="mt-8">
         <CreateProjectForm />

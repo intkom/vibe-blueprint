@@ -77,18 +77,20 @@ export default async function DashboardPage() {
       ) : (
         <ul className="flex flex-col gap-3">
           {rows.map((project) => (
-            <li
-              key={project.id}
-              className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950"
-            >
-              <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">
-                {project.title?.trim() || "Untitled"}
-              </h2>
-              {project.raw_idea ? (
-                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                  {project.raw_idea}
-                </p>
-              ) : null}
+            <li key={project.id}>
+              <Link
+                href={`/project/${project.id}`}
+                className="block rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/50"
+              >
+                <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">
+                  {project.title?.trim() || "Untitled"}
+                </h2>
+                {project.raw_idea ? (
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                    {project.raw_idea}
+                  </p>
+                ) : null}
+              </Link>
             </li>
           ))}
         </ul>
