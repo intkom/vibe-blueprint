@@ -82,6 +82,41 @@ const SMART_CATEGORIES: Category[] = [
   },
 ];
 
+/* ── Idea quality scoring ─────────────────────────────── */
+function scoreIdea(text: string): { score: number; tip: string | null } {
+  if (text.length < 10) return { score: 0, tip: null };
+  let score = 0;
+
+  // Length (up to 30 pts)
+  score += Math.min(30, Math.floor((text.length / 150) * 30));
+
+  // Target audience (20 pts)
+  const hasAudience = /\b(for|users?|customers?|teams?|founders?|developers?|businesses?|startups?|freelancers?|agencies?|clients?|students?|creators?|marketers?)\b/i.test(text);
+  if (hasAudience) score += 20;
+
+  // Problem statement (20 pts)
+  const hasProblem = /\b(problem|pain|issue|solve|need|want|frustrat|difficult|struggle|automat|replac|save time|too slow|too expensive|manual)\b/i.test(text);
+  if (hasProblem) score += 20;
+
+  // Specificity — numbers, tech, pricing (15 pts)
+  const hasSpecificity = /(\$\d|\d+\/|\d+ (hour|min|day|user|team)|b2b|b2c|saas|api|mobile|ios|android|dashboard|real.?time)/i.test(text);
+  if (hasSpecificity) score += 15;
+
+  // Business model hint (15 pts)
+  const hasBizModel = /\b(subscription|freemium|per (user|seat|month)|one.time|pay|revenue|monetiz|pricing|\$)/i.test(text);
+  if (hasBizModel) score += 15;
+
+  score = Math.min(100, score);
+
+  let tip: string | null = null;
+  if (!hasAudience)    tip = "Add a target audience — who specifically will use this?";
+  else if (!hasProblem) tip = "Describe the core problem your product solves.";
+  else if (!hasSpecificity) tip = "Add specificity — tech stack, scale, or use case details.";
+  else if (!hasBizModel)  tip = "Mention a pricing model to strengthen the idea.";
+
+  return { score, tip };
+}
+
 const DEFAULT_SUGGESTIONS: Template[] = [
   { label: "SaaS Starter", text: "A subscription SaaS tool for small teams that automates repetitive workflows and shows analytics. B2B, $49/month per team." },
   { label: "Marketplace MVP", text: "A two-sided marketplace connecting service providers with customers. Handles booking, payments, reviews. 12% transaction fee." },
@@ -178,6 +213,8 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
 
   // Cleanup debounce on unmount
   useEffect(() => () => { if (debounceRef.current) clearTimeout(debounceRef.current); }, []);
+
+  const ideaScore = useMemo(() => scoreIdea(ideaText), [ideaText]);
 
   return (
     <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -293,6 +330,41 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
           The more specific you are, the more tailored the output.
         </p>
       </div>
+
+      {/* ── Idea quality score ── */}
+      {charCount >= 10 && !pending && (
+        <div style={{ animation: "fadeInUp 0.3s ease both" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 7 }}>
+            <span style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>
+              Idea quality
+            </span>
+            <span style={{
+              fontSize: "0.75rem", fontWeight: 700,
+              color: ideaScore.score >= 71 ? "#34d399" : ideaScore.score >= 41 ? "#fbbf24" : "#f87171",
+            }}>
+              {ideaScore.score}/100
+            </span>
+          </div>
+          <div style={{ height: 5, borderRadius: 9999, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+            <div style={{
+              height: "100%",
+              width: `${ideaScore.score}%`,
+              borderRadius: 9999,
+              background: ideaScore.score >= 71
+                ? "linear-gradient(90deg,#059669,#34d399)"
+                : ideaScore.score >= 41
+                ? "linear-gradient(90deg,#d97706,#fbbf24)"
+                : "linear-gradient(90deg,#dc2626,#f87171)",
+              transition: "width 0.4s ease, background 0.4s ease",
+            }} />
+          </div>
+          {ideaScore.tip && (
+            <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", margin: "6px 0 0", lineHeight: 1.5 }}>
+              💡 {ideaScore.tip}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* ── Smart suggestions panel ── */}
       {suggestions && !pending && (

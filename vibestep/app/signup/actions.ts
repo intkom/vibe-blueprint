@@ -24,5 +24,5 @@ export async function signup(
   if (error) return { error: error.message };
 
   revalidatePath("/dashboard");
-  redirect("/dashboard");
+  redirect("/onboarding");
 }

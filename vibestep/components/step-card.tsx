@@ -6,6 +6,7 @@ import { markStepComplete } from "@/app/actions/build-steps";
 import { useNotifications } from "@/lib/notification-context";
 import { StepNotes } from "@/components/step-notes";
 import { ConfettiBurst } from "@/components/confetti-burst";
+import { checkAchievements } from "@/lib/achievements";
 
 type Step = {
   id: string;
@@ -44,13 +45,15 @@ function IconLock() {
 }
 
 export function StepCard({
-  step, isActive, isLocked, projectId, isLastStep = false,
+  step, isActive, isLocked, projectId, isLastStep = false, totalSteps = 10, completedCount = 0,
 }: {
   step: Step;
   isActive: boolean;
   isLocked: boolean;
   projectId: string;
   isLastStep?: boolean;
+  totalSteps?: number;
+  completedCount?: number;
 }) {
   const [confirmed, setConfirmed] = useState(false);
   const [pending, setPending] = useState(false);
@@ -248,16 +251,30 @@ export function StepCard({
                 disabled={!confirmed || pending}
                 onClick={async () => {
                   setPending(true);
-                  if (isLastStep) {
-                    setFireConfetti(true);
-                    addNotification("🏆 All 10 steps done! You shipped it!", "milestone", "🏆");
-                  } else {
+                  if (isLastStep) setFireConfetti(true);
+
+                  // Check achievements before server call (uses localStorage)
+                  const newCompleted = completedCount + 1;
+                  const newAchievements = checkAchievements({
+                    totalSteps,
+                    completedSoFar: newCompleted,
+                  });
+
+                  // Show achievement toasts (milestone type for special ones)
+                  for (const ach of newAchievements) {
+                    setTimeout(() => {
+                      addNotification(`${ach.emoji} ${ach.title} — ${ach.description}`, "milestone", ach.emoji);
+                    }, 400);
+                  }
+
+                  // Generic completion notification (only if no achievement)
+                  if (newAchievements.length === 0) {
                     addNotification(
                       `Step ${step.step_index + 1} complete! Keep going 🎉`,
-                      "success",
-                      "✅",
+                      "success", "✅",
                     );
                   }
+
                   const fd = new FormData();
                   fd.append("stepId", step.id);
                   fd.append("projectId", projectId);

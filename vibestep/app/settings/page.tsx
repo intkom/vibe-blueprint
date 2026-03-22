@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { AppHeader } from "@/components/app-header";
 import { ReferralSection } from "@/components/referral-section";
+import { AchievementBadges } from "@/components/achievement-badges";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -313,6 +314,11 @@ export default async function SettingsPage() {
               }} />
             </div>
           </div>
+        </div>
+
+        {/* ── Achievements ── */}
+        <div style={{ marginBottom: 14 }}>
+          <AchievementBadges />
         </div>
 
         {/* ── Referral ── */}
