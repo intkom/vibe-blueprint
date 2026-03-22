@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { AppHeader } from "@/components/app-header";
 import { StepDetailClient } from "@/components/step-detail-client";
+import { StepAiChat } from "@/components/step-ai-chat";
 import { enrichSingleStep, type StepEnrichment } from "@/lib/enrich-step";
 import type { Metadata } from "next";
 
@@ -119,7 +120,7 @@ export default async function StepDetailPage({ params }: Props) {
   // Verify ownership via project
   const { data: project } = await supabase
     .from("projects")
-    .select("id, title")
+    .select("id, title, raw_idea")
     .eq("id", projectId)
     .eq("user_id", user.id)
     .single();
@@ -332,6 +333,17 @@ export default async function StepDetailPage({ params }: Props) {
             isActive={isActive && !isLocked}
             criteria={enrichment.acceptance_criteria}
             isLastStep={step.step_index === totalSteps - 1}
+          />
+
+          {/* ── AI Step Assistant ── */}
+          <StepAiChat
+            stepTitle={step.title ?? ""}
+            stepPhase={step.phase ?? "build"}
+            stepObjective={step.objective ?? ""}
+            stepGuidance={step.guidance}
+            projectTitle={project?.title ?? "Your Project"}
+            projectIdea={(project as { raw_idea?: string } | null)?.raw_idea ?? ""}
+            stepIndex={step.step_index}
           />
 
           {/* ── Common mistakes ── */}

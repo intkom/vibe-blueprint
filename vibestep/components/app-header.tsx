@@ -39,6 +39,7 @@ export function AppHeader() {
         <nav style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <HeaderLink href="/dashboard">Dashboard</HeaderLink>
           <HeaderLink href="/tools">Tools</HeaderLink>
+          <HeaderLink href="/validate">Validate</HeaderLink>
 
           <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)", margin: "0 4px" }} />
 
@@ -57,6 +58,7 @@ export function AppHeader() {
 
           <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)", margin: "0 4px" }} />
 
+          <HeaderLink href="/settings">Settings</HeaderLink>
           <ThemeToggle />
           <NotificationBell />
           <UserAvatar />

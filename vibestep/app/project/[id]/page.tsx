@@ -7,6 +7,7 @@ import { ExportStepsButton } from "@/components/export-steps-button";
 import { ShareButton } from "@/components/share-button";
 import { ConfettiBurst } from "@/components/confetti-burst";
 import { deserializeMeta, type Warning, type StackRecommendation } from "@/lib/generate-build-steps";
+import { AIChatPanel } from "@/components/ai-chat-panel";
 import {
   deserializeToolOutput, isToolType,
   type ValidatorOutput, type StackOutput, type MonetizationOutput,
@@ -863,6 +864,23 @@ export default async function ProjectPage({ params }: Props) {
         )}
 
       </main>
+
+      {/* ── AI Co-Founder Chat (sprint projects only) ── */}
+      {!isTool && (
+        <AIChatPanel
+          projectId={id}
+          projectTitle={project.title ?? "Your Project"}
+          projectIdea={project.raw_idea ?? ""}
+          steps={sprintSteps.map(s => ({
+            id: s.id,
+            step_index: s.step_index,
+            phase: s.phase,
+            title: s.title,
+            objective: s.objective,
+            status: s.status,
+          }))}
+        />
+      )}
     </div>
   );
 }
