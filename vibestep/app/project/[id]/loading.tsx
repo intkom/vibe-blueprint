@@ -6,7 +6,7 @@ export default function ProjectLoading() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#030014", color: "white" }}>
+    <div style={{ minHeight: "100vh", background: "var(--vs-bg)", color: "var(--vs-text)" }}>
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }`}</style>
 
       {/* Header skeleton */}

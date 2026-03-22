@@ -25,7 +25,7 @@ export default async function DashboardPage() {
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', background: '#030014', color: 'white' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--vs-bg)', color: 'var(--vs-text)' }}>
         <AppHeader />
         <div style={{ maxWidth: 760, margin: '0 auto', padding: '64px 24px' }}>
           <div style={{
@@ -88,7 +88,7 @@ export default async function DashboardPage() {
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#030014', color: 'white', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--vs-bg)', color: 'var(--vs-text)', position: 'relative', overflow: 'hidden' }}>
       <OnboardingModal />
 
       {/* Gradient mesh */}
@@ -97,7 +97,7 @@ export default async function DashboardPage() {
         background: [
           'radial-gradient(ellipse 70% 50% at 80% -10%, rgba(124,58,237,0.16) 0%, transparent 60%)',
           'radial-gradient(ellipse 50% 40% at 10% 80%, rgba(236,72,153,0.08) 0%, transparent 55%)',
-          '#030014',
+          'var(--vs-bg)',
         ].join(','),
       }} />
       <div aria-hidden="true" style={{
@@ -130,10 +130,10 @@ export default async function DashboardPage() {
               <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(167,139,250,0.55)', textTransform: 'uppercase', marginBottom: 6 }}>
                 Your workspace
               </p>
-              <h1 style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.025em', margin: 0, color: 'rgba(255,255,255,0.95)' }}>
-                Welcome back 👋
+              <h1 style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.025em', margin: 0, color: 'var(--vs-text)' }}>
+                Welcome back, {user.email?.split('@')[0]} 👋
               </h1>
-              <p style={{ margin: '5px 0 0', fontSize: '0.82rem', color: 'rgba(255,255,255,0.3)' }}>
+              <p style={{ margin: '5px 0 0', fontSize: '0.82rem', color: 'var(--vs-text-dim)' }}>
                 {user.email}
               </p>
               {currentStreak > 0 && (
@@ -311,7 +311,7 @@ function DashboardAnalytics({ stepsData, projectCount, completedCount }: Analyti
       </div>
 
       {/* Bar chart */}
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 64 }}>
+      <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 96 }}>
         {bars.map((pct, i) => (
           <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, height: "100%" }}>
             <div style={{ flex: 1, width: "100%", display: "flex", alignItems: "flex-end" }}>

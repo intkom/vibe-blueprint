@@ -7,7 +7,7 @@ export default function StepDetailLoading() {
   } as const;
 
   return (
-    <div style={{ minHeight: "100vh", background: "#030014", color: "white" }}>
+    <div style={{ minHeight: "100vh", background: "var(--vs-bg)", color: "var(--vs-text)" }}>
       <style>{`
         @keyframes shimmerSlide {
           0%   { background-position: 200% 0; }

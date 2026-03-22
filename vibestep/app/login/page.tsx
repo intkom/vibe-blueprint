@@ -21,7 +21,7 @@ export default async function LoginPage({ searchParams }: Props) {
   const urlError = messageForUrlError(params.error);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#030014', color: 'white', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--vs-bg)', color: 'var(--vs-text)', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
 
       {/* ── Gradient mesh background ── */}
       <div aria-hidden="true" style={{

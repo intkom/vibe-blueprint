@@ -76,7 +76,7 @@ const tools = [
 
 export default function ToolsPage() {
   return (
-    <div style={{ minHeight: "100vh", background: "#030014", color: "white", position: "relative", overflow: "hidden" }}>
+    <div style={{ minHeight: "100vh", background: "var(--vs-bg)", color: "var(--vs-text)", position: "relative", overflow: "hidden" }}>
 
       {/* Gradient mesh */}
       <div aria-hidden="true" style={{

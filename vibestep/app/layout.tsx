@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { NotificationProvider } from "@/lib/notification-context";
-import { ThemeProvider } from "@/lib/theme-context";
 import { NotificationToasts } from "@/components/notification-bell";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 
@@ -31,14 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full`}>
-      <body className="min-h-full bg-[#030014] antialiased">
-        <ThemeProvider>
-          <NotificationProvider>
-            {children}
-            <NotificationToasts />
-            <KeyboardShortcuts />
-          </NotificationProvider>
-        </ThemeProvider>
+      <body className="min-h-full antialiased">
+        <NotificationProvider>
+          {children}
+          <NotificationToasts />
+          <KeyboardShortcuts />
+        </NotificationProvider>
       </body>
     </html>
   );

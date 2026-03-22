@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { LiveCounter } from '@/components/live-counter'
+import { ActivityFeed } from '@/components/activity-feed'
 
 /* ── Star field ──────────────────────────────────────────── */
 function StarField() {
@@ -155,9 +157,9 @@ const pricingTiers = [
 ]
 
 const marqueeItems = [
-  'Product Hunt #1',
+  'Vibe Coders',
   'Indie Hackers',
-  'Y Combinator Alumni',
+  'First-time Builders',
   'Solo Founders',
   'Startup Studios',
   'Dev Agencies',
@@ -611,7 +613,7 @@ function FaqSection() {
 /* ── Page ─────────────────────────────────────────────────── */
 export default function Home() {
   return (
-    <main style={{ minHeight: '100vh', background: '#030014', color: 'white', position: 'relative', overflowX: 'hidden' }}>
+    <main style={{ minHeight: '100vh', background: 'var(--vs-bg)', color: 'var(--vs-text)', position: 'relative', overflowX: 'hidden' }}>
       <StarField />
 
       {/* Marquee keyframes */}
@@ -725,6 +727,14 @@ export default function Home() {
               <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.2)', marginTop: 1 }}>{s.sub}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Live social proof ── */}
+      <section style={{ position: 'relative', zIndex: 10, padding: '0 2rem 80px' }}>
+        <div style={{ maxWidth: 860, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
+          <LiveCounter />
+          <ActivityFeed />
         </div>
       </section>
 

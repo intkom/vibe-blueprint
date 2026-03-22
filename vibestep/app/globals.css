@@ -13,17 +13,6 @@
   --vs-scrollbar-track: #030014;
 }
 
-[data-theme="light"] {
-  --vs-bg: #f5f4ff;
-  --vs-bg-secondary: rgba(255,255,255,0.85);
-  --vs-surface: rgba(0,0,0,0.025);
-  --vs-border: rgba(0,0,0,0.08);
-  --vs-text: #1a0e3a;
-  --vs-text-muted: rgba(26,14,58,0.55);
-  --vs-text-dim: rgba(26,14,58,0.35);
-  --vs-nav-bg: rgba(245,244,255,0.92);
-  --vs-scrollbar-track: #f5f4ff;
-}
 
 /* ── Base ── */
 @layer base {
@@ -320,6 +309,21 @@
   }
   .animate-spin-slow {
     animation: spin 1s linear infinite;
+  }
+
+  /* Responsive visibility helpers */
+  .vs-desktop-only { display: flex; }
+  .vs-mobile-only  { display: none; }
+
+  @media (max-width: 768px) {
+    .vs-desktop-only { display: none !important; }
+    .vs-mobile-only  { display: flex !important; }
+  }
+
+  /* Mobile responsive grid helpers */
+  @media (max-width: 640px) {
+    .vs-stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .vs-single-col { grid-template-columns: 1fr !important; }
   }
 
   /* Delays — applied on top of any animation */

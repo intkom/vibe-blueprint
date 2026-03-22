@@ -4,7 +4,7 @@ export const metadata = { title: "Privacy Policy – VibeStep" };
 
 export default function PrivacyPage() {
   return (
-    <div style={{ minHeight: "100vh", background: "#030014", color: "white" }}>
+    <div style={{ minHeight: "100vh", background: "var(--vs-bg)", color: "var(--vs-text)" }}>
       {/* Ambient */}
       <div aria-hidden="true" style={{ position: "fixed", top: "-15%", left: "50%", transform: "translateX(-50%)", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)", filter: "blur(80px)", pointerEvents: "none", zIndex: 0 }} />
 

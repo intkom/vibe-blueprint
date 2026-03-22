@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { AppHeader } from "@/components/app-header";
+import { ReferralSection } from "@/components/referral-section";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -45,10 +46,10 @@ export default async function SettingsPage() {
       : "Incredible week! You're building real momentum. Don't stop now.";
 
   return (
-    <div style={{ minHeight: "100vh", background: "#030014", color: "white", position: "relative", overflow: "hidden" }}>
+    <div style={{ minHeight: "100vh", background: "var(--vs-bg)", color: "var(--vs-text)", position: "relative", overflow: "hidden" }}>
       <div aria-hidden="true" style={{
         position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
-        background: "radial-gradient(ellipse 60% 40% at 85% 5%, rgba(124,58,237,0.1) 0%, transparent 60%), #030014",
+        background: "radial-gradient(ellipse 60% 40% at 85% 5%, rgba(124,58,237,0.1) 0%, transparent 60%), var(--vs-bg)",
       }} />
 
       <AppHeader />
@@ -312,6 +313,11 @@ export default async function SettingsPage() {
               }} />
             </div>
           </div>
+        </div>
+
+        {/* ── Referral ── */}
+        <div style={{ marginBottom: 14 }}>
+          <ReferralSection username={emailLocal} />
         </div>
 
         {/* ── Keyboard shortcuts ── */}
