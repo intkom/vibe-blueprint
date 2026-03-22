@@ -118,8 +118,11 @@ export function UserAvatar() {
           {/* Menu links */}
           <div style={{ padding: "6px" }}>
             {[
-              { href: "/dashboard", label: "Dashboard", icon: "▦" },
-              { href: "/create",    label: "New idea",  icon: "✦" },
+              { href: "/dashboard",  label: "Dashboard",  icon: "▦" },
+              { href: "/create",     label: "New idea",   icon: "✦" },
+              { href: "/tools",      label: "Tools",      icon: "⚡" },
+              { href: "/templates",  label: "Templates",  icon: "◈" },
+              { href: "/settings",   label: "Settings",   icon: "⚙" },
             ].map(item => (
               <Link
                 key={item.href}

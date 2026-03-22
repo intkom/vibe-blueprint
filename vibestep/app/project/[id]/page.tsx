@@ -810,8 +810,6 @@ export default async function ProjectPage({ params }: Props) {
                           isLocked={isLocked}
                           projectId={id}
                           isLastStep={i === stepsList.length - 1}
-                          totalSteps={totalCount}
-                          completedCount={completedCount}
                         />
                       </li>
                     );
