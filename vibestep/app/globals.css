@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+/* ── CSS Variables (theme tokens) ── */
+:root {
+  --vs-bg: #030014;
+  --vs-bg-secondary: rgba(10,6,30,0.7);
+  --vs-surface: rgba(255,255,255,0.03);
+  --vs-border: rgba(255,255,255,0.07);
+  --vs-text: rgba(255,255,255,0.9);
+  --vs-text-muted: rgba(255,255,255,0.45);
+  --vs-text-dim: rgba(255,255,255,0.22);
+  --vs-nav-bg: rgba(3,0,20,0.88);
+  --vs-scrollbar-track: #030014;
+}
+
+[data-theme="light"] {
+  --vs-bg: #f5f4ff;
+  --vs-bg-secondary: rgba(255,255,255,0.85);
+  --vs-surface: rgba(0,0,0,0.025);
+  --vs-border: rgba(0,0,0,0.08);
+  --vs-text: #1a0e3a;
+  --vs-text-muted: rgba(26,14,58,0.55);
+  --vs-text-dim: rgba(26,14,58,0.35);
+  --vs-nav-bg: rgba(245,244,255,0.92);
+  --vs-scrollbar-track: #f5f4ff;
+}
+
 /* ── Base ── */
 @layer base {
   * {
@@ -9,12 +34,13 @@
     scroll-behavior: smooth;
   }
   body {
-    background-color: #030014;
-    color: white;
+    background-color: var(--vs-bg);
+    color: var(--vs-text);
     overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #030014; }
+  ::-webkit-scrollbar-track { background: var(--vs-scrollbar-track); }
   ::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.4); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.6); }
 }

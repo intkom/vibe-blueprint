@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { markStepComplete } from "@/app/actions/build-steps";
+import { useNotifications } from "@/lib/notification-context";
+import { StepNotes } from "@/components/step-notes";
 
 type Step = {
   id: string;
@@ -48,6 +50,8 @@ export function StepCard({
   projectId: string;
 }) {
   const [confirmed, setConfirmed] = useState(false);
+  const [pending, setPending] = useState(false);
+  const { addNotification } = useNotifications();
   const isStepDone = step.status === "complete";
   const phaseKey = (step.phase ?? "build").toLowerCase();
   const phaseStyle = PHASE_COLORS[phaseKey] ?? PHASE_COLORS.build;
@@ -233,32 +237,45 @@ export function StepCard({
                 </span>
               </label>
 
-              <form action={markStepComplete} style={{ marginTop: 12 }}>
-                <input type="hidden" name="stepId" value={step.id} />
-                <input type="hidden" name="projectId" value={projectId} />
-                <button
-                  type="submit"
-                  disabled={!confirmed}
-                  style={{
-                    background: confirmed
-                      ? "linear-gradient(135deg,#059669,#34d399)"
-                      : "rgba(255,255,255,0.05)",
-                    border: confirmed
-                      ? "1px solid rgba(52,211,153,0.4)"
-                      : "1px solid rgba(255,255,255,0.08)",
-                    color: confirmed ? "white" : "rgba(255,255,255,0.25)",
-                    padding: "8px 16px", borderRadius: 9,
-                    fontSize: "0.8rem", fontWeight: 600,
-                    cursor: confirmed ? "pointer" : "not-allowed",
-                    transition: "all 0.2s ease",
-                    boxShadow: confirmed ? "0 0 20px rgba(52,211,153,0.3)" : "none",
-                  }}
-                >
-                  Mark step complete ✓
-                </button>
-              </form>
+              <button
+                type="button"
+                disabled={!confirmed || pending}
+                onClick={async () => {
+                  setPending(true);
+                  addNotification(
+                    `Step ${step.step_index + 1} complete! Keep going 🎉`,
+                    "success",
+                    "✅",
+                  );
+                  const fd = new FormData();
+                  fd.append("stepId", step.id);
+                  fd.append("projectId", projectId);
+                  await markStepComplete(fd);
+                  setPending(false);
+                }}
+                style={{
+                  marginTop: 12,
+                  background: confirmed && !pending
+                    ? "linear-gradient(135deg,#059669,#34d399)"
+                    : "rgba(255,255,255,0.05)",
+                  border: confirmed && !pending
+                    ? "1px solid rgba(52,211,153,0.4)"
+                    : "1px solid rgba(255,255,255,0.08)",
+                  color: confirmed && !pending ? "white" : "rgba(255,255,255,0.25)",
+                  padding: "8px 16px", borderRadius: 9,
+                  fontSize: "0.8rem", fontWeight: 600,
+                  cursor: confirmed && !pending ? "pointer" : "not-allowed",
+                  transition: "all 0.2s ease",
+                  boxShadow: confirmed && !pending ? "0 0 20px rgba(52,211,153,0.3)" : "none",
+                  display: "block",
+                }}
+              >
+                {pending ? "Saving…" : "Mark step complete ✓"}
+              </button>
             </div>
           )}
+          {/* Step notes — available on all non-locked steps */}
+          {!isLocked && <StepNotes stepId={step.id} />}
         </div>
       </div>
     </div>

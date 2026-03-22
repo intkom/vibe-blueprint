@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { signOut } from "@/app/actions/auth";
+import { NotificationBell } from "@/components/notification-bell";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function AppHeader() {
   return (
@@ -50,6 +54,11 @@ export function AppHeader() {
           }}>
             + New idea
           </Link>
+
+          <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)", margin: "0 4px" }} />
+
+          <ThemeToggle />
+          <NotificationBell />
 
           <form action={signOut} style={{ margin: 0 }}>
             <button type="submit" style={{
