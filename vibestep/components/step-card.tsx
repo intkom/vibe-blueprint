@@ -5,6 +5,7 @@ import Link from "next/link";
 import { markStepComplete } from "@/app/actions/build-steps";
 import { useNotifications } from "@/lib/notification-context";
 import { StepNotes } from "@/components/step-notes";
+import { ConfettiBurst } from "@/components/confetti-burst";
 
 type Step = {
   id: string;
@@ -43,15 +44,17 @@ function IconLock() {
 }
 
 export function StepCard({
-  step, isActive, isLocked, projectId,
+  step, isActive, isLocked, projectId, isLastStep = false,
 }: {
   step: Step;
   isActive: boolean;
   isLocked: boolean;
   projectId: string;
+  isLastStep?: boolean;
 }) {
   const [confirmed, setConfirmed] = useState(false);
   const [pending, setPending] = useState(false);
+  const [fireConfetti, setFireConfetti] = useState(false);
   const { addNotification } = useNotifications();
   const isStepDone = step.status === "complete";
   const phaseKey = (step.phase ?? "build").toLowerCase();
@@ -65,6 +68,8 @@ export function StepCard({
   ];
 
   return (
+    <>
+    <ConfettiBurst trigger={fireConfetti} />
     <div style={{
       background: isStepDone
         ? "rgba(52,211,153,0.03)"
@@ -243,11 +248,16 @@ export function StepCard({
                 disabled={!confirmed || pending}
                 onClick={async () => {
                   setPending(true);
-                  addNotification(
-                    `Step ${step.step_index + 1} complete! Keep going 🎉`,
-                    "success",
-                    "✅",
-                  );
+                  if (isLastStep) {
+                    setFireConfetti(true);
+                    addNotification("🏆 All 10 steps done! You shipped it!", "milestone", "🏆");
+                  } else {
+                    addNotification(
+                      `Step ${step.step_index + 1} complete! Keep going 🎉`,
+                      "success",
+                      "✅",
+                    );
+                  }
                   const fd = new FormData();
                   fd.append("stepId", step.id);
                   fd.append("projectId", projectId);
@@ -299,5 +309,6 @@ export function StepCard({
         </div>
       </div>
     </div>
+    </>
   );
 }

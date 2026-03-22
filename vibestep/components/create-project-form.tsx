@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState, useState, useEffect, useRef } from "react";
+import { useActionState, useState, useEffect, useRef, useMemo } from "react";
 import { createProject, type CreateProjectState } from "@/app/actions/projects";
 import { TOOL_META, type ToolType } from "@/lib/tools";
 
+/* ── Example ideas ──────────────────────────────────────── */
 const EXAMPLE_IDEAS: Record<ToolType, string[]> = {
   sprint: [
     "A Notion clone for developers — markdown-first, with code blocks, GitHub integration, and keyboard shortcuts everywhere.",
@@ -29,6 +30,77 @@ const EXAMPLE_IDEAS: Record<ToolType, string[]> = {
   ],
 };
 
+/* ── Smart suggestion templates ─────────────────────────── */
+type Template = { label: string; text: string };
+type Category = { keywords: string[]; headline: string; templates: Template[] };
+
+const SMART_CATEGORIES: Category[] = [
+  {
+    keywords: ["saas", "dashboard", "subscription", "b2b", "enterprise", "team", "admin", "business", "crm", "erp"],
+    headline: "Sounds like a B2B SaaS — here are blueprints that worked",
+    templates: [
+      { label: "Team Analytics", text: "A SaaS analytics dashboard for marketing teams. Shows campaign performance, conversion funnels, and A/B test results. Teams of 5–20. Subscription at $49/seat/month." },
+      { label: "Client Portal", text: "A white-label client portal for creative agencies. Clients view project progress, approve deliverables, and pay invoices. B2B, $99/month per agency with annual discount." },
+      { label: "HR Platform", text: "An HR SaaS for small businesses (10–100 employees). Onboarding checklists, time tracking, leave management, payroll integration. $12/employee/month." },
+    ],
+  },
+  {
+    keywords: ["marketplace", "buy", "sell", "rent", "booking", "hire", "freelance", "gig", "p2p"],
+    headline: "Sounds like a marketplace — here are blueprints that worked",
+    templates: [
+      { label: "Services Marketplace", text: "A marketplace for niche professional services. Clients post briefs, vetted freelancers bid. Platform takes 15%. Focus on video/content production." },
+      { label: "Equipment Rental", text: "A peer-to-peer equipment rental platform for photographers and filmmakers. Insurance included, calendar availability, Stripe, local pickup or shipping." },
+      { label: "Expert Booking", text: "An on-demand booking platform for licensed professionals — lawyers, accountants, coaches. 30-min video calls, upfront payment, automated reminders." },
+    ],
+  },
+  {
+    keywords: ["ai", "gpt", "llm", "generate", "automate", "intelligent", "chatbot", "ml", "claude", "openai"],
+    headline: "Sounds like an AI tool — here are blueprints that worked",
+    templates: [
+      { label: "AI Content Writer", text: "An AI writing assistant for content marketers. Paste a URL or topic, get a full SEO-optimized blog post with meta descriptions and headline variants. Integrates with WordPress." },
+      { label: "AI Data Analyst", text: "An AI tool for non-technical analysts. Upload a CSV, ask questions in plain English, get instant charts and insights. Exports to Google Sheets. $29/month." },
+      { label: "AI Support Agent", text: "An AI customer support agent trained on your docs and tickets. Handles 80% of tier-1 queries, escalates edge cases. Integrates with Intercom and Zendesk." },
+    ],
+  },
+  {
+    keywords: ["mobile", "ios", "android", "app", "health", "fitness", "workout", "habit", "wellness", "track"],
+    headline: "Sounds like a mobile or health app — here are blueprints that worked",
+    templates: [
+      { label: "Fitness Tracker", text: "A workout tracking app for strength athletes. Log exercises, weights, and reps. Auto-calculates progressive overload, strength curves, syncs with Apple Health. $7/month." },
+      { label: "Habit Tracker", text: "A minimalist habit tracking app. Daily check-ins, streak visualization, weekly review prompts. Private by design. Annual subscription at $29/year." },
+      { label: "Nutrition Logger", text: "A meal logging app for macro tracking. Barcode scanner, AI meal recognition from photo, macro goals, and weekly summaries. Freemium with premium meal plans." },
+    ],
+  },
+  {
+    keywords: ["developer", "dev", "api", "code", "github", "deploy", "backend", "frontend", "engineer", "cli", "sdk"],
+    headline: "Sounds like a developer tool — here are blueprints that worked",
+    templates: [
+      { label: "API Platform", text: "An API testing and documentation platform for small teams. Auto-generates docs from OpenAPI spec, collaborative test suites, environment variables, Slack failure alerts." },
+      { label: "AI Code Reviewer", text: "An async code review tool. AI summarizes PR changes, flags security issues, suggests improvements before human review. GitHub App, $29/dev/month." },
+      { label: "Deployment Dashboard", text: "A unified deployment dashboard for indie hackers. Connect GitHub, Vercel, Railway, PlanetScale — see all deployments, logs, and costs in one place. $9/month." },
+    ],
+  },
+];
+
+const DEFAULT_SUGGESTIONS: Template[] = [
+  { label: "SaaS Starter", text: "A subscription SaaS tool for small teams that automates repetitive workflows and shows analytics. B2B, $49/month per team." },
+  { label: "Marketplace MVP", text: "A two-sided marketplace connecting service providers with customers. Handles booking, payments, reviews. 12% transaction fee." },
+  { label: "Mobile Productivity", text: "A mobile-first productivity app for busy professionals. Organize tasks, track goals, build habits. Freemium with $5/month premium." },
+];
+
+function detectCategory(text: string): Category | null {
+  const lower = text.toLowerCase();
+  let best: { cat: Category; count: number } | null = null;
+  for (const cat of SMART_CATEGORIES) {
+    const count = cat.keywords.filter(k => lower.includes(k)).length;
+    if (count > 0 && (!best || count > best.count)) {
+      best = { cat, count };
+    }
+  }
+  return best?.cat ?? null;
+}
+
+/* ── Subcomponents ──────────────────────────────────────── */
 const initialState: CreateProjectState = { error: null };
 
 function LoadingMessage({ messages }: { messages: string[] }) {
@@ -41,7 +113,7 @@ function LoadingMessage({ messages }: { messages: string[] }) {
     <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
       <span style={{
         width: 16, height: 16, flexShrink: 0,
-        border: "2.5px solid rgba(255,255,255,0.2)", borderTopColor: "white",
+        border: "2.5px solid rgba(255,255,255,0.25)", borderTopColor: "white",
         borderRadius: "50%", animation: "spin 0.75s linear infinite", display: "inline-block",
       }} />
       <span key={idx} style={{ animation: "fadeInUp 0.35s ease both" }}>
@@ -52,18 +124,22 @@ function LoadingMessage({ messages }: { messages: string[] }) {
 }
 
 const TOOL_CTA: Record<ToolType, string> = {
-  validator: "Validate this idea →",
-  stack:     "Build my tech blueprint →",
+  validator:    "Validate this idea →",
+  stack:        "Build my tech blueprint →",
   monetization: "Map my monetization →",
-  sprint:    "Generate build steps →",
+  sprint:       "Generate build steps →",
 };
 
+/* ── Main form ──────────────────────────────────────────── */
 export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType }) {
   const [state, formAction, pending] = useActionState(createProject, initialState);
   const [focused, setFocused] = useState(false);
   const [btnHover, setBtnHover] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [ideaText, setIdeaText] = useState("");
+  const [suggestions, setSuggestions] = useState<{ headline: string; templates: Template[] } | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const meta = TOOL_META[toolType];
   const examples = EXAMPLE_IDEAS[toolType] ?? [];
@@ -72,17 +148,43 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
     if (textareaRef.current) {
       textareaRef.current.value = text;
       setCharCount(text.length);
+      setIdeaText(text);
       textareaRef.current.focus();
     }
   }
 
+  function handleTextChange(value: string) {
+    setCharCount(value.length);
+    setIdeaText(value);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    if (value.length < 10) {
+      setSuggestions(null);
+      return;
+    }
+
+    debounceRef.current = setTimeout(() => {
+      const cat = detectCategory(value);
+      if (cat) {
+        setSuggestions({ headline: cat.headline, templates: cat.templates });
+      } else if (value.length >= 15) {
+        setSuggestions({ headline: "Here are some starting blueprints that worked", templates: DEFAULT_SUGGESTIONS });
+      } else {
+        setSuggestions(null);
+      }
+    }, 600);
+  }
+
+  // Cleanup debounce on unmount
+  useEffect(() => () => { if (debounceRef.current) clearTimeout(debounceRef.current); }, []);
+
   return (
     <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-      {/* Hidden tool type */}
       <input type="hidden" name="tool_type" value={toolType} />
 
-      {state.error ? (
+      {/* Error */}
+      {state.error && (
         <div role="alert" style={{
           display: "flex", alignItems: "flex-start", gap: 10,
           background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.22)",
@@ -92,7 +194,7 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
           <span style={{ flexShrink: 0, lineHeight: 1.3 }}>⚠</span>
           <span>{state.error}</span>
         </div>
-      ) : null}
+      )}
 
       {/* Example chips */}
       {examples.length > 0 && (
@@ -161,7 +263,7 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
             rows={9}
             disabled={pending}
             placeholder={meta.placeholder}
-            onChange={e => setCharCount(e.target.value.length)}
+            onChange={e => handleTextChange(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             style={{
@@ -192,6 +294,61 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
         </p>
       </div>
 
+      {/* ── Smart suggestions panel ── */}
+      {suggestions && !pending && (
+        <div style={{ animation: "fadeInUp 0.35s ease both" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <span style={{
+              width: 5, height: 5, borderRadius: "50%",
+              background: "#a78bfa", boxShadow: "0 0 6px rgba(167,139,250,0.7)",
+              flexShrink: 0, animation: "pulseGlow 2s ease-in-out infinite",
+            }} />
+            <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "rgba(167,139,250,0.7)", margin: 0, letterSpacing: "0.02em" }}>
+              {suggestions.headline}
+            </p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {suggestions.templates.map((tpl, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => fillExample(tpl.text)}
+                style={{
+                  background: "rgba(139,92,246,0.06)",
+                  border: "1px solid rgba(139,92,246,0.2)",
+                  borderRadius: 12, padding: "12px 14px",
+                  textAlign: "left", cursor: "pointer",
+                  transition: "all 0.18s ease",
+                  animation: `fadeInUp 0.3s ease ${i * 0.07}s both`,
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(139,92,246,0.12)";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(139,92,246,0.45)";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(139,92,246,0.06)";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(139,92,246,0.2)";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+                }}
+              >
+                <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "#a78bfa", margin: "0 0 5px" }}>
+                  {tpl.label}
+                </p>
+                <p style={{
+                  fontSize: "0.72rem", color: "rgba(255,255,255,0.35)",
+                  margin: 0, lineHeight: 1.55,
+                  display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}>
+                  {tpl.text}
+                </p>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Submit */}
       <button
         type="submit"
@@ -200,19 +357,24 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
         onMouseLeave={() => setBtnHover(false)}
         style={{
           width: "100%",
-          background: pending ? "rgba(109,40,217,0.4)" : btnHover ? "linear-gradient(135deg,#8b5cf6,#7c3aed)" : "linear-gradient(135deg,#7c3aed,#6d28d9)",
+          background: pending
+            ? "rgba(109,40,217,0.4)"
+            : btnHover
+              ? "linear-gradient(135deg,#8b5cf6,#7c3aed)"
+              : "linear-gradient(135deg,#7c3aed,#6d28d9)",
           border: "1px solid rgba(139,92,246,0.45)",
           color: "white", padding: "14px 20px", borderRadius: 12,
           fontSize: "0.95rem", fontWeight: 600,
           cursor: pending ? "not-allowed" : "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
-          boxShadow: pending ? "none" : btnHover ? "0 0 36px rgba(139,92,246,0.6), 0 8px 24px rgba(0,0,0,0.4)" : "0 0 22px rgba(139,92,246,0.3)",
           transform: btnHover && !pending ? "translateY(-2px)" : "translateY(0)",
           transition: "all 0.22s ease",
           opacity: pending ? 0.85 : 1,
           letterSpacing: "0.01em",
           minHeight: 50,
           position: "relative", overflow: "hidden",
+          // Pulse ring while generating
+          animation: pending ? "ringPulse 1.4s ease-in-out infinite" : "none",
         }}
       >
         {btnHover && !pending && (

@@ -44,6 +44,15 @@ export default async function DashboardPage() {
 
   const rows = (projects ?? []) as ProjectRow[];
 
+  // Fetch streak profile (best-effort)
+  const { data: profileData } = await supabase
+    .from("profiles")
+    .select("current_streak, longest_streak")
+    .eq("id", user.id)
+    .single();
+  const currentStreak = profileData?.current_streak ?? 0;
+  const longestStreak = profileData?.longest_streak ?? 0;
+
   // Fetch step stats + tool type (phase of step 0) for all projects
   const stepStatsMap: Record<string, StepStats> = {};
   const toolTypeMap: Record<string, string | null> = {};
@@ -127,6 +136,25 @@ export default async function DashboardPage() {
               <p style={{ margin: '5px 0 0', fontSize: '0.82rem', color: 'rgba(255,255,255,0.3)' }}>
                 {user.email}
               </p>
+              {currentStreak > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 12, flexWrap: 'wrap' }}>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    background: 'rgba(251,146,60,0.1)', border: '1px solid rgba(251,146,60,0.3)',
+                    borderRadius: 9999, padding: '5px 12px',
+                  }}>
+                    <span style={{ fontSize: '1rem', animation: 'streakFlame 1.8s ease-in-out infinite' }}>🔥</span>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#fb923c', letterSpacing: '-0.01em' }}>
+                      {currentStreak} day streak
+                    </span>
+                  </div>
+                  {longestStreak > currentStreak && (
+                    <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>
+                      Best: {longestStreak} days
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
             <Link href="/create" style={{
               display: 'inline-block',

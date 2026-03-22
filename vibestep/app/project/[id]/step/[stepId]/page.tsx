@@ -331,6 +331,7 @@ export default async function StepDetailPage({ params }: Props) {
             stepStatus={step.status}
             isActive={isActive && !isLocked}
             criteria={enrichment.acceptance_criteria}
+            isLastStep={step.step_index === totalSteps - 1}
           />
 
           {/* ── Common mistakes ── */}

@@ -799,12 +799,16 @@ export default async function ProjectPage({ params }: Props) {
                     const isActive = i === activeIdx;
                     const isLocked = activeIdx !== -1 && i > activeIdx;
                     return (
-                      <li key={step.id}>
+                      <li key={step.id} style={{
+                        animation: "slideInLeft 0.35s ease both",
+                        animationDelay: `${i * 0.045}s`,
+                      }}>
                         <StepCard
                           step={step}
                           isActive={isActive}
                           isLocked={isLocked}
                           projectId={id}
+                          isLastStep={i === stepsList.length - 1}
                         />
                       </li>
                     );

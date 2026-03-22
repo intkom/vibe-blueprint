@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { signOut } from "@/app/actions/auth";
 import { NotificationBell } from "@/components/notification-bell";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { UserAvatar } from "@/components/user-avatar";
 
 export function AppHeader() {
   return (
@@ -59,17 +59,7 @@ export function AppHeader() {
 
           <ThemeToggle />
           <NotificationBell />
-
-          <form action={signOut} style={{ margin: 0 }}>
-            <button type="submit" style={{
-              fontSize: "0.82rem", color: "rgba(255,255,255,0.38)",
-              padding: "7px 12px", borderRadius: 8, cursor: "pointer",
-              background: "none", border: "none",
-              transition: "color 0.18s ease",
-            }}>
-              Sign out
-            </button>
-          </form>
+          <UserAvatar />
         </nav>
       </div>
     </header>

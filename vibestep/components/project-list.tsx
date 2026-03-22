@@ -117,16 +117,26 @@ export function ProjectList({ entries }: { entries: ProjectEntry[] }) {
           </p>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: 14 }}>
-          {filtered.map(e => (
-            <ProjectCard
+        <div
+          key={`${tab}|${query}`}
+          style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: 14 }}
+        >
+          {filtered.map((e, i) => (
+            <div
               key={e.project.id}
-              project={e.project}
-              stats={e.stats}
-              pct={e.pct}
-              isDone={e.isDone}
-              toolType={e.toolType}
-            />
+              style={{
+                animation: "fadeInUp 0.4s ease both",
+                animationDelay: `${i * 0.055}s`,
+              }}
+            >
+              <ProjectCard
+                project={e.project}
+                stats={e.stats}
+                pct={e.pct}
+                isDone={e.isDone}
+                toolType={e.toolType}
+              />
+            </div>
           ))}
         </div>
       )}
