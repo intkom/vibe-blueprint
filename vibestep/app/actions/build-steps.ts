@@ -23,6 +23,7 @@ export async function markStepComplete(formData: FormData) {
 
   if (!error) {
     revalidatePath(`/project/${projectId}`);
+    revalidatePath(`/project/${projectId}/step/${stepId}`);
     revalidatePath("/dashboard");
   }
 }

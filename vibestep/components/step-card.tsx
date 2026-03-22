@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { markStepComplete } from "@/app/actions/build-steps";
 import { useNotifications } from "@/lib/notification-context";
 import { StepNotes } from "@/components/step-notes";
@@ -274,8 +275,27 @@ export function StepCard({
               </button>
             </div>
           )}
-          {/* Step notes — available on all non-locked steps */}
-          {!isLocked && <StepNotes stepId={step.id} />}
+          {/* Step notes + detail link — available on all non-locked steps */}
+          {!isLocked && (
+            <>
+              <StepNotes stepId={step.id} />
+              <Link
+                href={`/project/${projectId}/step/${step.id}`}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 5,
+                  marginTop: 12, fontSize: "0.72rem", fontWeight: 600,
+                  color: isStepDone ? "rgba(255,255,255,0.2)" : phaseStyle.text,
+                  textDecoration: "none", opacity: 0.75,
+                  transition: "opacity 0.15s ease",
+                }}
+              >
+                View full details
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m5 12 14 0M12 5l7 7-7 7"/>
+                </svg>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

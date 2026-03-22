@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { generateBuildSteps, serializeMeta } from "@/lib/generate-build-steps";
+import { enrichAllSteps } from "@/lib/enrich-step";
 import { runTool, serializeToolOutput, TOOL_TYPES, type ToolType } from "@/lib/tools";
 
 export type CreateProjectState = { error: string | null };
@@ -64,8 +65,33 @@ export async function createProject(
       ai_output: i === 0 ? meta : s.guidance,
     }));
 
-    const { error: stepsError } = await supabase.from("build_steps").insert(steps);
+    const { data: insertedSteps, error: stepsError } = await supabase
+      .from("build_steps")
+      .insert(steps)
+      .select("id, step_index");
     if (stepsError) return { error: stepsError.message };
+
+    // Enrich steps with AI-generated acceptance criteria, common mistakes, time estimate.
+    // Best-effort — project creation succeeds even if enrichment fails.
+    if (insertedSteps && insertedSteps.length > 0) {
+      try {
+        const enrichments = await enrichAllSteps(plan.steps);
+        await Promise.all(
+          insertedSteps.map(row => {
+            const e = enrichments[row.step_index];
+            if (!e) return Promise.resolve();
+            return supabase.from("build_steps").update({
+              acceptance_criteria: e.acceptance_criteria,
+              common_mistakes: e.common_mistakes,
+              estimated_hours: e.estimated_hours,
+              difficulty: e.difficulty,
+            }).eq("id", row.id);
+          })
+        );
+      } catch {
+        // Enrichment failed silently — project + steps already saved successfully
+      }
+    }
 
     revalidatePath("/dashboard");
     redirect(`/dashboard`);
