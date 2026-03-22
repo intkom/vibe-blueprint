@@ -159,8 +159,8 @@ export default async function LoginPage({ searchParams }: Props) {
 
             <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'rgba(255,255,255,0.25)', margin: 0 }}>
               Don&apos;t have an account?{' '}
-              <Link href="/dashboard" style={{ color: 'rgba(167,139,250,0.7)', textDecoration: 'none', fontWeight: 500 }}>
-                Get started free
+              <Link href="/signup" style={{ color: 'rgba(167,139,250,0.7)', textDecoration: 'none', fontWeight: 500 }}>
+                Sign up free
               </Link>
             </p>
           </div>

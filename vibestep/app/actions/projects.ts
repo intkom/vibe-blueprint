@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { generateBuildSteps, serializeMeta } from "@/lib/generate-build-steps";
+import { runTool, serializeToolOutput, TOOL_TYPES, type ToolType } from "@/lib/tools";
 
 export type CreateProjectState = { error: string | null };
 
@@ -12,6 +13,10 @@ export async function createProject(
   formData: FormData
 ): Promise<CreateProjectState> {
   const raw_idea = String(formData.get("idea") ?? "").trim();
+  const toolTypeRaw = String(formData.get("tool_type") ?? "sprint").trim();
+  const toolType: ToolType = (TOOL_TYPES as readonly string[]).includes(toolTypeRaw)
+    ? (toolTypeRaw as ToolType)
+    : "sprint";
 
   if (!raw_idea) {
     return { error: "Describe your idea — even a rough sentence is enough." };
@@ -29,21 +34,54 @@ export async function createProject(
     return { error: "Sign in to save a project." };
   }
 
-  let plan;
+  /* ── Sprint tool (existing behaviour — 10 steps) ── */
+  if (toolType === "sprint") {
+    let plan;
+    try {
+      plan = await generateBuildSteps(raw_idea);
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : "Failed to generate steps." };
+    }
+
+    const { data: project, error: projectError } = await supabase
+      .from("projects")
+      .insert({ title: plan.title, raw_idea, user_id: user.id })
+      .select("id")
+      .single();
+
+    if (projectError || !project) {
+      return { error: projectError?.message ?? "Failed to save project." };
+    }
+
+    const meta = serializeMeta(plan);
+    const steps = plan.steps.map((s, i) => ({
+      project_id: project.id,
+      step_index: i,
+      phase: s.phase,
+      title: s.title,
+      objective: s.objective,
+      guidance: s.guidance,
+      ai_output: i === 0 ? meta : s.guidance,
+    }));
+
+    const { error: stepsError } = await supabase.from("build_steps").insert(steps);
+    if (stepsError) return { error: stepsError.message };
+
+    revalidatePath("/dashboard");
+    redirect(`/dashboard`);
+  }
+
+  /* ── All other tools (single structured output) ── */
+  let output;
   try {
-    plan = await generateBuildSteps(raw_idea);
+    output = await runTool(toolType, raw_idea);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Failed to generate steps.";
-    return { error: msg };
+    return { error: err instanceof Error ? err.message : "Failed to generate output." };
   }
 
   const { data: project, error: projectError } = await supabase
     .from("projects")
-    .insert({
-      title: plan.title,
-      raw_idea,
-      user_id: user.id,
-    })
+    .insert({ title: output.title, raw_idea, user_id: user.id })
     .select("id")
     .single();
 
@@ -51,27 +89,19 @@ export async function createProject(
     return { error: projectError?.message ?? "Failed to save project." };
   }
 
-  // Serialize stack + warnings into ai_output of step 0
-  const meta = serializeMeta(plan);
-
-  const steps = plan.steps.map((s, i) => ({
+  // Store the full structured output in step 0's ai_output; phase = tool_type for detection
+  const { error: stepError } = await supabase.from("build_steps").insert({
     project_id: project.id,
-    step_index: i,
-    phase: s.phase,
-    title: s.title,
-    objective: s.objective,
-    guidance: s.guidance,
-    // Store the full blueprint meta (stack + warnings) on step 0 so project page can read it
-    ai_output: i === 0 ? meta : s.guidance,
-  }));
+    step_index: 0,
+    phase: toolType,            // used to detect which renderer to show
+    title: toolType,
+    objective: "",
+    guidance: "",
+    ai_output: serializeToolOutput(output),
+  });
 
-  const { error: stepsError } = await supabase.from("build_steps").insert(steps);
-
-  if (stepsError) {
-    return { error: stepsError.message };
-  }
+  if (stepError) return { error: stepError.message };
 
   revalidatePath("/dashboard");
-  // Send user straight to their blueprint — don't make them navigate back
   redirect(`/project/${project.id}`);
 }

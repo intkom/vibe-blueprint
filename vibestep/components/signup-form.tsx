@@ -1,0 +1,91 @@
+"use client";
+
+import { useActionState, useState } from "react";
+import { signup, type SignupState } from "@/app/signup/actions";
+
+const initialState: SignupState = { error: null };
+
+function Field({
+  id, name, type, label, placeholder, autoComplete,
+}: {
+  id: string; name: string; type: string;
+  label: string; placeholder: string; autoComplete: string;
+}) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <label htmlFor={id} style={{ fontSize: "0.82rem", fontWeight: 500, color: "rgba(255,255,255,0.55)", letterSpacing: "0.01em" }}>
+        {label}
+      </label>
+      <input
+        id={id} name={name} type={type} required autoComplete={autoComplete} placeholder={placeholder}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{
+          width: "100%",
+          background: focused ? "rgba(139,92,246,0.07)" : "rgba(255,255,255,0.04)",
+          border: `1px solid ${focused ? "rgba(139,92,246,0.65)" : "rgba(255,255,255,0.1)"}`,
+          borderRadius: 10, padding: "12px 14px",
+          fontSize: "0.9rem", color: "white", outline: "none",
+          boxShadow: focused ? "0 0 0 3px rgba(139,92,246,0.14), 0 0 20px rgba(139,92,246,0.08)" : "none",
+          transition: "all 0.2s ease", caretColor: "#a78bfa",
+        }}
+      />
+    </div>
+  );
+}
+
+export function SignupForm() {
+  const [state, formAction, pending] = useActionState(signup, initialState);
+  const [btnHover, setBtnHover] = useState(false);
+
+  return (
+    <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+      {state.error ? (
+        <div role="alert" style={{
+          display: "flex", alignItems: "flex-start", gap: 10,
+          background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)",
+          borderRadius: 10, padding: "12px 14px",
+          fontSize: "0.85rem", color: "rgba(252,165,165,0.9)",
+        }}>
+          <span style={{ fontSize: "1rem", lineHeight: 1.2, flexShrink: 0 }}>⚠</span>
+          <span>{state.error}</span>
+        </div>
+      ) : null}
+
+      <Field id="email" name="email" type="email" label="Email address" placeholder="you@example.com" autoComplete="email" />
+      <Field id="password" name="password" type="password" label="Password" placeholder="At least 6 characters" autoComplete="new-password" />
+      <Field id="confirm" name="confirm" type="password" label="Confirm password" placeholder="Same as above" autoComplete="new-password" />
+
+      <button
+        type="submit"
+        disabled={pending}
+        onMouseEnter={() => setBtnHover(true)}
+        onMouseLeave={() => setBtnHover(false)}
+        style={{
+          width: "100%",
+          background: pending ? "rgba(109,40,217,0.5)" : btnHover ? "linear-gradient(135deg,#8b5cf6,#7c3aed)" : "linear-gradient(135deg,#7c3aed,#6d28d9)",
+          border: "1px solid rgba(139,92,246,0.45)",
+          color: "white", padding: "13px 20px", borderRadius: 11,
+          fontSize: "0.9rem", fontWeight: 600, cursor: pending ? "not-allowed" : "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          boxShadow: btnHover && !pending ? "0 0 28px rgba(139,92,246,0.55)" : "0 0 16px rgba(139,92,246,0.25)",
+          transform: btnHover && !pending ? "translateY(-1px)" : "translateY(0)",
+          transition: "all 0.22s ease", opacity: pending ? 0.7 : 1,
+          marginTop: 4, letterSpacing: "0.01em",
+        }}
+      >
+        {pending ? (
+          <>
+            <span style={{
+              width: 16, height: 16,
+              border: "2px solid rgba(255,255,255,0.25)", borderTopColor: "white",
+              borderRadius: "50%", animation: "spin 0.8s linear infinite", flexShrink: 0,
+            }} />
+            Creating account…
+          </>
+        ) : "Create account →"}
+      </button>
+    </form>
+  );
+}

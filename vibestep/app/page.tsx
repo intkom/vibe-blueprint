@@ -73,25 +73,28 @@ const features = [
 
 const testimonials = [
   {
-    quote: "I was about to build a real-time collaborative feature in v1. The Dead-End Detector told me exactly why that would have wrecked my timeline. Saved me 3 weeks minimum.",
+    quote: "I was about to build real-time collaboration in v1. The Dead-End Detector told me exactly why that would have wrecked my timeline. Saved me 3 weeks minimum.",
     name: "Marcus Chen",
-    role: "Indie hacker, shipped 4 products",
+    role: "Indie hacker, 4 shipped products",
     avatar: "MC",
     avatarColor: 'linear-gradient(135deg,#7c3aed,#5b21b6)',
+    stars: 5,
   },
   {
-    quote: "Every other AI tool told me 'use PostgreSQL.' This one told me WHY — and explained that my multi-tenant setup needed row-level security from day one, not week 12.",
+    quote: "Every other AI told me 'use PostgreSQL.' This one told me WHY — and explained that my multi-tenant setup needed row-level security from day one, not week 12.",
     name: "Priya Nair",
-    role: "Solo SaaS founder, $2.4k MRR",
+    role: "Solo SaaS founder · $2.4k MRR",
     avatar: "PN",
     avatarColor: 'linear-gradient(135deg,#ec4899,#be185d)',
+    stars: 5,
   },
   {
     quote: "Replaced my 2-hour planning session with a 30-second paste. The output was more opinionated than the senior dev I paid $150/hr to do the same review.",
     name: "Tom Åberg",
-    role: "Startup builder, 3rd company",
+    role: "Startup builder · 3rd company",
     avatar: "TÅ",
     avatarColor: 'linear-gradient(135deg,#0ea5e9,#0369a1)',
+    stars: 5,
   },
 ]
 
@@ -102,7 +105,7 @@ const pricingTiers = [
     period: '',
     description: "See if it's real before you pay.",
     cta: 'Start free',
-    ctaHref: '/login',
+    ctaHref: '/signup',
     features: [
       '3 blueprints per month',
       'Full tech stack output',
@@ -118,7 +121,7 @@ const pricingTiers = [
     period: '/mo',
     description: 'For founders who ship constantly.',
     cta: 'Start building',
-    ctaHref: '/login',
+    ctaHref: '/signup',
     features: [
       'Unlimited blueprints',
       'Everything in Free',
@@ -135,7 +138,7 @@ const pricingTiers = [
     period: '/mo',
     description: 'For agencies and small build teams.',
     cta: 'Contact us',
-    ctaHref: '/login',
+    ctaHref: '/signup',
     features: [
       'Unlimited blueprints',
       'Everything in Builder',
@@ -145,6 +148,65 @@ const pricingTiers = [
     ],
     highlight: false,
     badge: null,
+  },
+]
+
+const marqueeItems = [
+  'Product Hunt #1',
+  'Indie Hackers',
+  'Y Combinator Alumni',
+  'Solo Founders',
+  'Startup Studios',
+  'Dev Agencies',
+  'Technical Founders',
+  'Non-Technical Founders',
+  'SaaS Builders',
+  'Micro-SaaS',
+  'B2B Tools',
+  'AI Startups',
+]
+
+const howItWorksSteps = [
+  {
+    num: '01',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+      </svg>
+    ),
+    title: 'Describe your idea',
+    desc: 'Paste your idea in plain English. No templates, no forms. Just tell it what you want to build and who it\'s for.',
+    color: '#a78bfa',
+    colorBg: 'rgba(139,92,246,0.08)',
+    colorBorder: 'rgba(139,92,246,0.2)',
+  },
+  {
+    num: '02',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+      </svg>
+    ),
+    title: 'Claude analyses it',
+    desc: 'Claude reads your spec like a senior technical co-founder. It evaluates your market, architecture, and failure risks in seconds.',
+    color: '#ec4899',
+    colorBg: 'rgba(236,72,153,0.08)',
+    colorBorder: 'rgba(236,72,153,0.2)',
+  },
+  {
+    num: '03',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+      </svg>
+    ),
+    title: 'Get your blueprint',
+    desc: 'Receive your exact tech stack, 3 critical warnings, and 10 atomic build steps — each 2–4 hours of focused work. Ready to ship.',
+    color: '#34d399',
+    colorBg: 'rgba(52,211,153,0.08)',
+    colorBorder: 'rgba(52,211,153,0.2)',
   },
 ]
 
@@ -226,8 +288,7 @@ function PricingCard({ tier }: { tier: typeof pricingTiers[0] }) {
           color: '#c4b5fd', padding: '3px 9px', borderRadius: 9999,
         }}>{tier.badge}</div>
       )}
-
-      <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: tier.highlight ? 'rgba(167,139,250,0.8)' : 'rgba(255,255,255,0.4)', marginBottom: 10, margin: '0 0 10px' }}>
+      <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: tier.highlight ? 'rgba(167,139,250,0.8)' : 'rgba(255,255,255,0.4)', margin: '0 0 10px' }}>
         {tier.name}
       </p>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, marginBottom: 8 }}>
@@ -235,7 +296,6 @@ function PricingCard({ tier }: { tier: typeof pricingTiers[0] }) {
         {tier.period && <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.35)', fontWeight: 500 }}>{tier.period}</span>}
       </div>
       <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.35)', marginBottom: 24, lineHeight: 1.5 }}>{tier.description}</p>
-
       <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: 9, flex: 1 }}>
         {tier.features.map(f => (
           <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: '0.82rem', color: 'rgba(255,255,255,0.6)' }}>
@@ -246,7 +306,6 @@ function PricingCard({ tier }: { tier: typeof pricingTiers[0] }) {
           </li>
         ))}
       </ul>
-
       <Link href={tier.ctaHref} style={{
         display: 'block', textAlign: 'center', textDecoration: 'none',
         padding: '11px 20px', borderRadius: 11, fontWeight: 600, fontSize: '0.875rem',
@@ -267,6 +326,12 @@ export default function Home() {
     <main style={{ minHeight: '100vh', background: '#030014', color: 'white', position: 'relative', overflowX: 'hidden' }}>
       <StarField />
 
+      {/* Marquee keyframes */}
+      <style>{`
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes marqueeReverse { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+      `}</style>
+
       {/* Ambient orbs */}
       <div aria-hidden="true" style={{ position: 'fixed', top: '-15%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0 }} />
       <div aria-hidden="true" style={{ position: 'fixed', bottom: '10%', left: '-5%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,72,153,0.1) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0 }} />
@@ -284,21 +349,17 @@ export default function Home() {
             <span style={{ fontSize: '1.15rem', fontWeight: 800, background: 'linear-gradient(135deg,#c4b5fd,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>VibeStep</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Link href="/login"
-              style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.45)', padding: '8px 14px', borderRadius: 8, textDecoration: 'none' }}
-              onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.9)')}
-              onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.45)')}
-            >
+            <Link href="/login" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.45)', padding: '8px 14px', borderRadius: 8, textDecoration: 'none' }}>
               Log in
             </Link>
-            <Link href="/login" style={{
+            <Link href="/signup" style={{
               fontSize: '0.875rem', padding: '9px 20px', borderRadius: 10,
               background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
               border: '1px solid rgba(139,92,246,0.4)', color: 'white',
               textDecoration: 'none', fontWeight: 600,
               boxShadow: '0 0 18px rgba(139,92,246,0.3)',
             }}>
-              Get your blueprint →
+              Get started free →
             </Link>
           </div>
         </div>
@@ -314,7 +375,7 @@ export default function Home() {
           fontSize: '0.75rem', color: '#c4b5fd', marginBottom: 36,
         }}>
           <span style={{ width: 7, height: 7, background: '#a78bfa', borderRadius: '50%', animation: 'pulseGlow 2s ease-in-out infinite' }} />
-          Tech Blueprint · Dead-End Detector · 10 Atomic Steps
+          Idea Validator · Tech Blueprint · Monetization Map · Sprint Planner
         </div>
 
         <h1 style={{
@@ -334,11 +395,11 @@ export default function Home() {
         </h1>
 
         <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.4)', maxWidth: 520, margin: '0 auto 44px', lineHeight: 1.75 }}>
-          Paste your startup idea. Get the exact tech stack, architecture decisions, and the 3 failure points most founders hit — in 30 seconds.
+          Paste your startup idea. Get the exact tech stack, architecture decisions, and the failure points most founders hit — in 30 seconds.
         </p>
 
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 64 }}>
-          <Link href="/login" style={{
+          <Link href="/signup" style={{
             fontSize: '1rem', padding: '14px 32px', borderRadius: 12,
             background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
             border: '1px solid rgba(139,92,246,0.45)', color: 'white',
@@ -363,7 +424,7 @@ export default function Home() {
         <div style={{ display: 'flex', gap: 52, flexWrap: 'wrap', justifyContent: 'center' }}>
           {[
             { value: '30s', label: 'Time to blueprint', sub: 'avg generation' },
-            { value: '3', label: 'Dead-end warnings', sub: 'per project' },
+            { value: '4', label: 'AI-powered tools', sub: 'in one workflow' },
             { value: '10', label: 'Atomic steps', sub: 'no guessing' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
@@ -376,6 +437,138 @@ export default function Home() {
               <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.2)', marginTop: 1 }}>{s.sub}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Marquee ── */}
+      <section style={{ position: 'relative', zIndex: 10, padding: '0 0 80px', overflow: 'hidden' }}>
+        <p style={{
+          textAlign: 'center', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.2em',
+          color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase', marginBottom: 24,
+        }}>Trusted by builders worldwide</p>
+
+        <div style={{ position: 'relative' }}>
+          {/* Fade edges */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: 100, zIndex: 1,
+            background: 'linear-gradient(90deg, #030014, transparent)', pointerEvents: 'none',
+          }} />
+          <div aria-hidden="true" style={{
+            position: 'absolute', right: 0, top: 0, bottom: 0, width: 100, zIndex: 1,
+            background: 'linear-gradient(270deg, #030014, transparent)', pointerEvents: 'none',
+          }} />
+
+          <div style={{ display: 'flex', overflow: 'hidden' }}>
+            <div style={{
+              display: 'flex', gap: 12, animation: 'marquee 28s linear infinite',
+              whiteSpace: 'nowrap', flexShrink: 0,
+            }}>
+              {[...marqueeItems, ...marqueeItems].map((item, i) => (
+                <span key={i} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 7,
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+                  borderRadius: 9999, padding: '8px 18px',
+                  fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)', fontWeight: 500,
+                  flexShrink: 0,
+                }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(167,139,250,0.5)', flexShrink: 0 }} />
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How it works ── */}
+      <section style={{ position: 'relative', zIndex: 10, padding: '0 2rem 100px', maxWidth: 1060, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 60 }}>
+          <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(167,139,250,0.55)', textTransform: 'uppercase', marginBottom: 10 }}>
+            How it works
+          </p>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.02em', marginBottom: 12 }}>
+            From idea to blueprint in 3 steps
+          </h2>
+          <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.35)', maxWidth: 420, margin: '0 auto' }}>
+            No setup. No templates. Just paste and go.
+          </p>
+        </div>
+
+        {/* Steps */}
+        <div style={{ position: 'relative' }}>
+          {/* Connector line */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', top: 52, left: '16.6%', right: '16.6%', height: 1,
+            background: 'linear-gradient(90deg, rgba(139,92,246,0.3), rgba(236,72,153,0.3), rgba(52,211,153,0.3))',
+            display: 'none',
+          }} />
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
+            {howItWorksSteps.map((step, i) => (
+              <div key={step.num} style={{ textAlign: 'center' }}>
+                {/* Number + icon */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, gap: 0, position: 'relative' }}>
+                  <div style={{
+                    width: 72, height: 72, borderRadius: '50%',
+                    background: step.colorBg, border: `1px solid ${step.colorBorder}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: step.color,
+                    boxShadow: `0 0 24px ${step.color}22`,
+                    position: 'relative',
+                  }}>
+                    {step.icon}
+                    <span style={{
+                      position: 'absolute', top: -8, right: -8,
+                      width: 22, height: 22, borderRadius: '50%',
+                      background: '#030014', border: `1px solid ${step.colorBorder}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '0.6rem', fontWeight: 800, color: step.color,
+                    }}>{i + 1}</span>
+                  </div>
+                </div>
+
+                <h3 style={{ fontWeight: 700, fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', marginBottom: 10 }}>
+                  {step.title}
+                </h3>
+                <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.38)', lineHeight: 1.72, margin: '0 auto', maxWidth: 280 }}>
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mockup preview card */}
+        <div style={{
+          marginTop: 60,
+          background: 'rgba(10,6,30,0.7)',
+          backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(139,92,246,0.15)',
+          borderRadius: 20, overflow: 'hidden',
+          boxShadow: '0 0 60px rgba(139,92,246,0.06)',
+        }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 8 }}>
+            {['#f87171','#fbbf24','#34d399'].map((c,i) => (
+              <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.6 }} />
+            ))}
+            <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', marginLeft: 8, fontFamily: 'monospace' }}>vibstep.app/project/blueprint</span>
+          </div>
+          <div style={{ padding: '24px 28px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
+            {[
+              { label: 'Tech Stack', value: 'Next.js + Supabase', color: '#a78bfa' },
+              { label: 'Dead-End Risk', value: '3 warnings found', color: '#f87171' },
+              { label: 'Build Steps', value: '10 atomic steps', color: '#34d399' },
+              { label: 'Est. Time', value: '2–4 hrs per step', color: '#60a5fa' },
+            ].map(item => (
+              <div key={item.label} style={{
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: 12, padding: '14px 16px',
+              }}>
+                <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)', margin: '0 0 6px' }}>{item.label}</p>
+                <p style={{ fontSize: '0.88rem', fontWeight: 600, color: item.color, margin: 0 }}>{item.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -413,9 +606,16 @@ export default function Home() {
               borderRadius: 20, padding: '26px 24px',
               display: 'flex', flexDirection: 'column', gap: 20,
             }}>
-              <div style={{ fontSize: '2.5rem', lineHeight: 1, color: 'rgba(139,92,246,0.3)', fontFamily: 'Georgia, serif' }}>&ldquo;</div>
+              {/* Stars */}
+              <div style={{ display: 'flex', gap: 3 }}>
+                {Array.from({ length: t.stars }).map((_, i) => (
+                  <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="none">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                ))}
+              </div>
               <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.72, margin: 0, flex: 1 }}>
-                {t.quote}
+                &ldquo;{t.quote}&rdquo;
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{
@@ -495,9 +695,9 @@ export default function Home() {
               </span>
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.35)', marginBottom: 32, maxWidth: 400, margin: '0 auto 32px', lineHeight: 1.7, fontSize: '0.9rem' }}>
-              Stop second-guessing your stack. Stop hitting dead ends you could have seen coming. Get your blueprint in 30 seconds.
+              Stop second-guessing your stack. Stop hitting dead ends. Get your blueprint in 30 seconds.
             </p>
-            <Link href="/login" style={{
+            <Link href="/signup" style={{
               display: 'inline-block', textDecoration: 'none',
               fontSize: '1rem', padding: '13px 36px', borderRadius: 12,
               background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
@@ -510,15 +710,88 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer style={{
-        position: 'relative', zIndex: 10, textAlign: 'center',
-        padding: '20px 0 36px',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
-        color: 'rgba(255,255,255,0.18)', fontSize: '0.82rem',
+        position: 'relative', zIndex: 10,
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+        padding: '56px 2rem 40px',
       }}>
-        <span style={{ background: 'linear-gradient(135deg,#c4b5fd,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontWeight: 700 }}>VibeStep</span>
-        {' '}· Turn your idea into a blueprint in 30 seconds
+        <div style={{ maxWidth: 1060, margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '2.5rem', marginBottom: 48 }}>
+
+            {/* Brand */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: 'linear-gradient(135deg,#7c3aed,#5b21b6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: 'white' }}>V</div>
+                <span style={{ fontWeight: 800, background: 'linear-gradient(135deg,#c4b5fd,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>VibeStep</span>
+              </div>
+              <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.25)', lineHeight: 1.65, maxWidth: 200 }}>
+                Turn your startup idea into an actionable blueprint in 30 seconds.
+              </p>
+            </div>
+
+            {/* Product */}
+            <div>
+              <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)', marginBottom: 16 }}>Product</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  { label: 'Features', href: '/#features' },
+                  { label: 'Pricing', href: '/#pricing' },
+                  { label: 'Tools', href: '/tools' },
+                  { label: 'Dashboard', href: '/dashboard' },
+                ].map(link => (
+                  <Link key={link.label} href={link.href} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Account */}
+            <div>
+              <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)', marginBottom: 16 }}>Account</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  { label: 'Sign up', href: '/signup' },
+                  { label: 'Log in', href: '/login' },
+                  { label: 'Dashboard', href: '/dashboard' },
+                ].map(link => (
+                  <Link key={link.label} href={link.href} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)', marginBottom: 16 }}>Legal</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  { label: 'Privacy Policy', href: '/privacy' },
+                  { label: 'Terms of Service', href: '/terms' },
+                ].map(link => (
+                  <Link key={link.label} href={link.href} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div style={{
+            borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 24,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+          }}>
+            <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.18)', margin: 0 }}>
+              © {new Date().getFullYear()} VibeStep. Built with Claude.
+            </p>
+            <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.18)', margin: 0 }}>
+              Turn ideas into blueprints in 30 seconds.
+            </p>
+          </div>
+        </div>
       </footer>
     </main>
   )
