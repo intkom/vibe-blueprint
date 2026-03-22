@@ -114,6 +114,7 @@ const pricingTiers = [
     ],
     highlight: false,
     badge: null,
+    comingSoon: false,
   },
   {
     name: 'Builder',
@@ -131,6 +132,7 @@ const pricingTiers = [
     ],
     highlight: true,
     badge: 'Most popular',
+    comingSoon: true,
   },
   {
     name: 'Team',
@@ -148,6 +150,7 @@ const pricingTiers = [
     ],
     highlight: false,
     badge: null,
+    comingSoon: true,
   },
 ]
 
@@ -280,7 +283,15 @@ function PricingCard({ tier }: { tier: typeof pricingTiers[0] }) {
           background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.8), transparent)',
         }} />
       )}
-      {tier.badge && (
+      {tier.comingSoon && (
+        <div style={{
+          position: 'absolute', top: 16, right: 16,
+          fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
+          background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+          color: 'rgba(255,255,255,0.35)', padding: '3px 9px', borderRadius: 9999,
+        }}>Coming Soon</div>
+      )}
+      {!tier.comingSoon && tier.badge && (
         <div style={{
           position: 'absolute', top: 16, right: 16,
           fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
@@ -306,16 +317,29 @@ function PricingCard({ tier }: { tier: typeof pricingTiers[0] }) {
           </li>
         ))}
       </ul>
-      <Link href={tier.ctaHref} style={{
-        display: 'block', textAlign: 'center', textDecoration: 'none',
-        padding: '11px 20px', borderRadius: 11, fontWeight: 600, fontSize: '0.875rem',
-        background: tier.highlight ? 'linear-gradient(135deg,#7c3aed,#6d28d9)' : 'rgba(255,255,255,0.06)',
-        border: tier.highlight ? '1px solid rgba(139,92,246,0.45)' : '1px solid rgba(255,255,255,0.1)',
-        color: 'white',
-        boxShadow: tier.highlight ? '0 0 22px rgba(139,92,246,0.3)' : 'none',
-      }}>
-        {tier.cta}
-      </Link>
+      {tier.comingSoon ? (
+        <div style={{
+          display: 'block', textAlign: 'center',
+          padding: '11px 20px', borderRadius: 11, fontWeight: 600, fontSize: '0.875rem',
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.07)',
+          color: 'rgba(255,255,255,0.2)',
+          cursor: 'not-allowed',
+        }}>
+          Coming soon
+        </div>
+      ) : (
+        <Link href={tier.ctaHref} style={{
+          display: 'block', textAlign: 'center', textDecoration: 'none',
+          padding: '11px 20px', borderRadius: 11, fontWeight: 600, fontSize: '0.875rem',
+          background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+          border: '1px solid rgba(139,92,246,0.45)',
+          color: 'white',
+          boxShadow: '0 0 22px rgba(139,92,246,0.3)',
+        }}>
+          {tier.cta}
+        </Link>
+      )}
     </div>
   )
 }
@@ -424,7 +448,7 @@ export default function Home() {
         <div style={{ display: 'flex', gap: 52, flexWrap: 'wrap', justifyContent: 'center' }}>
           {[
             { value: '30s', label: 'Time to blueprint', sub: 'avg generation' },
-            { value: '4', label: 'AI-powered tools', sub: 'in one workflow' },
+            { value: '1', label: 'AI tool live now', sub: 'more coming soon' },
             { value: '10', label: 'Atomic steps', sub: 'no guessing' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
