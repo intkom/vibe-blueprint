@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { deleteProject } from "@/app/actions/projects";
 
 export type ProjectRow = {
   id: string;
@@ -37,6 +39,15 @@ export function IconFolder() {
   );
 }
 
+function TrashIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6"/>
+      <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
+    </svg>
+  );
+}
+
 export function ProjectCard({
   project, stats, pct, isDone, toolType,
 }: {
@@ -48,8 +59,40 @@ export function ProjectCard({
 }) {
   const hasSteps = stats.total > 0;
   const badge = toolType ? TOOL_BADGE_STYLE[toolType] : null;
+  const [delHover, setDelHover] = useState(false);
+
+  function handleDelete(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (confirm(`Delete "${project.title?.trim() || "Untitled"}"? This cannot be undone.`)) {
+      const fd = new FormData();
+      fd.append("projectId", project.id);
+      deleteProject(fd);
+    }
+  }
 
   return (
+    <div style={{ position: "relative" }}>
+      {/* Delete button — floats above the card link */}
+      <button
+        type="button"
+        onClick={handleDelete}
+        onMouseEnter={() => setDelHover(true)}
+        onMouseLeave={() => setDelHover(false)}
+        title="Delete project"
+        style={{
+          position: "absolute", top: 12, right: 12, zIndex: 10,
+          width: 28, height: 28, borderRadius: 7,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: delHover ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)",
+          border: delHover ? "1px solid rgba(239,68,68,0.35)" : "1px solid rgba(255,255,255,0.08)",
+          color: delHover ? "#f87171" : "rgba(255,255,255,0.25)",
+          cursor: "pointer", transition: "all 0.18s ease",
+        }}
+      >
+        <TrashIcon />
+      </button>
+
     <Link
       href={`/project/${project.id}`}
       style={{
@@ -177,5 +220,6 @@ export function ProjectCard({
         </div>
       </div>
     </Link>
+    </div>
   );
 }

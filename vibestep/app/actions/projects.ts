@@ -105,3 +105,21 @@ export async function createProject(
   revalidatePath("/dashboard");
   redirect(`/project/${project.id}`);
 }
+
+export async function deleteProject(formData: FormData): Promise<void> {
+  const projectId = String(formData.get("projectId") ?? "").trim();
+  if (!projectId) return;
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  await supabase
+    .from("projects")
+    .delete()
+    .eq("id", projectId)
+    .eq("user_id", user.id);
+
+  revalidatePath("/dashboard");
+  redirect("/dashboard");
+}

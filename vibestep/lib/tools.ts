@@ -65,9 +65,9 @@ export const TOOL_META: Record<ToolType, {
     badge: "10 atomic steps",
     placeholder: "What are you building? Who is it for? What problem does it solve? What tech stack do you prefer?\n\nThe more detail, the more specific your steps.",
     loadingMessages: [
-      "Reading your idea…",
-      "Thinking like a senior engineer…",
-      "Breaking it into atomic steps…",
+      "Claude is thinking…",
+      "Reading your idea carefully…",
+      "Generating 10 atomic steps…",
       "Sequencing build order…",
       "Saving your blueprint…",
     ],

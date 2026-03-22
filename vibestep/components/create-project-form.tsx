@@ -6,9 +6,11 @@ import { TOOL_META, type ToolType } from "@/lib/tools";
 
 const EXAMPLE_IDEAS: Record<ToolType, string[]> = {
   sprint: [
-    "A SaaS tool for freelancers to send invoices and track payments. Clients can pay online. Built for solo designers and developers.",
-    "A habit tracker app where friends can see each other's streaks and cheer each other on. Mobile-first, social accountability.",
-    "An AI writing assistant for cold emails. You paste a job description, it generates personalized outreach for sales reps.",
+    "A Notion clone for developers — markdown-first, with code blocks, GitHub integration, and keyboard shortcuts everywhere.",
+    "A habit tracker for athletes — log workouts, streaks, and personal bests. Mobile-first. Syncs with Apple Health.",
+    "An AI writing assistant for content creators — paste a topic, get a full blog post draft with SEO suggestions.",
+    "A booking app for freelancers — clients can see availability, book sessions, pay upfront, and get automated reminders.",
+    "A SaaS dashboard template marketplace — developers buy and sell pre-built admin dashboards for popular stacks.",
   ],
   validator: [
     "An app that lets people rent out their unused parking spots by the hour. Targeted at city apartment residents.",

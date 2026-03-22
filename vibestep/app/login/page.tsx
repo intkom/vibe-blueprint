@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { LoginForm } from "@/components/login-form";
+import { GoogleAuthButton } from "@/components/google-auth-button";
 
 function messageForUrlError(code: string | undefined): string | null {
   if (!code) return null;
@@ -150,14 +151,16 @@ export default async function LoginPage({ searchParams }: Props) {
 
             {/* Divider */}
             <div style={{
-              display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0',
+              display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0 16px',
             }}>
               <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
               <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)' }}>or</span>
               <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
             </div>
 
-            <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'rgba(255,255,255,0.25)', margin: 0 }}>
+            <GoogleAuthButton label="Continue with Google" />
+
+            <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'rgba(255,255,255,0.25)', margin: '20px 0 0' }}>
               Don&apos;t have an account?{' '}
               <Link href="/signup" style={{ color: 'rgba(167,139,250,0.7)', textDecoration: 'none', fontWeight: 500 }}>
                 Sign up free

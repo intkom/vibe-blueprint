@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { StepCard } from "@/components/step-card";
 import { AppHeader } from "@/components/app-header";
+import { ExportStepsButton } from "@/components/export-steps-button";
 import { deserializeMeta, type Warning, type StackRecommendation } from "@/lib/generate-build-steps";
 import {
   deserializeToolOutput, isToolType,
@@ -740,16 +741,24 @@ export default async function ProjectPage({ params }: Props) {
 
             {/* Build Steps header */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-              <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", margin: 0 }}>
-                Build steps
-              </p>
-              <span style={{
-                fontSize: "0.7rem", fontWeight: 600, color: "rgba(139,92,246,0.7)",
-                background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.2)",
-                padding: "3px 10px", borderRadius: 9999,
-              }}>
-                {totalCount} steps
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", margin: 0 }}>
+                  Build steps
+                </p>
+                <span style={{
+                  fontSize: "0.7rem", fontWeight: 600, color: "rgba(139,92,246,0.7)",
+                  background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.2)",
+                  padding: "3px 10px", borderRadius: 9999,
+                }}>
+                  {totalCount} steps
+                </span>
+              </div>
+              {totalCount > 0 && (
+                <ExportStepsButton
+                  steps={sprintSteps}
+                  projectTitle={project.title?.trim() || "Untitled"}
+                />
+              )}
             </div>
 
             {stepsList.length === 0 ? (
