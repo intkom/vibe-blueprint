@@ -144,10 +144,10 @@ export default async function CreatePage({ searchParams }: Props) {
               </div>
               <div>
                 <h1 style={{ fontSize: "1.2rem", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", color: "rgba(255,255,255,0.95)" }}>
-                  {toolType === "sprint" ? "Describe your build" : meta.label}
+                  {toolType === "sprint" ? "What are you building?" : meta.label}
                 </h1>
                 <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", margin: "2px 0 0" }}>
-                  {toolType === "sprint" ? "Full intelligence analysis · Powered by Axiom" : `${meta.tagline} · Powered by Axiom`}
+                  {toolType === "sprint" ? "Describe your idea, stack, or build. Axiom will show you exactly what to fix." : `${meta.tagline} · Powered by Axiom`}
                 </p>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { NotificationProvider } from "@/lib/notification-context";
 import { NotificationToasts } from "@/components/notification-bell";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { GlobalSearch } from "@/components/global-search";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +48,7 @@ export default function RootLayout({
           <NotificationToasts />
           <KeyboardShortcuts />
           <GlobalSearch />
+          <Analytics />
         </NotificationProvider>
       </body>
     </html>

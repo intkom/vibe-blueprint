@@ -255,10 +255,10 @@ function EmptyState() {
       </div>
 
       <h2 style={{ fontSize:"1.25rem", fontWeight:800, letterSpacing:"-0.02em", color:"rgba(255,255,255,0.72)", margin:"0 0 10px" }}>
-        Nothing analyzed yet
+        Your first analysis is 30 seconds away
       </h2>
-      <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,0.28)", margin:"0 0 28px", lineHeight:1.65, maxWidth:280 }}>
-        Paste your first build to get your product truth. Risk detection, architecture clarity, and execution path in 30 seconds.
+      <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,0.28)", margin:"0 0 28px", lineHeight:1.65, maxWidth:300 }}>
+        Describe what you&apos;re building. Axiom will show you exactly what to fix before you ship it.
       </p>
       <Link href="/create" style={{
         display:"inline-flex", alignItems:"center", gap:8,
@@ -271,7 +271,7 @@ function EmptyState() {
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 5v14M5 12h14"/>
         </svg>
-        Analyze a new build →
+        Analyze my build free →
       </Link>
     </div>
   );
