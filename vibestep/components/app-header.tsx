@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { signOut } from "@/app/actions/auth";
+import { NotificationsBell } from "@/components/notifications-bell";
 
 /* ── Avatar helpers ─────────────────────────────────────── */
 const AVATAR_COLORS = ["#7c3aed","#2563eb","#059669","#d97706","#dc2626","#0891b2","#db2777","#4f46e5"];
@@ -154,6 +155,9 @@ export function AppHeader() {
               </svg>
               Analyze
             </Link>
+
+            {/* Notifications */}
+            <NotificationsBell />
 
             {/* Avatar */}
             <div ref={dropRef} style={{ position:"relative" }}>

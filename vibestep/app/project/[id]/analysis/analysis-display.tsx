@@ -11,6 +11,7 @@ import { ConfidenceBadge } from "@/components/confidence-badge";
 import { TechStackSection } from "@/components/tech-stack-section";
 import { CompetitiveMoatSection } from "@/components/competitive-moat-section";
 import { FollowUpQuestions } from "@/components/follow-up-questions";
+import { CodeGeneratorPanel } from "@/components/code-generator-panel";
 
 /* ── Helpers ──────────────────────────────────────────────── */
 
@@ -748,6 +749,9 @@ export function AnalysisDisplay({
 
   function openAction(cfg: ActionPanelConfig) { setActionConfig(cfg); }
 
+  // Code generator panel
+  const [codeGenStep, setCodeGenStep] = useState<string | null>(null);
+
   // Export to markdown
   const exportMarkdown = useCallback(() => {
     const a = analysis;
@@ -1023,7 +1027,7 @@ export function AnalysisDisplay({
               },
               {
                 icon: "⌨", label: "Generate code",
-                onClick: () => openAction({ type: "codegen", title: "Generate starter code", subtitle: "Get a code scaffold for your build", projectIdea, projectTitle, context: { health_score: analysis.health_score } }),
+                onClick: () => setCodeGenStep(`${projectTitle} — starter code`),
                 color: "#60a5fa",
               },
               {
@@ -1294,17 +1298,7 @@ export function AnalysisDisplay({
                     context: step,
                     onStepComplete: () => markAddressed(i),
                   })}
-                  onCodeGen={() => openAction({
-                    type: "codegen",
-                    title: `Code: ${step.title}`,
-                    subtitle: "Production-ready starter code",
-                    projectIdea,
-                    projectTitle,
-                    context: {
-                      ...step,
-                      stack: analysis.architecture_insights?.map(a => `${a.layer}: ${a.recommendation}`).join(", ") ?? "",
-                    },
-                  })}
+                  onCodeGen={() => setCodeGenStep(`Step ${step.step}: ${step.title}`)}
                   onStuck={() => openAction({
                     type: "stuck",
                     title: `Stuck on Step ${step.step}: ${step.title}`,
@@ -1917,6 +1911,16 @@ export function AnalysisDisplay({
         <ActionPanel
           config={actionConfig}
           onClose={() => setActionConfig(null)}
+        />
+      )}
+
+      {/* ── Code Generator Panel ── */}
+      {codeGenStep && (
+        <CodeGeneratorPanel
+          step={codeGenStep}
+          idea={projectIdea}
+          projectTitle={projectTitle}
+          onClose={() => setCodeGenStep(null)}
         />
       )}
     </div>
