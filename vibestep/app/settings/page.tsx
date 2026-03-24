@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { AppHeader } from "@/components/app-header";
 import { ReferralSection } from "@/components/referral-section";
 import { AchievementBadges } from "@/components/achievement-badges";
+import { EmailPreferencesForm } from "@/components/email-preferences-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export default async function SettingsPage() {
   // Fetch streak profile
   const { data: profile } = await supabase
     .from("profiles")
-    .select("current_streak, longest_streak")
+    .select("current_streak, longest_streak, referral_code, analyses_used, bonus_analyses, plan, email_weekly_digest, email_risk_alerts, email_build_tips")
     .eq("id", user.id)
     .single();
 
@@ -394,7 +395,16 @@ export default async function SettingsPage() {
 
         {/* ── Referral ── */}
         <div style={{ marginBottom: 14 }}>
-          <ReferralSection username={emailLocal} />
+          <ReferralSection referralCode={profile?.referral_code ?? emailLocal} />
+        </div>
+
+        {/* ── Email preferences ── */}
+        <div style={{ marginBottom: 14 }}>
+          <EmailPreferencesForm
+            weeklyDigest={profile?.email_weekly_digest ?? true}
+            riskAlerts={profile?.email_risk_alerts ?? true}
+            buildTips={profile?.email_build_tips ?? true}
+          />
         </div>
 
         {/* ── Keyboard shortcuts ── */}

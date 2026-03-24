@@ -79,7 +79,7 @@ const SECTION_MARKERS: Array<{ marker: string; message: string; pct: number }> =
   { marker: '"iteration_suggestions":', message: "Generating iteration roadmap",   pct: 94 },
 ];
 
-const SYSTEM_PROMPT = `You are Axiom, a product intelligence engine. Analyze the user's build idea with technical depth and honesty.
+export const SYSTEM_PROMPT = `You are Axiom, a product intelligence engine. Analyze the user's build idea with technical depth and honesty.
 
 Return ONLY this exact JSON structure — no markdown, no fences, no explanation:
 {
@@ -181,6 +181,43 @@ export async function POST(req: NextRequest) {
   if (!user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // ── Usage limit check ─────────────────────────────────────
+  const FREE_LIMIT = 3;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("analyses_used, analyses_reset_date, plan, bonus_analyses")
+    .eq("id", user.id)
+    .single();
+
+  let currentUsage = profile?.analyses_used ?? 0;
+  if (profile) {
+    // Reset counter if it's a new calendar month
+    const resetDate = profile.analyses_reset_date ? new Date(profile.analyses_reset_date) : null;
+    if (resetDate) {
+      const now = new Date();
+      const isNewMonth =
+        now.getFullYear() > resetDate.getFullYear() ||
+        (now.getFullYear() === resetDate.getFullYear() && now.getMonth() > resetDate.getMonth());
+      if (isNewMonth) {
+        await supabase
+          .from("profiles")
+          .update({ analyses_used: 0, analyses_reset_date: now.toISOString().split("T")[0] })
+          .eq("id", user.id);
+        currentUsage = 0;
+      }
+    }
+
+    const bonusCount = profile.bonus_analyses ?? 0;
+    const isPro = (profile.plan ?? "free") !== "free";
+    if (!isPro && currentUsage >= FREE_LIMIT + bonusCount) {
+      return Response.json(
+        { error: "limit_reached", used: currentUsage, limit: FREE_LIMIT + bonusCount },
+        { status: 429 }
+      );
+    }
+  }
+  // ─────────────────────────────────────────────────────────
 
   const encoder = new TextEncoder();
 
@@ -348,6 +385,12 @@ export async function POST(req: NextRequest) {
           .eq("id", project.id);
 
         send({ type: "done", projectId: project.id, analysis });
+
+        // Increment usage counter
+        await supabase
+          .from("profiles")
+          .update({ analyses_used: currentUsage + 1 })
+          .eq("id", user.id);
       } catch (err) {
         const message = err instanceof Error ? err.message : "Analysis failed";
         send({ type: "error", message });

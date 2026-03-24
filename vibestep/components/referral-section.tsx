@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-export function ReferralSection({ username }: { username: string }) {
-  const refLink = `https://axiom.app/ref/${username}`;
+export function ReferralSection({ referralCode }: { referralCode: string }) {
+  const refLink = `${typeof window !== "undefined" ? window.location.origin : "https://axiom.build"}/ref/${referralCode}`;
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {

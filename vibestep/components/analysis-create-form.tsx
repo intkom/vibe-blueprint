@@ -3,6 +3,7 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { StreamEvent } from "@/app/api/analyze/route";
+import { UpgradeModal } from "@/components/upgrade-modal";
 
 function scoreIdea(text: string): { score: number; tip: string | null } {
   if (text.length < 10) return { score: 0, tip: null };
@@ -73,6 +74,9 @@ export function AnalysisCreateForm() {
   const [progress, setProgress] = useState(0);
   const [log, setLog] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeUsed, setUpgradeUsed] = useState(0);
+  const [upgradeLimit, setUpgradeLimit] = useState(3);
 
   const ideaScore = useMemo(() => scoreIdea(ideaText), [ideaText]);
   const complexity = useMemo(() => charCount >= 10 ? getComplexity(ideaText) : null, [ideaText, charCount]);
@@ -143,7 +147,18 @@ export function AnalysisCreateForm() {
         body: JSON.stringify({ idea }),
       });
 
-      if (!res.ok || !res.body) throw new Error("Request failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({})) as { error?: string; used?: number; limit?: number };
+        if (data.error === "limit_reached") {
+          setUpgradeUsed(data.used ?? 3);
+          setUpgradeLimit(data.limit ?? 3);
+          setShowUpgradeModal(true);
+          setPhase("idle");
+          return;
+        }
+        throw new Error("Request failed");
+      }
+      if (!res.body) throw new Error("Request failed");
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -352,6 +367,14 @@ export function AnalysisCreateForm() {
 
   // ── Idle form ────────────────────────────────────────────────
   return (
+    <>
+    {showUpgradeModal && (
+      <UpgradeModal
+        onClose={() => setShowUpgradeModal(false)}
+        used={upgradeUsed}
+        limit={upgradeLimit}
+      />
+    )}
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       {/* Example chips */}
       <div>
@@ -548,5 +571,6 @@ export function AnalysisCreateForm() {
         <span style={{ position: "relative", zIndex: 1 }}>Run analysis →</span>
       </button>
     </form>
+    </>
   );
 }

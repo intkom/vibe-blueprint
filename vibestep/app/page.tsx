@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { SiteFooter } from '@/components/site-footer'
+import { SocialProofTicker } from '@/components/social-proof-ticker'
+import { ExitIntentPopup } from '@/components/exit-intent-popup'
 
 /* ─────────────────────────────────────────────────────────────
    Star field
@@ -756,6 +758,7 @@ export default function Home() {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--vs-bg)', color: 'var(--vs-text)', position: 'relative', overflowX: 'hidden' }}>
+      <ExitIntentPopup />
       <StarField />
 
       <style>{`
@@ -837,9 +840,13 @@ export default function Home() {
         <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.4)', maxWidth: 500, margin: '0 auto 18px', lineHeight: 1.78 }}>
           Paste your idea. Get build health score, risk detection, and a 10-step execution path in 30 seconds.
         </p>
-        <p style={{ fontSize: '0.82rem', color: 'rgba(167,139,250,0.5)', margin: '0 auto 44px', fontWeight: 500 }}>
+        <p style={{ fontSize: '0.82rem', color: 'rgba(167,139,250,0.5)', margin: '0 auto 24px', fontWeight: 500 }}>
           Join 500+ builders who shipped with clarity
         </p>
+
+        <div style={{ marginBottom: 36 }}>
+          <SocialProofTicker />
+        </div>
 
         <div className="lp-cta-row" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 80 }}>
           <Link href="/signup" style={{
@@ -966,6 +973,17 @@ export default function Home() {
           <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(167,139,250,0.55)', textTransform: 'uppercase', marginBottom: 10 }}>Pricing</p>
           <h2 style={{ fontSize: 'clamp(1.5rem,3.5vw,1.9rem)', fontWeight: 800, color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.02em', margin: '0 0 12px' }}>Start free. Upgrade when you need it.</h2>
           <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.32)', margin: 0 }}>No trial limits on the Starter plan. Analyze 3 builds per month, forever.</p>
+        </div>
+        {/* Urgency badge */}
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: '0.75rem', fontWeight: 700,
+            background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.25)',
+            color: 'rgba(251,191,36,0.85)', padding: '6px 14px', borderRadius: 9999,
+          }}>
+            🔥 47 builders upgraded to Pro this week
+          </span>
         </div>
         <div className="lp-pricing" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
           {pricingTiers.map(tier => <PricingCard key={tier.name} tier={tier} />)}

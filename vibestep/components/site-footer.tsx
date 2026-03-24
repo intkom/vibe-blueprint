@@ -5,23 +5,23 @@ import Link from "next/link";
 
 const LINKS = {
   Product: [
-    { label: "Dashboard",  href: "/dashboard" },
-    { label: "Analyze",    href: "/create" },
-    { label: "Templates",  href: "/templates" },
-    { label: "Validate",   href: "/validate" },
-    { label: "Status",     href: "/status" },
+    { label: "Dashboard",     href: "/dashboard" },
+    { label: "Analyze",       href: "/create" },
+    { label: "Templates",     href: "/templates" },
+    { label: "Validate",      href: "/validate" },
+    { label: "Integrations",  href: "/integrations" },
   ],
   Resources: [
     { label: "How it works", href: "/#demo" },
+    { label: "API Docs",     href: "/api-docs" },
     { label: "Pricing",      href: "/#pricing" },
-    { label: "FAQ",          href: "/#faq" },
     { label: "Changelog",    href: "#" },
   ],
   Company: [
-    { label: "About",    href: "#" },
-    { label: "Twitter",  href: "#" },
-    { label: "GitHub",   href: "#" },
-    { label: "LinkedIn", href: "#" },
+    { label: "Product Hunt", href: "/launch" },
+    { label: "About",        href: "#" },
+    { label: "Twitter",      href: "#" },
+    { label: "GitHub",       href: "#" },
   ],
   Legal: [
     { label: "Privacy", href: "/privacy" },

@@ -6,6 +6,7 @@ import type { AnalysisData } from "@/app/api/analyze/route";
 import { ActionPanel, type ActionPanelConfig } from "@/components/action-panel";
 import { WorkspaceChat } from "@/components/workspace-chat";
 import { BuildJournal } from "@/components/build-journal";
+import { ShareBar } from "@/components/share-bar";
 
 /* ── Helpers ──────────────────────────────────────────────── */
 
@@ -854,13 +855,18 @@ export function AnalysisDisplay({
         </div>
 
         {/* Title */}
-        <div style={{ marginBottom: 40, animation: "fadeInUp 0.4s ease both" }}>
+        <div style={{ marginBottom: 32, animation: "fadeInUp 0.4s ease both" }}>
           <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.5)", marginBottom: 8 }}>
             Analysis Report
           </p>
-          <h1 style={{ fontSize: "clamp(1.5rem, 3.5vw, 2rem)", fontWeight: 900, letterSpacing: "-0.025em", color: "rgba(255,255,255,0.95)", margin: 0, lineHeight: 1.2 }}>
+          <h1 style={{ fontSize: "clamp(1.5rem, 3.5vw, 2rem)", fontWeight: 900, letterSpacing: "-0.025em", color: "rgba(255,255,255,0.95)", margin: "0 0 16px", lineHeight: 1.2 }}>
             {projectTitle}
           </h1>
+          <ShareBar
+            projectId={projectId}
+            projectTitle={projectTitle}
+            healthScore={analysis.health_score}
+          />
         </div>
 
         {/* ── SECTION 1: Build Health ── */}

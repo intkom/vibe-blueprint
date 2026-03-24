@@ -10,6 +10,7 @@ import { QuickActions } from "@/components/quick-actions";
 import { ExtensionPromoBanner } from "@/components/extension-promo-banner";
 import { TodayFocusWidget, QuickAnalyzeWidget, RecentInsightsWidget, type FocusProject, type InsightItem } from "@/components/dashboard-widgets";
 import type { AnalysisData } from "@/app/api/analyze/route";
+import { UsageIndicatorClient } from "@/components/usage-indicator-client";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -23,11 +24,18 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: projects, error } = await supabase
-    .from("projects")
-    .select("id, title, raw_idea, created_at, updated_at, analysis")
-    .eq("user_id", user.id)
-    .order("updated_at", { ascending: false });
+  const [{ data: projects, error }, { data: profile }] = await Promise.all([
+    supabase
+      .from("projects")
+      .select("id, title, raw_idea, created_at, updated_at, analysis")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false }),
+    supabase
+      .from("profiles")
+      .select("analyses_used, bonus_analyses, plan")
+      .eq("id", user.id)
+      .single(),
+  ]);
 
   if (error) {
     return (
@@ -77,6 +85,10 @@ export default async function DashboardPage() {
   const completedCount = entries.filter(e => e.isDone).length;
   const inProgressCount = rows.length - completedCount;
   const name = user.email?.split("@")[0] ?? "there";
+
+  const isPro = (profile?.plan ?? "free") !== "free";
+  const analysesUsed = profile?.analyses_used ?? 0;
+  const analysesLimit = 3 + (profile?.bonus_analyses ?? 0);
 
   // Today's Focus — most recently updated project with analysis but not fully done
   const focusProject: FocusProject | null = (() => {
@@ -166,6 +178,13 @@ export default async function DashboardPage() {
             </div>
           ))}
         </div>
+
+        {/* ── Usage indicator (free plan only) ── */}
+        {!isPro && (
+          <div style={{ marginBottom: 16 }}>
+            <UsageIndicatorClient used={analysesUsed} limit={analysesLimit} />
+          </div>
+        )}
 
         {/* ── Smart widgets row ── */}
         {(focusProject || recentInsights.length > 0) && (
