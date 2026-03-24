@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { AnalysisDisplay } from "./analysis-display";
-import type { AnalysisData } from "@/app/api/analyze/route";
+import type { AnalysisData, DeepAnalysisData } from "@/app/api/analyze/route";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };
@@ -31,14 +31,12 @@ export default async function AnalysisPage({ params }: Props) {
 
   const { data: project } = await supabase
     .from("projects")
-    .select("id, title, raw_idea, analysis")
+    .select("id, title, raw_idea, analysis, deep_analysis, input_mode")
     .eq("id", id)
     .eq("user_id", user.id)
     .single();
 
   if (!project) redirect("/dashboard");
-
-  // If no analysis yet, redirect to project page (old flow)
   if (!project.analysis) redirect(`/project/${id}`);
 
   return (
@@ -47,6 +45,8 @@ export default async function AnalysisPage({ params }: Props) {
       projectTitle={project.title ?? "Product Analysis"}
       projectIdea={project.raw_idea ?? ""}
       analysis={project.analysis as AnalysisData}
+      deepAnalysis={(project.deep_analysis ?? null) as DeepAnalysisData | null}
+      inputMode={(project.input_mode as "idea" | "code" | "github") ?? "idea"}
     />
   );
 }

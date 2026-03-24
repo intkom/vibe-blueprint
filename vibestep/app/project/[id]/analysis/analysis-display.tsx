@@ -2,11 +2,15 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import type { AnalysisData } from "@/app/api/analyze/route";
+import type { AnalysisData, DeepAnalysisData } from "@/app/api/analyze/route";
 import { ActionPanel, type ActionPanelConfig } from "@/components/action-panel";
 import { WorkspaceChat } from "@/components/workspace-chat";
 import { BuildJournal } from "@/components/build-journal";
 import { ShareBar } from "@/components/share-bar";
+import { ConfidenceBadge } from "@/components/confidence-badge";
+import { TechStackSection } from "@/components/tech-stack-section";
+import { CompetitiveMoatSection } from "@/components/competitive-moat-section";
+import { FollowUpQuestions } from "@/components/follow-up-questions";
 
 /* ── Helpers ──────────────────────────────────────────────── */
 
@@ -518,12 +522,19 @@ export function AnalysisDisplay({
   projectTitle,
   projectIdea,
   analysis,
+  deepAnalysis: initialDeepAnalysis = null,
+  inputMode = "idea",
 }: {
   projectId: string;
   projectTitle: string;
   projectIdea: string;
   analysis: AnalysisData;
+  deepAnalysis?: DeepAnalysisData | null;
+  inputMode?: "idea" | "code" | "github";
 }) {
+  // Deep analysis state — can be updated by follow-up Q&A
+  const [deepAnalysis, setDeepAnalysis] = useState<DeepAnalysisData | null>(initialDeepAnalysis);
+  const conf = deepAnalysis?.section_confidence ?? null;
   // Execution path — persisted in localStorage
   const STORAGE_KEY = `axiom_addressed_${projectId}`;
   const [addressed, setAddressed] = useState<Set<number>>(() => {
@@ -953,6 +964,7 @@ export function AnalysisDisplay({
             <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 <SectionLabel>Risk Areas</SectionLabel>
+                {conf && <ConfidenceBadge score={conf.risk_areas} />}
                 <span style={{
                   fontSize: "0.6rem", fontWeight: 700, padding: "2px 8px", borderRadius: 9999,
                   background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", color: "#f87171",
@@ -1015,7 +1027,10 @@ export function AnalysisDisplay({
             borderRadius: 16, overflow: "hidden",
           }}>
             <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-              <SectionLabel>Architecture Insights</SectionLabel>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                <SectionLabel>Architecture Insights</SectionLabel>
+                {conf && <ConfidenceBadge score={conf.architecture} />}
+              </div>
             </div>
             <div style={{ padding: "14px 20px", display: "flex", flexDirection: "column", gap: 16 }}>
               {analysis.architecture_insights.map((insight, i) => (
@@ -1113,7 +1128,10 @@ export function AnalysisDisplay({
           }}>
             <div style={{ padding: "18px 20px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
-                <SectionLabel>Execution Path</SectionLabel>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <SectionLabel>Execution Path</SectionLabel>
+                  {conf && <ConfidenceBadge score={conf.execution_path} />}
+                </div>
                 <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", fontWeight: 500, marginBottom: 14 }}>
                   {addressedCount}/{totalSteps} addressed
                 </span>
@@ -1252,7 +1270,10 @@ export function AnalysisDisplay({
               borderRadius: 16, overflow: "hidden",
             }}>
               <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <SectionLabel>Competitor Landscape</SectionLabel>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <SectionLabel>Competitor Landscape</SectionLabel>
+                  {conf && <ConfidenceBadge score={conf.competitor_analysis} />}
+                </div>
               </div>
               <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
                 {analysis.competitor_analysis.map((comp, i) => (
@@ -1593,6 +1614,53 @@ export function AnalysisDisplay({
                 })}
               </div>
             </div>
+          </Section>
+        )}
+
+        {/* ── Tech Stack (deep analysis) ── */}
+        {deepAnalysis?.tech_stack && deepAnalysis.tech_stack.length > 0 && (
+          <Section delay={1.4} style={{ marginBottom: 24 }}>
+            <div style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: 16, overflow: "hidden",
+            }}>
+              <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <SectionLabel>Recommended Tech Stack</SectionLabel>
+              </div>
+              <div style={{ padding: "16px 20px" }}>
+                <TechStackSection items={deepAnalysis.tech_stack} />
+              </div>
+            </div>
+          </Section>
+        )}
+
+        {/* ── Competitive Moat ── */}
+        {deepAnalysis?.competitive_moat && (
+          <Section delay={1.45} style={{ marginBottom: 24 }}>
+            <div style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: 16, overflow: "hidden",
+            }}>
+              <div style={{ padding: "18px 20px 14px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <SectionLabel>Competitive Moat</SectionLabel>
+              </div>
+              <div style={{ padding: "16px 20px" }}>
+                <CompetitiveMoatSection moat={deepAnalysis.competitive_moat} />
+              </div>
+            </div>
+          </Section>
+        )}
+
+        {/* ── Follow-Up Questions ── */}
+        {deepAnalysis?.followup_questions && deepAnalysis.followup_questions.length > 0 && (
+          <Section delay={1.5} style={{ marginBottom: 24 }}>
+            <FollowUpQuestions
+              questions={deepAnalysis.followup_questions}
+              projectId={projectId}
+              onAnalysisUpdated={setDeepAnalysis}
+            />
           </Section>
         )}
 
