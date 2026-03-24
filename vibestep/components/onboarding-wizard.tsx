@@ -4,20 +4,22 @@ import { useState, useActionState, useRef } from "react";
 import { onboardAndCreate } from "@/app/actions/onboarding";
 
 /* ── Types ── */
-type BuildType = "saas" | "mobile" | "api" | "other";
+type BuildType = "saas" | "mobile" | "devtool" | "ecommerce" | "ai" | "other";
 type ExpLevel  = "beginner" | "intermediate" | "expert";
 
 const BUILD_OPTIONS: { id: BuildType; emoji: string; label: string; sub: string }[] = [
-  { id: "saas",   emoji: "🖥️", label: "SaaS / Web App",   sub: "Subscription product or web tool"  },
-  { id: "mobile", emoji: "📱", label: "Mobile App",        sub: "iOS and/or Android"                 },
-  { id: "api",    emoji: "⚡", label: "API / Backend",     sub: "Developer tool or data platform"    },
-  { id: "other",  emoji: "✨", label: "Something else",    sub: "Marketplace, game, hardware, etc."  },
+  { id: "saas",      emoji: "🖥",  label: "SaaS Product",    sub: "Subscription web app or tool"      },
+  { id: "mobile",    emoji: "📱",  label: "Mobile App",      sub: "iOS and/or Android"                },
+  { id: "devtool",   emoji: "⚡",  label: "Developer Tool",  sub: "API, CLI, SDK, or data platform"   },
+  { id: "ecommerce", emoji: "🛍",  label: "E-commerce",      sub: "Store, marketplace, or D2C brand"  },
+  { id: "ai",        emoji: "🧠",  label: "AI Application",  sub: "AI-first product or agent"         },
+  { id: "other",     emoji: "✨",  label: "Something else",  sub: "Marketplace, game, hardware, etc." },
 ];
 
 const EXP_OPTIONS: { id: ExpLevel; emoji: string; label: string; sub: string }[] = [
-  { id: "beginner",     emoji: "🌱", label: "Beginner",     sub: "Learning as I go"             },
-  { id: "intermediate", emoji: "🔨", label: "Intermediate",  sub: "Built a few things before"   },
-  { id: "expert",       emoji: "🚀", label: "Expert",        sub: "Ship fast, no hand-holding"  },
+  { id: "beginner",     emoji: "🌱", label: "Beginner",     sub: "Learning as I go — keep it simple"         },
+  { id: "intermediate", emoji: "🔨", label: "Intermediate", sub: "Built a few things, know the basics"        },
+  { id: "expert",       emoji: "🚀", label: "Expert",       sub: "Ship fast, technical depth appreciated"     },
 ];
 
 const IDEA_EXAMPLES = [
@@ -26,17 +28,13 @@ const IDEA_EXAMPLES = [
   "A no-code Shopify app builder where merchants describe what they want and AI generates the app.",
 ];
 
-const STEPS = [
-  { num: 1, label: "What are you building?" },
-  { num: 2, label: "Your experience level" },
-  { num: 3, label: "Describe your first idea" },
-];
+const TOTAL_STEPS = 4;
 
 /* ── Component ── */
 export function OnboardingWizard() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [buildType, setBuildType] = useState<BuildType | null>(null);
-  const [expLevel, setExpLevel]   = useState<ExpLevel  | null>(null);
+  const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
+  const [buildTypes, setBuildTypes] = useState<Set<BuildType>>(new Set());
+  const [expLevel, setExpLevel]   = useState<ExpLevel | null>(null);
   const [idea, setIdea]           = useState("");
   const [animDir, setAnimDir]     = useState<"forward" | "back">("forward");
   const [state, formAction, pending] = useActionState(
@@ -45,9 +43,17 @@ export function OnboardingWizard() {
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  function goTo(next: 1 | 2 | 3, dir: "forward" | "back" = "forward") {
+  function goTo(next: 0 | 1 | 2 | 3, dir: "forward" | "back" = "forward") {
     setAnimDir(dir);
     setTimeout(() => setStep(next), 0);
+  }
+
+  function toggleBuildType(id: BuildType) {
+    setBuildTypes(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
   }
 
   function fillExample(text: string) {
@@ -57,6 +63,7 @@ export function OnboardingWizard() {
 
   const animKey = `${step}-${animDir}`;
   const slideIn  = animDir === "forward" ? "slideInRight" : "slideInLeft";
+  const progressPct = (step / (TOTAL_STEPS - 1)) * 100;
 
   return (
     <div style={{
@@ -76,97 +83,211 @@ export function OnboardingWizard() {
       <div style={{ width: "100%", maxWidth: 520, position: "relative", zIndex: 10 }}>
 
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 40, justifyContent: "center" }}>
-          <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800, color: "white", boxShadow: "0 0 16px rgba(139,92,246,0.5)" }}>A</div>
-          <span style={{ fontSize: "1.1rem", fontWeight: 800, background: "linear-gradient(135deg,#c4b5fd,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Axiom</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: step === 0 ? 0 : 40, justifyContent: "center" }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 10,
+            background: "linear-gradient(135deg,#7c3aed,#5b21b6)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 14, fontWeight: 800, color: "white",
+            boxShadow: "0 0 16px rgba(139,92,246,0.5)",
+          }}>A</div>
+          <span style={{
+            fontSize: "1.1rem", fontWeight: 800,
+            background: "linear-gradient(135deg,#c4b5fd,#a78bfa)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+          }}>Axiom</span>
         </div>
 
-        {/* Progress bar */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-            {STEPS.map(s => (
-              <div key={s.num} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: "50%",
-                  background: s.num <= step ? "linear-gradient(135deg,#7c3aed,#5b21b6)" : "rgba(255,255,255,0.05)",
-                  border: `1px solid ${s.num <= step ? "rgba(139,92,246,0.5)" : "rgba(255,255,255,0.1)"}`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.6rem", fontWeight: 800,
-                  color: s.num <= step ? "white" : "rgba(255,255,255,0.2)",
-                  transition: "all 0.3s ease",
-                  boxShadow: s.num === step ? "0 0 12px rgba(139,92,246,0.5)" : "none",
-                }}>
-                  {s.num < step ? "✓" : s.num}
-                </div>
-                <span style={{ fontSize: "0.68rem", color: s.num === step ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)", display: "none" }}>{s.label}</span>
+        {/* Progress bar (hidden on welcome step) */}
+        {step > 0 && (
+          <div style={{ marginBottom: 32 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div style={{ display: "flex", gap: 6 }}>
+                {[1, 2, 3].map(n => (
+                  <div key={n} style={{
+                    width: n <= step ? 20 : 8, height: 4, borderRadius: 9999,
+                    background: n < step ? "#34d399" : n === step ? "linear-gradient(90deg,#7c3aed,#a78bfa)" : "rgba(255,255,255,0.08)",
+                    transition: "all 0.4s ease",
+                  }} />
+                ))}
               </div>
-            ))}
+              <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.25)", fontWeight: 600 }}>
+                Step {step} of 3
+              </span>
+            </div>
+            <div style={{ height: 2, background: "rgba(255,255,255,0.06)", borderRadius: 9999, overflow: "hidden" }}>
+              <div style={{
+                height: "100%", borderRadius: 9999,
+                background: "linear-gradient(90deg,#7c3aed,#a78bfa)",
+                width: `${progressPct}%`,
+                transition: "width 0.5s cubic-bezier(0.4,0,0.2,1)",
+                boxShadow: "0 0 8px rgba(139,92,246,0.6)",
+              }} />
+            </div>
           </div>
-          <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 9999, overflow: "hidden" }}>
-            <div style={{
-              height: "100%", borderRadius: 9999,
-              background: "linear-gradient(90deg,#7c3aed,#a78bfa)",
-              width: `${((step - 1) / 2) * 100}%`,
-              transition: "width 0.5s cubic-bezier(0.4,0,0.2,1)",
-              boxShadow: "0 0 8px rgba(139,92,246,0.6)",
-            }} />
-          </div>
-          <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.25)", margin: "8px 0 0", textAlign: "right" }}>
-            Step {step} of 3
-          </p>
-        </div>
+        )}
 
         {/* Card */}
         <div style={{
           background: "rgba(8,4,26,0.97)",
           backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)",
           border: "1px solid rgba(139,92,246,0.2)",
-          borderRadius: 24, padding: "36px 32px",
+          borderRadius: 24, padding: step === 0 ? "48px 36px" : "36px 32px",
           boxShadow: "0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(139,92,246,0.08)",
           position: "relative", overflow: "hidden",
         }}>
-          <div aria-hidden="true" style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "60%", height: 1, background: "linear-gradient(90deg,transparent,rgba(139,92,246,0.8),transparent)" }} />
+          <div aria-hidden="true" style={{
+            position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+            width: "60%", height: 1,
+            background: "linear-gradient(90deg,transparent,rgba(139,92,246,0.8),transparent)",
+          }} />
 
-          <div key={animKey} style={{ animation: `${slideIn} 0.32s cubic-bezier(0.34,1.56,0.64,1) both` }}>
+          <div key={animKey} style={{ animation: step === 0 ? "fadeIn 0.5s ease" : `${slideIn} 0.32s cubic-bezier(0.34,1.56,0.64,1) both` }}>
 
-            {/* ── Step 1: Build type ── */}
-            {step === 1 && (
-              <div>
-                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>Welcome to Axiom</p>
-                <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>What are you building?</h2>
-                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>This helps us tailor your analysis.</p>
+            {/* ── Step 0: Welcome ── */}
+            {step === 0 && (
+              <div style={{ textAlign: "center" }}>
+                {/* Animated logo orb */}
+                <div style={{
+                  width: 72, height: 72, borderRadius: 20, margin: "0 auto 28px",
+                  background: "linear-gradient(135deg,rgba(124,58,237,0.3),rgba(91,33,182,0.15))",
+                  border: "1px solid rgba(139,92,246,0.4)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "2rem",
+                  boxShadow: "0 0 40px rgba(139,92,246,0.3)",
+                  animation: "pulseGlow 3s ease-in-out infinite",
+                }}>✦</div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 28 }}>
-                  {BUILD_OPTIONS.map(opt => (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => { setBuildType(opt.id); setTimeout(() => goTo(2), 180); }}
-                      style={{
-                        display: "flex", flexDirection: "column", alignItems: "flex-start",
-                        padding: "16px 16px",
-                        background: buildType === opt.id ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.03)",
-                        border: `1px solid ${buildType === opt.id ? "rgba(139,92,246,0.5)" : "rgba(255,255,255,0.08)"}`,
-                        borderRadius: 14, cursor: "pointer", textAlign: "left",
-                        transition: "all 0.18s ease",
-                        boxShadow: buildType === opt.id ? "0 0 20px rgba(139,92,246,0.15)" : "none",
-                      }}
-                    >
-                      <span style={{ fontSize: "1.5rem", marginBottom: 8 }}>{opt.emoji}</span>
-                      <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "rgba(255,255,255,0.82)", display: "block", marginBottom: 3 }}>{opt.label}</span>
-                      <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)" }}>{opt.sub}</span>
-                    </button>
+                <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 12px" }}>
+                  Welcome to Axiom
+                </p>
+                <h1 style={{ fontSize: "1.9rem", fontWeight: 900, letterSpacing: "-0.03em", margin: "0 0 12px", color: "rgba(255,255,255,0.95)", lineHeight: 1.2 }}>
+                  The AI that understands your build
+                </h1>
+                <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.38)", margin: "0 0 36px", lineHeight: 1.7 }}>
+                  Let&apos;s set up your workspace in 60 seconds. We&apos;ll personalize your analysis based on what you&apos;re building.
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
+                  {[
+                    { icon: "⚡", text: "Instant AI-powered build analysis" },
+                    { icon: "🎯", text: "Risk areas identified before you ship" },
+                    { icon: "🗺", text: "Step-by-step execution roadmap" },
+                  ].map(f => (
+                    <div key={f.text} style={{ display: "flex", alignItems: "center", gap: 12, textAlign: "left" }}>
+                      <div style={{
+                        width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+                        background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.2)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: "1rem",
+                      }}>{f.icon}</div>
+                      <span style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.55)" }}>{f.text}</span>
+                    </div>
                   ))}
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => goTo(1)}
+                  style={{
+                    width: "100%",
+                    background: "linear-gradient(135deg,#7c3aed,#6d28d9)",
+                    border: "1px solid rgba(139,92,246,0.5)",
+                    color: "white", padding: "14px 24px", borderRadius: 12,
+                    fontSize: "1rem", fontWeight: 700, cursor: "pointer",
+                    boxShadow: "0 0 28px rgba(139,92,246,0.4)",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)"; }}
+                >
+                  Get started →
+                </button>
+              </div>
+            )}
+
+            {/* ── Step 1: Build type (multi-select) ── */}
+            {step === 1 && (
+              <div>
+                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>
+                  Step 1 of 3
+                </p>
+                <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>
+                  What are you building?
+                </h2>
+                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 24px" }}>
+                  Select all that apply — we&apos;ll tailor your analysis.
+                </p>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24 }}>
+                  {BUILD_OPTIONS.map(opt => {
+                    const selected = buildTypes.has(opt.id);
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => toggleBuildType(opt.id)}
+                        style={{
+                          display: "flex", flexDirection: "column", alignItems: "flex-start",
+                          padding: "16px 16px",
+                          background: selected ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.03)",
+                          border: `1px solid ${selected ? "rgba(139,92,246,0.5)" : "rgba(255,255,255,0.08)"}`,
+                          borderRadius: 14, cursor: "pointer", textAlign: "left",
+                          transition: "all 0.18s ease",
+                          boxShadow: selected ? "0 0 20px rgba(139,92,246,0.15)" : "none",
+                          position: "relative",
+                        }}
+                      >
+                        {selected && (
+                          <div style={{
+                            position: "absolute", top: 8, right: 8,
+                            width: 18, height: 18, borderRadius: "50%",
+                            background: "linear-gradient(135deg,#7c3aed,#5b21b6)",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: "0.6rem", color: "white", fontWeight: 800,
+                          }}>✓</div>
+                        )}
+                        <span style={{ fontSize: "1.4rem", marginBottom: 8 }}>{opt.emoji}</span>
+                        <span style={{ fontSize: "0.83rem", fontWeight: 700, color: "rgba(255,255,255,0.82)", display: "block", marginBottom: 3 }}>
+                          {opt.label}
+                        </span>
+                        <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.4 }}>{opt.sub}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => goTo(2)}
+                  disabled={buildTypes.size === 0}
+                  style={{
+                    width: "100%",
+                    background: buildTypes.size > 0 ? "linear-gradient(135deg,#7c3aed,#6d28d9)" : "rgba(139,92,246,0.2)",
+                    border: "1px solid rgba(139,92,246,0.45)",
+                    color: buildTypes.size > 0 ? "white" : "rgba(255,255,255,0.3)",
+                    padding: "12px 20px", borderRadius: 11, fontSize: "0.9rem", fontWeight: 700,
+                    cursor: buildTypes.size > 0 ? "pointer" : "not-allowed",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {buildTypes.size > 0 ? `Continue with ${buildTypes.size} selected →` : "Select at least one →"}
+                </button>
               </div>
             )}
 
             {/* ── Step 2: Experience level ── */}
             {step === 2 && (
               <div>
-                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>Almost there</p>
-                <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>Your experience level?</h2>
-                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>We&apos;ll adjust the technical depth of your analysis.</p>
+                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>
+                  Step 2 of 3
+                </p>
+                <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>
+                  Your experience level?
+                </h2>
+                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>
+                  We&apos;ll adjust the technical depth of your analysis.
+                </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
                   {EXP_OPTIONS.map(opt => (
@@ -193,24 +314,37 @@ export function OnboardingWizard() {
                   ))}
                 </div>
 
-                <button type="button" onClick={() => goTo(1, "back")} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.25)", fontSize: "0.78rem", cursor: "pointer", padding: 0 }}>
+                <button type="button" onClick={() => goTo(1, "back")} style={{
+                  background: "none", border: "none", color: "rgba(255,255,255,0.25)", fontSize: "0.78rem", cursor: "pointer", padding: 0,
+                }}>
                   ← Back
                 </button>
               </div>
             )}
 
-            {/* ── Step 3: Idea ── */}
+            {/* ── Step 3: First idea ── */}
             {step === 3 && (
               <form action={formAction}>
-                <input type="hidden" name="building_type" value={buildType ?? ""} />
+                <input type="hidden" name="building_type" value={[...buildTypes].join(",")} />
                 <input type="hidden" name="experience_level" value={expLevel ?? ""} />
 
-                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>Last step</p>
-                <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>What&apos;s your first idea?</h2>
-                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 20px" }}>Describe it in plain English — we&apos;ll turn it into a full build plan.</p>
+                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>
+                  Step 3 of 3 — Last step
+                </p>
+                <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>
+                  Paste your first idea
+                </h2>
+                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 20px" }}>
+                  See Axiom in action — describe it in plain English.
+                </p>
 
                 {state?.error && (
-                  <div role="alert" style={{ display: "flex", gap: 10, background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.22)", borderRadius: 10, padding: "12px 14px", fontSize: "0.82rem", color: "rgba(252,165,165,0.85)", marginBottom: 16 }}>
+                  <div role="alert" style={{
+                    display: "flex", gap: 10,
+                    background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.22)",
+                    borderRadius: 10, padding: "12px 14px",
+                    fontSize: "0.82rem", color: "rgba(252,165,165,0.85)", marginBottom: 16,
+                  }}>
                     <span>⚠</span><span>{state.error}</span>
                   </div>
                 )}
@@ -229,7 +363,7 @@ export function OnboardingWizard() {
                     borderRadius: 12, padding: "14px 16px", fontSize: "0.9rem",
                     outline: "none", resize: "vertical", lineHeight: 1.65,
                     marginBottom: 10, boxSizing: "border-box",
-                    fontFamily: "inherit",
+                    fontFamily: "inherit", caretColor: "#a78bfa",
                   }}
                 />
 
@@ -252,7 +386,11 @@ export function OnboardingWizard() {
                 </div>
 
                 <div style={{ display: "flex", gap: 10 }}>
-                  <button type="button" onClick={() => goTo(2, "back")} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.3)", padding: "12px 16px", borderRadius: 11, fontSize: "0.82rem", cursor: "pointer", flexShrink: 0 }}>
+                  <button type="button" onClick={() => goTo(2, "back")} style={{
+                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                    color: "rgba(255,255,255,0.3)", padding: "12px 16px", borderRadius: 11,
+                    fontSize: "0.82rem", cursor: "pointer", flexShrink: 0,
+                  }}>
                     ← Back
                   </button>
                   <button
@@ -274,7 +412,21 @@ export function OnboardingWizard() {
                         <span style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", animation: "spin 0.7s linear infinite", display: "inline-block" }} />
                         Analyzing your build…
                       </span>
-                    ) : "Analyze my build →"}
+                    ) : "Analyze now →"}
+                  </button>
+                </div>
+
+                {/* Skip */}
+                <div style={{ textAlign: "center", marginTop: 16 }}>
+                  <button
+                    type="button"
+                    onClick={() => { window.location.href = "/dashboard"; }}
+                    style={{
+                      background: "none", border: "none", fontSize: "0.78rem",
+                      color: "rgba(255,255,255,0.2)", cursor: "pointer", padding: 0,
+                    }}
+                  >
+                    I&apos;ll do this later →
                   </button>
                 </div>
               </form>
@@ -290,7 +442,12 @@ export function OnboardingWizard() {
       <style>{`
         @keyframes slideInRight { from { opacity:0; transform:translateX(28px) scale(0.97); } to { opacity:1; transform:translateX(0) scale(1); } }
         @keyframes slideInLeft  { from { opacity:0; transform:translateX(-28px) scale(0.97); } to { opacity:1; transform:translateX(0) scale(1); } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
         @keyframes spin { to { transform:rotate(360deg); } }
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 40px rgba(139,92,246,0.3); }
+          50% { box-shadow: 0 0 60px rgba(139,92,246,0.5), 0 0 80px rgba(139,92,246,0.2); }
+        }
       `}</style>
     </div>
   );

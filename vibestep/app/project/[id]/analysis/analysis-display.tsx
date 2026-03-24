@@ -516,6 +516,55 @@ function priorityStyle(s: string) {
   return               { color: "#60a5fa", bg: "rgba(96,165,250,0.1)",  border: "rgba(96,165,250,0.3)"  };
 }
 
+/* ── Recommended Action Banner ───────────────────────────── */
+function RecommendedActionBanner({
+  topRisk, healthScore, openRiskCount,
+}: {
+  topRisk: { title: string; severity: string };
+  healthScore: number;
+  openRiskCount: number;
+}) {
+  const [dismissed, setDismissed] = useState(false);
+  if (dismissed) return null;
+
+  const isHighSeverity = topRisk.severity === "high";
+  const recommendation = isHighSeverity
+    ? `Address the "${topRisk.title}" risk before starting development`
+    : openRiskCount > 2
+      ? `Resolve ${openRiskCount} open risks to increase your health score`
+      : `You're ready to build — start with Step 1 of your execution path`;
+
+  const color = isHighSeverity ? "#fbbf24" : openRiskCount > 2 ? "#fb923c" : "#34d399";
+  const bg = isHighSeverity ? "rgba(251,191,36,0.06)" : openRiskCount > 2 ? "rgba(251,146,60,0.06)" : "rgba(52,211,153,0.06)";
+  const border = isHighSeverity ? "rgba(251,191,36,0.2)" : openRiskCount > 2 ? "rgba(251,146,60,0.2)" : "rgba(52,211,153,0.2)";
+  const icon = isHighSeverity ? "⚠" : openRiskCount > 2 ? "🎯" : "✓";
+
+  return (
+    <div style={{
+      background: bg, border: `1px solid ${border}`,
+      borderRadius: 12, padding: "12px 16px", marginBottom: 24,
+      display: "flex", alignItems: "flex-start", gap: 12,
+      animation: "fadeInUp 0.4s ease both",
+    }}>
+      <span style={{ fontSize: "1rem", flexShrink: 0, marginTop: 1 }}>{icon}</span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color, margin: "0 0 3px" }}>
+          Axiom recommends
+        </p>
+        <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.62)", margin: 0, lineHeight: 1.5 }}>
+          {recommendation}
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={() => setDismissed(true)}
+        style={{ background: "none", border: "none", color: "rgba(255,255,255,0.2)", cursor: "pointer", padding: 0, fontSize: "0.9rem", flexShrink: 0 }}
+        aria-label="Dismiss recommendation"
+      >✕</button>
+    </div>
+  );
+}
+
 /* ── Main component ───────────────────────────────────────── */
 export function AnalysisDisplay({
   projectId,
@@ -912,32 +961,108 @@ export function AnalysisDisplay({
                     </div>
                   ))}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => openAction({
-                    type: "score",
-                    title: `Improve from ${analysis.health_score} to ${Math.min(100, analysis.health_score + 20)}+`,
-                    subtitle: "Specific actions to raise your build health score",
-                    projectIdea,
-                    projectTitle,
-                    context: { health_score: analysis.health_score, health_label: analysis.health_label },
-                  })}
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                    background: `${color}15`, border: `1px solid ${color}35`,
-                    color, padding: "6px 14px", borderRadius: 8,
-                    fontSize: "0.75rem", fontWeight: 700, cursor: "pointer",
-                    transition: "all 0.15s ease",
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = `${color}25`; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = `${color}15`; }}
-                >
-                  📈 Improve my score →
-                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={() => openAction({
+                      type: "score",
+                      title: `Improve from ${analysis.health_score} to ${Math.min(100, analysis.health_score + 20)}+`,
+                      subtitle: "Specific actions to raise your build health score",
+                      projectIdea,
+                      projectTitle,
+                      context: { health_score: analysis.health_score, health_label: analysis.health_label },
+                    })}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      background: `${color}15`, border: `1px solid ${color}35`,
+                      color, padding: "6px 14px", borderRadius: 8,
+                      fontSize: "0.75rem", fontWeight: 700, cursor: "pointer",
+                      transition: "all 0.15s ease",
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = `${color}25`; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = `${color}15`; }}
+                  >
+                    📈 Improve my score →
+                  </button>
+                </div>
+                {/* Analysis metadata */}
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 14, flexWrap: "wrap" }}>
+                  {conf && (
+                    <span style={{ fontSize: "0.62rem", color: "rgba(255,255,255,0.22)", display: "flex", alignItems: "center", gap: 4 }}>
+                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: conf.overall >= 70 ? "#34d399" : conf.overall >= 50 ? "#fbbf24" : "#fb923c", display: "inline-block" }} />
+                      Confidence: {conf.overall >= 70 ? "High" : conf.overall >= 50 ? "Moderate" : "Low"} ({conf.overall}%)
+                    </span>
+                  )}
+                  <span style={{ fontSize: "0.62rem", color: "rgba(255,255,255,0.18)" }}>
+                    Model: {conf ? "Claude Haiku + Sonnet" : "Claude Haiku"}
+                  </span>
+                  <span style={{ fontSize: "0.62rem", color: "rgba(255,255,255,0.18)" }}>
+                    {analysis.risk_areas?.length ?? 0} risks · {analysis.execution_path?.length ?? 0} steps
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </Section>
+
+        {/* ── Quick Actions bar ── */}
+        <Section delay={0.12} style={{ marginBottom: 24 }}>
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8,
+          }}>
+            {[
+              {
+                icon: "🛡", label: "Fix top risk",
+                onClick: () => document.getElementById("s3")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+                color: "#f87171",
+              },
+              {
+                icon: "▶", label: "Start step 1",
+                onClick: () => document.getElementById("s5")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+                color: "#34d399",
+              },
+              {
+                icon: "⌨", label: "Generate code",
+                onClick: () => openAction({ type: "codegen", title: "Generate starter code", subtitle: "Get a code scaffold for your build", projectIdea, projectTitle, context: { health_score: analysis.health_score } }),
+                color: "#60a5fa",
+              },
+              {
+                icon: "↗", label: "Share analysis",
+                onClick: () => { navigator.clipboard.writeText(window.location.href).catch(() => {}); },
+                color: "#a78bfa",
+              },
+            ].map(action => (
+              <button
+                key={action.label}
+                type="button"
+                onClick={action.onClick}
+                style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6,
+                  padding: "12px 8px",
+                  background: `${action.color}08`, border: `1px solid ${action.color}22`,
+                  borderRadius: 12, cursor: "pointer",
+                  transition: "all 0.18s ease",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = `${action.color}16`; (e.currentTarget as HTMLButtonElement).style.borderColor = `${action.color}44`; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = `${action.color}08`; (e.currentTarget as HTMLButtonElement).style.borderColor = `${action.color}22`; }}
+              >
+                <span style={{ fontSize: "1.1rem" }}>{action.icon}</span>
+                <span style={{ fontSize: "0.65rem", fontWeight: 700, color: action.color, textAlign: "center", lineHeight: 1.3 }}>
+                  {action.label}
+                </span>
+              </button>
+            ))}
+          </div>
+        </Section>
+
+        {/* ── Recommended action banner ── */}
+        {analysis.risk_areas?.length > 0 && (
+          <RecommendedActionBanner
+            topRisk={analysis.risk_areas[0]}
+            healthScore={analysis.health_score}
+            openRiskCount={openRiskCount}
+          />
+        )}
 
         {/* ── SECTION 2: Product Truth ── */}
         <Section id="s2" delay={0.2} style={{ marginBottom: 24 }}>

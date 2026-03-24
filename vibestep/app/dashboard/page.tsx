@@ -238,20 +238,23 @@ export default async function DashboardPage() {
 
 /* ── Empty state ───────────────────────────────────────── */
 function EmptyState() {
+  const QUICK_TEMPLATES = [
+    { icon: "🖥", title: "SaaS Tool",      idea: "A B2B SaaS that helps marketing teams schedule and publish social media posts across all platforms. Built with Next.js and Supabase. Subscription pricing $29/mo." },
+    { icon: "📱", title: "Mobile App",     idea: "A habit tracker app for athletes — log workouts, streaks, and personal bests. Mobile-first. Syncs with Apple Health. Free + $4.99/mo premium." },
+    { icon: "🧠", title: "AI Product",     idea: "An AI writing assistant for content creators — paste a topic, get a full blog post draft with SEO suggestions. Built with Next.js + Claude API." },
+  ];
+
   return (
-    <div style={{
-      display:"flex", flexDirection:"column", alignItems:"center",
-      padding:"64px 24px 80px", textAlign:"center",
-    }}>
-      {/* Constellation */}
-      <div aria-hidden="true" style={{ position:"relative", width:110, height:80, marginBottom:28 }}>
+    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"56px 24px 80px", textAlign:"center" }}>
+      {/* Constellation illustration */}
+      <div aria-hidden="true" style={{ position:"relative", width:120, height:90, marginBottom:32 }}>
         {[
           { t:4,  l:8,  s:5, c:"#a78bfa", o:0.6 },
           { t:2,  l:55, s:3, c:"#c084fc", o:0.4 },
-          { t:16, l:95, s:4, c:"#818cf8", o:0.5 },
-          { t:55, l:98, s:3, c:"#a78bfa", o:0.35 },
-          { t:65, l:16, s:4, c:"#7c3aed", o:0.45 },
-          { t:58, l:52, s:5, c:"#c084fc", o:0.3 },
+          { t:16, l:102,s:4, c:"#818cf8", o:0.5 },
+          { t:58, l:100,s:3, c:"#a78bfa", o:0.35 },
+          { t:68, l:14, s:4, c:"#7c3aed", o:0.45 },
+          { t:60, l:52, s:5, c:"#c084fc", o:0.3 },
           { t:28, l:0,  s:3, c:"#818cf8", o:0.4 },
         ].map((d,i) => (
           <div key={i} style={{
@@ -265,33 +268,67 @@ function EmptyState() {
         <div style={{
           position:"absolute", top:"50%", left:"50%",
           transform:"translate(-50%,-50%)",
-          width:52, height:52, borderRadius:14,
+          width:56, height:56, borderRadius:16,
           background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(139,92,246,0.08))",
           border:"1px solid rgba(139,92,246,0.25)",
           display:"flex", alignItems:"center", justifyContent:"center",
-          fontSize:"1.5rem", boxShadow:"0 0 28px rgba(139,92,246,0.15)",
+          fontSize:"1.6rem", boxShadow:"0 0 32px rgba(139,92,246,0.2)",
         }}>✦</div>
       </div>
 
-      <h2 style={{ fontSize:"1.25rem", fontWeight:800, letterSpacing:"-0.02em", color:"rgba(255,255,255,0.72)", margin:"0 0 10px" }}>
-        Your first analysis is 30 seconds away
+      <h2 style={{ fontSize:"1.3rem", fontWeight:800, letterSpacing:"-0.02em", color:"rgba(255,255,255,0.75)", margin:"0 0 10px" }}>
+        No analyses yet
       </h2>
-      <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,0.28)", margin:"0 0 28px", lineHeight:1.65, maxWidth:300 }}>
-        Describe what you&apos;re building. Axiom will show you exactly what to fix before you ship it.
+      <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,0.28)", margin:"0 0 28px", lineHeight:1.7, maxWidth:320 }}>
+        Paste your first idea and get clarity in 30 seconds — risks, execution path, health score.
       </p>
+
       <Link href="/create" style={{
         display:"inline-flex", alignItems:"center", gap:8,
         background:"linear-gradient(135deg,#7c3aed,#6d28d9)",
         border:"1px solid rgba(139,92,246,0.5)",
-        color:"white", padding:"11px 24px", borderRadius:10,
-        fontSize:"0.875rem", fontWeight:600, textDecoration:"none",
-        boxShadow:"0 0 28px rgba(139,92,246,0.3)",
+        color:"white", padding:"12px 26px", borderRadius:11,
+        fontSize:"0.9rem", fontWeight:700, textDecoration:"none",
+        boxShadow:"0 0 32px rgba(139,92,246,0.35)",
+        marginBottom:40,
       }}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 5v14M5 12h14"/>
         </svg>
-        Analyze my build free →
+        Analyze my first build →
       </Link>
+
+      {/* Template cards */}
+      <div style={{ width:"100%", maxWidth:700 }}>
+        <p style={{ fontSize:"0.62rem", fontWeight:700, letterSpacing:"0.16em", textTransform:"uppercase", color:"rgba(255,255,255,0.18)", marginBottom:14 }}>
+          Or start with a template
+        </p>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:10 }}>
+          {QUICK_TEMPLATES.map(tpl => (
+            <Link
+              key={tpl.title}
+              href={`/create?idea=${encodeURIComponent(tpl.idea)}`}
+              style={{
+                display:"flex", flexDirection:"column", alignItems:"flex-start",
+                background:"rgba(255,255,255,0.025)", border:"1px solid rgba(255,255,255,0.07)",
+                borderRadius:12, padding:"16px",
+                textDecoration:"none", textAlign:"left",
+                transition:"all 0.18s ease",
+              }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor="rgba(139,92,246,0.35)"; el.style.background="rgba(139,92,246,0.06)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor="rgba(255,255,255,0.07)"; el.style.background="rgba(255,255,255,0.025)"; }}
+            >
+              <span style={{ fontSize:"1.4rem", marginBottom:10 }}>{tpl.icon}</span>
+              <span style={{ fontSize:"0.82rem", fontWeight:700, color:"rgba(255,255,255,0.7)", display:"block", marginBottom:4 }}>
+                {tpl.title}
+              </span>
+              <span style={{ fontSize:"0.68rem", color:"rgba(255,255,255,0.25)", lineHeight:1.5, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
+                {tpl.idea}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
