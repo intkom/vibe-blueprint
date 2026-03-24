@@ -80,7 +80,7 @@ export function KeyboardShortcuts() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {[
-            { key: "N", label: "New idea" },
+            { key: "N", label: "New analysis" },
             { key: "D", label: "Dashboard" },
             { key: "?", label: "Toggle shortcuts" },
             { key: "Esc", label: "Close panels" },

@@ -6,7 +6,7 @@ import { AchievementBadges } from "@/components/achievement-badges";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settings – VibeStep",
+  title: "Settings – Axiom",
   description: "Account settings and weekly progress digest preview.",
 };
 
@@ -190,7 +190,7 @@ export default async function SettingsPage() {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: "0.8rem", fontWeight: 800, color: "white",
                 }}>V</div>
-                <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "#c4b5fd" }}>VibeStep</span>
+                <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "#c4b5fd" }}>Axiom</span>
                 <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.2)", marginLeft: 4 }}>
                   · Weekly digest
                 </span>
@@ -321,6 +321,77 @@ export default async function SettingsPage() {
           <AchievementBadges />
         </div>
 
+        {/* ── Team ── */}
+        <div style={{
+          background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: 16, padding: "20px 24px", marginBottom: 14,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+            <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)", margin: 0 }}>
+              Team
+            </p>
+            <span style={{
+              fontSize: "0.65rem", fontWeight: 700, padding: "3px 10px", borderRadius: 9999,
+              background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.2)", color: "#fbbf24",
+            }}>
+              Solo plan
+            </span>
+          </div>
+
+          {/* Current member */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+            <div style={{
+              width: 34, height: 34, borderRadius: "50%", flexShrink: 0,
+              background: "linear-gradient(135deg,#7c3aed,#6d28d9)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "0.75rem", fontWeight: 800, color: "white",
+            }}>
+              {displayName.charAt(0)}
+            </div>
+            <div>
+              <p style={{ fontSize: "0.82rem", fontWeight: 600, color: "rgba(255,255,255,0.72)", margin: 0 }}>{displayName}</p>
+              <p style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.28)", margin: 0 }}>{user.email} · Owner</p>
+            </div>
+          </div>
+
+          {/* Invite input */}
+          <div style={{
+            background: "rgba(139,92,246,0.04)", border: "1px solid rgba(139,92,246,0.15)",
+            borderRadius: 12, padding: "16px 18px",
+          }}>
+            <p style={{ fontSize: "0.8rem", fontWeight: 600, color: "rgba(255,255,255,0.55)", margin: "0 0 4px" }}>
+              Invite a teammate
+            </p>
+            <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.28)", margin: "0 0 12px" }}>
+              Upgrade to Team plan to share analyses and collaborate in real time.
+            </p>
+            <div style={{ display: "flex", gap: 8 }}>
+              <input
+                type="email"
+                placeholder="teammate@company.com"
+                disabled
+                style={{
+                  flex: 1, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)",
+                  borderRadius: 8, padding: "8px 12px", fontSize: "0.82rem",
+                  color: "rgba(255,255,255,0.3)", outline: "none", fontFamily: "inherit",
+                  cursor: "not-allowed",
+                }}
+              />
+              <button
+                type="button"
+                disabled
+                style={{
+                  background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.25)",
+                  color: "#a78bfa", padding: "8px 16px", borderRadius: 8,
+                  fontSize: "0.8rem", fontWeight: 700, cursor: "not-allowed", opacity: 0.6,
+                }}
+              >
+                Upgrade →
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* ── Referral ── */}
         <div style={{ marginBottom: 14 }}>
           <ReferralSection username={emailLocal} />
@@ -339,8 +410,9 @@ export default async function SettingsPage() {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             {[
-              { key: "N", action: "New idea" },
+              { key: "N", action: "New analysis" },
               { key: "D", action: "Dashboard" },
+              { key: "⌘K", action: "Search everything" },
               { key: "?", action: "Show shortcuts" },
               { key: "Esc", action: "Close panels" },
             ].map(({ key, action }) => (

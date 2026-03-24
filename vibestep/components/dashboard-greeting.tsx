@@ -23,10 +23,10 @@ export function DashboardGreeting({
   const greeting = useMemo(() => getGreeting(), []);
 
   const subtitle = useMemo(() => {
-    if (totalProjects === 0) return "Ready to build your first idea?";
-    if (inProgressCount === 0) return "All projects completed. Start something new!";
-    if (inProgressCount === 1) return "You have 1 idea in progress.";
-    return `You have ${inProgressCount} ideas in progress.`;
+    if (totalProjects === 0) return "Ready to analyze your first build?";
+    if (inProgressCount === 0) return "All analyses complete. Analyze something new!";
+    if (inProgressCount === 1) return "You have 1 analysis in progress.";
+    return `You have ${inProgressCount} analyses in progress.`;
   }, [totalProjects, inProgressCount]);
 
   return (
@@ -73,7 +73,7 @@ export function DashboardGreeting({
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
-        New idea
+        New analysis
       </Link>
     </div>
   );

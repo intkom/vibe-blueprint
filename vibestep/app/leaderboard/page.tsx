@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Leaderboard – VibeStep",
-  description: "The top builders on VibeStep. See who's shipping the most and fastest.",
+  title: "Leaderboard – Axiom",
+  description: "The top builders on Axiom. See who's shipping the most and fastest.",
 };
 
 const LEADERS = [
@@ -48,8 +48,8 @@ export default function LeaderboardPage() {
       }}>
         <div style={{ maxWidth: 860, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, padding: "0 1.5rem" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-            <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "white" }}>V</div>
-            <span style={{ fontSize: "0.95rem", fontWeight: 800, background: "linear-gradient(135deg,#c4b5fd,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>VibeStep</span>
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "white" }}>A</div>
+            <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "rgba(255,255,255,0.9)" }}>Axiom</span>
           </Link>
           <Link href="/signup" style={{
             display: "inline-flex", alignItems: "center",
@@ -75,7 +75,7 @@ export default function LeaderboardPage() {
             Top Builders
           </h1>
           <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.35)", margin: 0, lineHeight: 1.7 }}>
-            The founders shipping the most with VibeStep. Updated weekly.
+            The founders shipping the most with Axiom. Updated weekly.
           </p>
         </div>
 
@@ -196,7 +196,7 @@ export default function LeaderboardPage() {
             Your name could be here 👆
           </p>
           <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.32)", margin: "0 0 24px" }}>
-            Start building with VibeStep and earn your spot on the leaderboard.
+            Start building with Axiom and earn your spot on the leaderboard.
           </p>
           <Link href="/signup" style={{
             display: "inline-flex", alignItems: "center",

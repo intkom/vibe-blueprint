@@ -17,7 +17,7 @@ export function ExportStepsButton({ steps, projectTitle }: { steps: Step[]; proj
   function handleExport() {
     const lines: string[] = [
       `# ${projectTitle}`,
-      `# VibeStep Build Plan — ${steps.length} Steps`,
+      `# Axiom Build Plan — ${steps.length} Steps`,
       `# Exported ${new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`,
       "",
     ];

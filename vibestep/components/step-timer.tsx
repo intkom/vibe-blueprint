@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 
 function storageKey(stepId: string) {
-  return `vibestep_time_${stepId}`;
+  return `axiom_time_${stepId}`;
 }
 
 export function getStoredStepSeconds(stepId: string): number {

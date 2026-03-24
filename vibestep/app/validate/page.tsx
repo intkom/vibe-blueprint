@@ -3,8 +3,8 @@ import { IdeaValidatorForm } from "@/components/idea-validator-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Idea Validator – VibeStep",
-  description: "Get a brutally honest AI analysis of your startup idea — market size, competitors, risks, and a go/no-go verdict in 15 seconds.",
+  title: "Idea Validator – Axiom",
+  description: "Get a structured analysis of your build — scored across 7 dimensions with a clear verdict and next step recommendations.",
 };
 
 export default function ValidatePage() {

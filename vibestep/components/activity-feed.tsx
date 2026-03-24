@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 const EVENTS = [
   { user: "Marcus K.",  action: "validated",       thing: "'AI writing assistant'",  time: "just now",  color: "#a78bfa" },
   { user: "Sarah A.",   action: "completed step",   thing: "Auth & user onboarding",  time: "1 min ago", color: "#60a5fa" },
-  { user: "Thiago D.",  action: "generated",        thing: "SaaS billing blueprint",  time: "2 min ago", color: "#34d399" },
+  { user: "Thiago D.",  action: "generated",        thing: "SaaS billing analysis",  time: "2 min ago", color: "#34d399" },
   { user: "Priya L.",   action: "forked",           thing: "AI Chrome Extension",     time: "3 min ago", color: "#ec4899" },
   { user: "Jakub R.",   action: "completed step",   thing: "Stripe integration",      time: "4 min ago", color: "#fbbf24" },
   { user: "Alex O.",    action: "validated",        thing: "'B2B analytics tool'",    time: "5 min ago", color: "#a78bfa" },
-  { user: "Kira L.",    action: "generated",        thing: "Mobile app blueprint",    time: "6 min ago", color: "#34d399" },
+  { user: "Kira L.",    action: "generated",        thing: "Mobile app analysis",    time: "6 min ago", color: "#34d399" },
   { user: "Nate B.",    action: "completed step",   thing: "Deploy to Vercel",        time: "8 min ago", color: "#60a5fa" },
   { user: "Fatima M.",  action: "validated",        thing: "'EdTech platform'",       time: "9 min ago", color: "#fb923c" },
-  { user: "Lucas Z.",   action: "generated",        thing: "E-commerce blueprint",    time: "11 min ago", color: "#a78bfa" },
+  { user: "Lucas Z.",   action: "generated",        thing: "E-commerce analysis",    time: "11 min ago", color: "#a78bfa" },
 ];
 
 const ACTION_ICONS: Record<string, string> = {

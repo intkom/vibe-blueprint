@@ -253,7 +253,7 @@ export function StepDetailClient({
                 {isLastStep ? "🏆 Final step complete!" : "Step completed"}
               </p>
               <p style={{ fontSize: "0.75rem", color: "rgba(52,211,153,0.6)", margin: "2px 0 0" }}>
-                {isLastStep ? "You shipped the full blueprint!" : "This step has been marked as done"}
+                {isLastStep ? "You shipped the full build!" : "This step has been marked as done"}
               </p>
             </div>
           </div>

@@ -69,7 +69,7 @@ export function IdeaValidatorForm() {
               fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.14em",
               textTransform: "uppercase", color: "rgba(255,255,255,0.28)",
             }}>
-              Describe your startup idea
+              Describe what you.re building
             </span>
           </label>
           <textarea
@@ -335,7 +335,7 @@ export function IdeaValidatorForm() {
                   letterSpacing: "0.01em",
                 }}
               >
-                Build it with VibeStep →
+                Build it with Axiom →
               </a>
             </div>
           )}
@@ -352,7 +352,7 @@ export function IdeaValidatorForm() {
                   letterSpacing: "0.01em",
                 }}
               >
-                Refine the angle in VibeStep →
+                Refine the angle in Axiom →
               </a>
             </div>
           )}

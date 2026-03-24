@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export function ReferralSection({ username }: { username: string }) {
-  const refLink = `https://vibe-blueprint.vercel.app/ref/${username}`;
+  const refLink = `https://axiom.app/ref/${username}`;
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -29,7 +29,7 @@ export function ReferralSection({ username }: { username: string }) {
             Refer &amp; Unlock
           </p>
           <p style={{ fontSize: "0.92rem", fontWeight: 700, color: "rgba(255,255,255,0.82)", margin: 0 }}>
-            Invite friends to VibeStep
+            Invite friends to Axiom
           </p>
         </div>
         <span style={{
@@ -76,7 +76,7 @@ export function ReferralSection({ username }: { username: string }) {
         </div>
 
         <p style={{ fontSize: "0.72rem", color: "rgba(139,92,246,0.7)", fontWeight: 600, margin: "12px 0 0", textAlign: "center" }}>
-          Invite 3 friends → unlock unlimited blueprints 🚀
+          Invite 3 friends → unlock unlimited analyses 🚀
         </p>
       </div>
 
@@ -110,7 +110,7 @@ export function ReferralSection({ username }: { username: string }) {
       {/* Share options */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {[
-          { label: "Share on X",        emoji: "✕", href: `https://x.com/intent/tweet?text=I%27m%20using%20VibeStep%20to%20turn%20startup%20ideas%20into%20build%20plans%20in%2030s.%20Try%20it%20free%3A%20${encodeURIComponent(refLink)}` },
+          { label: "Share on X",        emoji: "✕", href: `https://x.com/intent/tweet?text=I%27m%20using%20Axiom%20to%20turn%20startup%20ideas%20into%20build%20plans%20in%2030s.%20Try%20it%20free%3A%20${encodeURIComponent(refLink)}` },
           { label: "Share on LinkedIn", emoji: "in", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(refLink)}` },
         ].map(s => (
           <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{

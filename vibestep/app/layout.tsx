@@ -4,6 +4,7 @@ import "./globals.css";
 import { NotificationProvider } from "@/lib/notification-context";
 import { NotificationToasts } from "@/components/notification-bell";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
+import { GlobalSearch } from "@/components/global-search";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,14 +13,24 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: {
-    default: "VibeStep – Build smarter, faster",
-    template: "%s | VibeStep",
+    default: "Axiom – Understand your product before it breaks",
+    template: "%s | Axiom",
   },
-  description: "Paste your startup idea. Get the exact tech stack, architecture decisions, and 10 atomic build steps — in 30 seconds. Powered by Claude AI.",
+  description:
+    "Paste your idea, stack, or build description. Axiom analyzes it and shows you what's weak, what will fail, and what to fix first. Structured product intelligence for indie hackers and AI builders.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   openGraph: {
-    siteName: "VibeStep",
+    siteName: "Axiom",
     type: "website",
+    title: "Axiom – Understand your product before it breaks",
+    description:
+      "Structured product intelligence for indie hackers and AI builders. Risk detection, architecture clarity, and execution paths — in 30 seconds.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Axiom – Understand your product before it breaks",
+    description:
+      "Paste your build. Get risk detection, architecture clarity, and an execution path. Structured product intelligence for builders.",
   },
 };
 
@@ -35,6 +46,7 @@ export default function RootLayout({
           {children}
           <NotificationToasts />
           <KeyboardShortcuts />
+          <GlobalSearch />
         </NotificationProvider>
       </body>
     </html>

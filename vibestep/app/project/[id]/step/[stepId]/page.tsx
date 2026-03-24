@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = step?.title?.trim() ?? "Step";
   const n = (step?.step_index ?? 0) + 1;
   return {
-    title: `Step ${n}: ${title} – ${project?.title ?? "VibeStep"}`,
+    title: `Step ${n}: ${title} – ${project?.title ?? "Axiom"}`,
     description: `Detailed guidance, acceptance criteria, and common mistakes for: ${title}`,
   };
 }

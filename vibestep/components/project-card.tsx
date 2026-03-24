@@ -10,6 +10,11 @@ export type ProjectRow = {
   raw_idea: string | null;
   created_at?: string | null;
   updated_at?: string | null;
+  analysis?: {
+    health_score?: number;
+    health_label?: string;
+    risk_areas?: unknown[];
+  } | null;
 };
 
 export type StepStats = {
@@ -56,6 +61,20 @@ export function ProjectCard({
   isDone: boolean;
   toolType?: string | null;
 }) {
+  const hasAnalysis = !!project.analysis;
+  const healthScore = project.analysis?.health_score;
+  const healthLabel = project.analysis?.health_label;
+  const riskCount = project.analysis?.risk_areas?.length ?? 0;
+  const analysisHref = hasAnalysis ? `/project/${project.id}/analysis` : `/project/${project.id}`;
+
+  function healthColor(score: number): string {
+    if (score >= 76) return "#34d399";
+    if (score >= 61) return "#60a5fa";
+    if (score >= 41) return "#fbbf24";
+    if (score >= 21) return "#fb923c";
+    return "#f87171";
+  }
+
   const [hover,    setHover]    = useState(false);
   const [delHover, setDelHover] = useState(false);
 
@@ -95,7 +114,7 @@ export function ProjectCard({
       ><TrashIcon /></button>
 
       <Link
-        href={`/project/${project.id}`}
+        href={analysisHref}
         style={{
           display:"block", textDecoration:"none", color:"inherit",
           background: hover
@@ -126,8 +145,8 @@ export function ProjectCard({
           transition:"opacity 0.22s ease",
         }} />
 
-        {/* Status badge */}
-        <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+        {/* Status badges */}
+        <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14, flexWrap:"wrap" }}>
           <span style={{
             display:"inline-flex", alignItems:"center", gap:6,
             fontSize:"0.62rem", fontWeight:700, letterSpacing:"0.09em", textTransform:"uppercase",
@@ -145,6 +164,27 @@ export function ProjectCard({
             }} />
             {isDone ? "Complete" : "In Progress"}
           </span>
+          {hasAnalysis && healthScore !== undefined && (
+            <span style={{
+              display:"inline-flex", alignItems:"center", gap:5,
+              fontSize:"0.62rem", fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase",
+              padding:"3px 10px", borderRadius:9999,
+              background: `${healthColor(healthScore)}12`,
+              border:`1px solid ${healthColor(healthScore)}35`,
+              color: healthColor(healthScore),
+            }}>
+              ◉ {healthScore} — {healthLabel}
+            </span>
+          )}
+          {hasAnalysis && riskCount > 0 && (
+            <span style={{
+              fontSize:"0.62rem", fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase",
+              padding:"3px 10px", borderRadius:9999,
+              background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.22)", color:"#f87171",
+            }}>
+              {riskCount} risk{riskCount !== 1 ? "s" : ""}
+            </span>
+          )}
         </div>
 
         {/* Title */}
@@ -216,7 +256,7 @@ export function ProjectCard({
             color: isDone ? "#34d399" : "#a78bfa",
             transition:"all 0.18s ease",
           }}>
-            {isDone ? "View blueprint" : "Continue building"}
+            {hasAnalysis ? "View Analysis →" : isDone ? "View analysis" : "Continue building"}
             <ArrowRight />
           </span>
         </div>

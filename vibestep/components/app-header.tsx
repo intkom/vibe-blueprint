@@ -24,7 +24,7 @@ function getInitials(email: string) {
 
 const CENTER_NAV = [
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/tools",     label: "Tools"     },
+  { href: "/tools",     label: "Analysis"  },
   { href: "/templates", label: "Templates" },
   { href: "/validate",  label: "Validate"  },
 ];
@@ -91,13 +91,12 @@ export function AppHeader() {
               background:"linear-gradient(135deg,#7c3aed,#5b21b6)",
               display:"flex", alignItems:"center", justifyContent:"center",
               fontSize:15, fontWeight:800, color:"white",
-              boxShadow:"0 0 18px rgba(139,92,246,0.55)",
-            }}>V</div>
+              boxShadow:"0 0 18px rgba(139,92,246,0.5)",
+            }}>A</div>
             <span style={{
               fontSize:"1.05rem", fontWeight:800, lineHeight:1,
-              background:"linear-gradient(135deg,#c4b5fd,#a78bfa)",
-              WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text",
-            }}>VibeStep</span>
+              color:"rgba(255,255,255,0.9)", letterSpacing:"-0.02em",
+            }}>Axiom</span>
           </Link>
 
           {/* ── CENTER: Nav links ── */}
@@ -153,7 +152,7 @@ export function AppHeader() {
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 5v14M5 12h14"/>
               </svg>
-              New idea
+              Analyze
             </Link>
 
             {/* Avatar */}
@@ -204,7 +203,7 @@ export function AppHeader() {
                         fontSize:"0.78rem", fontWeight:600, color:"rgba(255,255,255,0.88)",
                         margin:0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
                       }}>{email ?? "Loading…"}</p>
-                      <p style={{ fontSize:"0.64rem", color:"rgba(255,255,255,0.28)", margin:"2px 0 0" }}>Free plan</p>
+                      <p style={{ fontSize:"0.64rem", color:"rgba(255,255,255,0.28)", margin:"2px 0 0" }}>Starter plan</p>
                     </div>
                   </div>
 

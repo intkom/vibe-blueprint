@@ -3,8 +3,8 @@ import { AppHeader } from "@/components/app-header";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blueprint Templates – VibeStep",
-  description: "Start faster with 6 battle-tested startup blueprints. SaaS, AI tools, APIs, mobile apps — pick a template and go.",
+  title: "Analysis Templates – Axiom",
+  description: "Start faster with 6 battle-tested build patterns. SaaS, AI tools, APIs, mobile apps — pick a template and go.",
 };
 
 const TEMPLATES = [
@@ -135,7 +135,7 @@ export default function TemplatesPage() {
             background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.25)",
             color: "#a78bfa", padding: "5px 14px", borderRadius: 9999, marginBottom: 20,
           }}>
-            Blueprint Templates
+            Analysis Templates
           </span>
           <h1 style={{
             fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 900, letterSpacing: "-0.03em",
@@ -143,10 +143,10 @@ export default function TemplatesPage() {
             background: "linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.6))",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
           }}>
-            Start with a proven blueprint
+            Start with a proven build pattern
           </h1>
           <p style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.38)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
-            6 battle-tested templates built for common startup patterns. Pick one, customize the idea, and get your full build plan in 30 seconds.
+            6 battle-tested templates built for common product patterns. Pick one, customize the idea, and get a full analysis in 30 seconds.
           </p>
         </div>
 
@@ -248,7 +248,7 @@ export default function TemplatesPage() {
             Have your own idea?
           </p>
           <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.3)", margin: "0 0 20px" }}>
-            Skip the templates — paste your raw idea and get a custom blueprint in 30 seconds.
+            Skip the templates — paste your build description and get a custom analysis in 30 seconds.
           </p>
           <Link href="/create" style={{
             display: "inline-flex", alignItems: "center",

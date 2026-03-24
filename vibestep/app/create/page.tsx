@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
 import { CreateProjectForm } from "@/components/create-project-form";
+import { AnalysisCreateForm } from "@/components/analysis-create-form";
 import { TOOL_META, type ToolType, TOOL_TYPES } from "@/lib/tools";
 
 type Props = {
@@ -106,7 +107,7 @@ export default async function CreatePage({ searchParams }: Props) {
           textDecoration: "none", marginBottom: 32,
         }}>
           <IconArrowLeft />
-          Back to tools
+          Back to analysis
         </Link>
 
         {/* ── Main card ── */}
@@ -143,10 +144,10 @@ export default async function CreatePage({ searchParams }: Props) {
               </div>
               <div>
                 <h1 style={{ fontSize: "1.2rem", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", color: "rgba(255,255,255,0.95)" }}>
-                  {meta.label}
+                  {toolType === "sprint" ? "Describe your build" : meta.label}
                 </h1>
                 <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", margin: "2px 0 0" }}>
-                  {meta.tagline} · Powered by Claude
+                  {toolType === "sprint" ? "Full intelligence analysis · Powered by Axiom" : `${meta.tagline} · Powered by Axiom`}
                 </p>
               </div>
             </div>
@@ -164,7 +165,11 @@ export default async function CreatePage({ searchParams }: Props) {
 
           {/* Form */}
           <div style={{ padding: "28px 32px 32px" }}>
-            <CreateProjectForm toolType={toolType} />
+            {toolType === "sprint" ? (
+              <AnalysisCreateForm />
+            ) : (
+              <CreateProjectForm toolType={toolType} />
+            )}
           </div>
         </div>
 

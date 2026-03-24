@@ -23,9 +23,9 @@ const tools = [
   },
   {
     type: "stack",
-    label: "Tech Blueprint",
+    label: "Architecture Analysis",
     tagline: "Exactly what to build with",
-    description: "Get the exact tech stack for your specific idea — not generic advice. Every layer decided, with reasons and what to avoid.",
+    description: "Get the exact tech stack for your specific build — not generic advice. Every layer decided, with reasons and what to avoid.",
     output: "Stack table · Decisions now · Defer list · First command",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -40,7 +40,7 @@ const tools = [
   },
   {
     type: "monetization",
-    label: "Monetization Map",
+    label: "Pricing Intelligence",
     tagline: "How to make money from it",
     description: "Evaluate 4 pricing models for your specific product. Get an exact pricing architecture with tier limits and the UX moments that trigger upgrades.",
     output: "Model comparison · Tier structure · Upgrade triggers · Recommendation",
@@ -57,10 +57,10 @@ const tools = [
   },
   {
     type: "sprint",
-    label: "Sprint Planner",
+    label: "Build Planner",
     tagline: "How to build it, step by step",
-    description: "Break your idea into 10 atomic, sequenced build steps — each 2–4 hours of focused work. With a full tech stack and architectural failure-point detection.",
-    output: "Tech stack · Dead-End Detector · 10 atomic steps · Phase badges",
+    description: "Break your build into sequenced execution steps — each 2–4 hours of focused work. With a full tech stack and architectural risk detection.",
+    output: "Tech stack · Risk flags · Sequenced steps · Phase badges",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
@@ -98,10 +98,10 @@ export default function ToolsPage() {
             Tools
           </p>
           <h1 style={{ fontSize: "1.9rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 10px", color: "rgba(255,255,255,0.95)" }}>
-            Pick a tool. Get a structured output.
+            Pick an analysis. Get product clarity.
           </h1>
           <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.38)", margin: 0, maxWidth: 480, lineHeight: 1.65 }}>
-            Each tool takes your idea and returns a decision-ready artifact — not paragraphs. Run them in sequence for a complete product plan.
+            Each tool takes your build description and returns a decision-ready output — not paragraphs. Run them in sequence for complete product intelligence.
           </p>
         </div>
 
@@ -126,9 +126,9 @@ export default function ToolsPage() {
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             {[
               { label: "Validate", color: "#fbbf24" },
-              { label: "Blueprint", color: "#a78bfa" },
-              { label: "Monetise", color: "#34d399" },
-              { label: "Sprint", color: "#60a5fa" },
+              { label: "Architecture", color: "#a78bfa" },
+              { label: "Pricing", color: "#34d399" },
+              { label: "Build", color: "#60a5fa" },
             ].map((step, i) => (
               <div key={step.label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 {i > 0 && <span style={{ color: "rgba(255,255,255,0.15)", fontSize: "0.8rem" }}>→</span>}

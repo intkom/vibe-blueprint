@@ -206,7 +206,7 @@ export function StepCard({
                     boxShadow: confirmed && !pending ? "0 0 16px rgba(139,92,246,0.3)" : "none",
                   }}
                 >
-                  {pending ? "Saving…" : "Mark as done ✓"}
+                  {pending ? "Saving…" : "Mark as addressed →"}
                 </button>
               </div>
             )}

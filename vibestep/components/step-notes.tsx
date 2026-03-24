@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 
 export function StepNotes({ stepId }: { stepId: string }) {
-  const key = `vibestep_note_${stepId}`;
+  const key = `axiom_note_${stepId}`;
   const [notes, setNotes] = useState("");
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [open, setOpen] = useState(false);

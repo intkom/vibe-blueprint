@@ -7,11 +7,14 @@ import { ProjectList } from "@/components/project-list";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import { DashboardGreeting } from "@/components/dashboard-greeting";
 import { QuickActions } from "@/components/quick-actions";
+import { ExtensionPromoBanner } from "@/components/extension-promo-banner";
+import { TodayFocusWidget, QuickAnalyzeWidget, RecentInsightsWidget, type FocusProject, type InsightItem } from "@/components/dashboard-widgets";
+import type { AnalysisData } from "@/app/api/analyze/route";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard – VibeStep",
-  description: "Manage your startup blueprints and build plans.",
+  title: "Dashboard – Axiom",
+  description: "Manage your analyses, build clarity reports, and execution paths.",
 };
 
 
@@ -22,7 +25,7 @@ export default async function DashboardPage() {
 
   const { data: projects, error } = await supabase
     .from("projects")
-    .select("id, title, raw_idea, created_at, updated_at")
+    .select("id, title, raw_idea, created_at, updated_at, analysis")
     .eq("user_id", user.id)
     .order("updated_at", { ascending: false });
 
@@ -75,6 +78,40 @@ export default async function DashboardPage() {
   const inProgressCount = rows.length - completedCount;
   const name = user.email?.split("@")[0] ?? "there";
 
+  // Today's Focus — most recently updated project with analysis but not fully done
+  const focusProject: FocusProject | null = (() => {
+    const candidates = entries
+      .filter(e => !e.isDone && e.project.analysis)
+      .sort((a, b) => new Date(b.project.updated_at ?? 0).getTime() - new Date(a.project.updated_at ?? 0).getTime());
+    const p = candidates[0]?.project;
+    if (!p) return null;
+    const a = p.analysis as AnalysisData | null;
+    const diff = Date.now() - new Date(p.updated_at ?? p.created_at ?? 0).getTime();
+    const daysAgo = Math.floor(diff / (1000 * 60 * 60 * 24));
+    return {
+      id: p.id,
+      title: p.title ?? "Untitled",
+      health_score: a?.health_score,
+      health_label: a?.health_label,
+      lastActivity: daysAgo === 0 ? "today" : daysAgo === 1 ? "yesterday" : `${daysAgo}d ago`,
+    };
+  })();
+
+  // Recent insights from analyses
+  const recentInsights: InsightItem[] = entries
+    .filter(e => e.project.analysis)
+    .slice(0, 3)
+    .map(e => {
+      const a = e.project.analysis as AnalysisData;
+      const risk = a.risk_areas?.[0];
+      return {
+        projectId: e.project.id,
+        projectTitle: e.project.title ?? "Untitled",
+        insight: risk ? `Top risk: ${risk.title} — ${risk.description}` : a.summary ?? "",
+        type: risk ? "risk" : "health",
+      };
+    });
+
   return (
     <div style={{ minHeight:"100vh", background:"var(--vs-bg)", color:"var(--vs-text)", position:"relative" }}>
       <OnboardingModal />
@@ -92,6 +129,9 @@ export default async function DashboardPage() {
 
       <main style={{ position:"relative", zIndex:1, maxWidth:960, margin:"0 auto", padding:"48px 28px 96px" }}>
 
+        {/* ── Extension promo banner ── */}
+        <ExtensionPromoBanner />
+
         {/* ── Greeting + New idea ── */}
         <div style={{ marginBottom:36 }}>
           <DashboardGreeting
@@ -107,7 +147,7 @@ export default async function DashboardPage() {
           marginBottom:28,
         }}>
           {[
-            { label:"Total projects", value:rows.length,       color:"#a78bfa" },
+            { label:"Total analyses", value:rows.length,       color:"#a78bfa" },
             { label:"In progress",    value:inProgressCount,   color:"#60a5fa" },
             { label:"Completed",      value:completedCount,    color:"#34d399" },
           ].map(stat => (
@@ -127,6 +167,24 @@ export default async function DashboardPage() {
           ))}
         </div>
 
+        {/* ── Smart widgets row ── */}
+        {(focusProject || recentInsights.length > 0) && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
+            {focusProject && <TodayFocusWidget project={focusProject} />}
+            <QuickAnalyzeWidget />
+            {recentInsights.length > 0 && (
+              <div style={{ gridColumn: "1 / -1" }}>
+                <RecentInsightsWidget insights={recentInsights} />
+              </div>
+            )}
+          </div>
+        )}
+        {!focusProject && (
+          <div style={{ marginBottom: 28 }}>
+            <QuickAnalyzeWidget />
+          </div>
+        )}
+
         {/* ── Quick actions row ── */}
         <div style={{ marginBottom:48 }}>
           <QuickActions />
@@ -142,10 +200,10 @@ export default async function DashboardPage() {
               <span style={{
                 fontSize:"0.62rem", fontWeight:700, letterSpacing:"0.16em",
                 textTransform:"uppercase", color:"rgba(255,255,255,0.28)",
-              }}>Your projects</span>
+              }}>Your analyses</span>
               <div style={{ flex:1, height:1, background:"rgba(255,255,255,0.06)" }} />
               <span style={{ fontSize:"0.72rem", color:"rgba(255,255,255,0.22)", fontWeight:500 }}>
-                {rows.length} {rows.length === 1 ? "idea" : "ideas"}
+                {rows.length} {rows.length === 1 ? "analysis" : "analyses"}
               </span>
             </div>
 
@@ -197,10 +255,10 @@ function EmptyState() {
       </div>
 
       <h2 style={{ fontSize:"1.25rem", fontWeight:800, letterSpacing:"-0.02em", color:"rgba(255,255,255,0.72)", margin:"0 0 10px" }}>
-        No ideas yet
+        Nothing analyzed yet
       </h2>
       <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,0.28)", margin:"0 0 28px", lineHeight:1.65, maxWidth:280 }}>
-        Your first blueprint is one click away. Describe your idea and get a full build plan in 30 seconds.
+        Paste your first build to get your product truth. Risk detection, architecture clarity, and execution path in 30 seconds.
       </p>
       <Link href="/create" style={{
         display:"inline-flex", alignItems:"center", gap:8,
@@ -213,7 +271,7 @@ function EmptyState() {
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 5v14M5 12h14"/>
         </svg>
-        Start first idea
+        Analyze a new build →
       </Link>
     </div>
   );

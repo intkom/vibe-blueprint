@@ -54,7 +54,7 @@ export function LiveCounter() {
         }}>
           {count}
         </span>
-        {" "}blueprints generated today
+        {" "}analyses run today
       </span>
     </div>
   );

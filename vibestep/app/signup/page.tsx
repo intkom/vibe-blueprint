@@ -43,12 +43,11 @@ export default async function SignupPage() {
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 14, fontWeight: 800, color: "white",
             boxShadow: "0 0 16px rgba(139,92,246,0.5)",
-          }}>V</div>
+          }}>A</div>
           <span style={{
             fontSize: "1.1rem", fontWeight: 800,
-            background: "linear-gradient(135deg,#c4b5fd,#a78bfa)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-          }}>VibeStep</span>
+            color: "rgba(255,255,255,0.9)", letterSpacing: "-0.02em",
+          }}>Axiom</span>
         </Link>
         <Link href="/" style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.35)", textDecoration: "none" }}>
           ← Back home
@@ -100,7 +99,7 @@ export default async function SignupPage() {
                 Create your account
               </h1>
               <p style={{ margin: "8px 0 0", fontSize: "0.875rem", color: "rgba(255,255,255,0.38)", lineHeight: 1.6 }}>
-                Free to start — 3 blueprints on us
+                Free to start — 3 analyses included
               </p>
             </div>
 

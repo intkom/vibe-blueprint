@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .single();
   const title = project?.title?.trim() || "Project";
   return {
-    title: `${title} – VibeStep`,
-    description: `Build plan and blueprint for: ${title}`,
+    title: `${title} – Axiom`,
+    description: `Product analysis for: ${title}`,
   };
 }
 
@@ -54,9 +54,9 @@ const VERDICT_COLORS: Record<string, { bg: string; border: string; text: string 
 };
 
 const TOOL_CHAIN: Partial<Record<string, { label: string; type: string; color: string; beam: string }>> = {
-  validator:   { label: "Tech Blueprint",    type: "stack",        color: "#a78bfa", beam: "linear-gradient(90deg,transparent,rgba(139,92,246,0.6),transparent)" },
-  stack:       { label: "Monetization Map",  type: "monetization", color: "#34d399", beam: "linear-gradient(90deg,transparent,rgba(52,211,153,0.6),transparent)" },
-  monetization:{ label: "Sprint Planner",    type: "sprint",       color: "#60a5fa", beam: "linear-gradient(90deg,transparent,rgba(96,165,250,0.6),transparent)"  },
+  validator:   { label: "Architecture Analysis",    type: "stack",        color: "#a78bfa", beam: "linear-gradient(90deg,transparent,rgba(139,92,246,0.6),transparent)" },
+  stack:       { label: "Pricing Intelligence",  type: "monetization", color: "#34d399", beam: "linear-gradient(90deg,transparent,rgba(52,211,153,0.6),transparent)" },
+  monetization:{ label: "Build Planner",    type: "sprint",       color: "#60a5fa", beam: "linear-gradient(90deg,transparent,rgba(96,165,250,0.6),transparent)"  },
 };
 
 /* ── SVG Icons ─────────────────────────────────────────── */
@@ -554,9 +554,9 @@ function DeadEndDetector({ warnings }: { warnings: Warning[] }) {
           display: "flex", alignItems: "center", justifyContent: "center", color: "#f87171",
         }}><IconWarning /></div>
         <div>
-          <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "rgba(255,255,255,0.9)", margin: 0 }}>Dead-End Detector</p>
+          <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "rgba(255,255,255,0.9)", margin: 0 }}>Risk Areas</p>
           <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", margin: 0 }}>
-            {warnings.length} critical failure {warnings.length === 1 ? "point" : "points"} for your specific idea
+            {warnings.length} critical failure {warnings.length === 1 ? "point" : "points"} for your specific build
           </p>
         </div>
       </div>
@@ -626,9 +626,9 @@ export default async function ProjectPage({ params }: Props) {
   // Tool type badge config
   const TOOL_BADGE: Record<string, { label: string; color: string; bg: string; border: string }> = {
     validator:   { label: "Idea Validator",   color: "#fbbf24", bg: "rgba(251,191,36,0.08)",  border: "rgba(251,191,36,0.25)"  },
-    stack:       { label: "Tech Blueprint",   color: "#a78bfa", bg: "rgba(139,92,246,0.08)",  border: "rgba(139,92,246,0.25)"  },
-    monetization:{ label: "Monetization Map", color: "#34d399", bg: "rgba(52,211,153,0.08)",  border: "rgba(52,211,153,0.25)"  },
-    sprint:      { label: "Sprint Planner",   color: "#60a5fa", bg: "rgba(96,165,250,0.08)",  border: "rgba(96,165,250,0.25)"  },
+    stack:       { label: "Architecture Analysis",   color: "#a78bfa", bg: "rgba(139,92,246,0.08)",  border: "rgba(139,92,246,0.25)"  },
+    monetization:{ label: "Pricing Intelligence", color: "#34d399", bg: "rgba(52,211,153,0.08)",  border: "rgba(52,211,153,0.25)"  },
+    sprint:      { label: "Build Planner",   color: "#60a5fa", bg: "rgba(96,165,250,0.08)",  border: "rgba(96,165,250,0.25)"  },
   };
   const toolBadge = toolPhase && TOOL_BADGE[toolPhase];
 

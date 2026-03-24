@@ -43,8 +43,8 @@ export const ACHIEVEMENTS: Record<AchievementId, Achievement> = {
   },
 };
 
-const STORAGE_KEY = "vibestep_achievements";
-const SPEED_KEY   = "vibestep_steps_today";
+const STORAGE_KEY = "axiom_achievements";
+const SPEED_KEY   = "axiom_steps_today";
 
 export function getUnlockedAchievements(): AchievementId[] {
   try {

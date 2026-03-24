@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const STORAGE_KEY = "vibestep_onboarding_done";
+const STORAGE_KEY = "axiom_onboarding_done";
 
 const STEPS = [
   {
@@ -16,8 +16,8 @@ const STEPS = [
     color: "#a78bfa",
     bg: "rgba(139,92,246,0.1)",
     border: "rgba(139,92,246,0.25)",
-    title: "Describe your idea",
-    desc: "Paste your startup idea in plain English — no templates needed. The more detail you give, the more tailored the output.",
+    title: "Describe your build",
+    desc: "Paste what you're building in plain language — your idea, your stack, or both. No templates needed.",
   },
   {
     icon: (
@@ -30,7 +30,7 @@ const STEPS = [
     bg: "rgba(236,72,153,0.1)",
     border: "rgba(236,72,153,0.25)",
     title: "Claude analyses it",
-    desc: "In ~30 seconds, Claude builds your tech stack, spots your failure points, and breaks your idea into 10 atomic build steps.",
+    desc: "In ~30 seconds, Axiom runs a structured analysis — scoring risk, picking architecture, and sequencing your execution path.",
   },
   {
     icon: (
@@ -117,7 +117,7 @@ export function OnboardingModal() {
               marginBottom: 18, fontSize: 22,
             }}>✦</div>
             <h2 style={{ fontSize: "1.4rem", fontWeight: 900, letterSpacing: "-0.02em", color: "rgba(255,255,255,0.95)", margin: "0 0 6px" }}>
-              Welcome to VibeStep
+              Welcome to Axiom
             </h2>
             <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.35)", margin: 0 }}>
               Here&apos;s how it works in 3 steps
@@ -189,7 +189,7 @@ export function OnboardingModal() {
                   boxShadow: "0 0 22px rgba(139,92,246,0.35)",
                 }}
               >
-                Start your first blueprint →
+                Start your first analysis →
               </Link>
             ) : (
               <>

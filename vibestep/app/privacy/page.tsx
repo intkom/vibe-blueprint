@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Privacy Policy – VibeStep" };
+export const metadata = { title: "Privacy Policy – Axiom" };
 
 export default function PrivacyPage() {
   return (
@@ -14,7 +14,7 @@ export default function PrivacyPage() {
           <div style={{ width: 26, height: 26, borderRadius: 7, background: "linear-gradient(135deg,#7c3aed,#ec4899)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           </div>
-          <span style={{ fontWeight: 800, fontSize: "1rem", letterSpacing: "-0.02em", color: "rgba(255,255,255,0.95)" }}>VibeStep</span>
+          <span style={{ fontWeight: 800, fontSize: "1rem", letterSpacing: "-0.02em", color: "rgba(255,255,255,0.95)" }}>Axiom</span>
         </Link>
         <Link href="/" style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.4)", textDecoration: "none" }}>← Back to home</Link>
       </nav>
@@ -55,7 +55,7 @@ export default function PrivacyPage() {
           },
           {
             title: "8. Contact Us",
-            body: "If you have questions about this Privacy Policy or how we handle your data, please contact us at privacy@vibestep.com. We will respond to all requests within 30 days.",
+            body: "If you have questions about this Privacy Policy or how we handle your data, please contact us at privacy@axiom.com. We will respond to all requests within 30 days.",
           },
         ].map(section => (
           <section key={section.title} style={{ marginBottom: 36 }}>

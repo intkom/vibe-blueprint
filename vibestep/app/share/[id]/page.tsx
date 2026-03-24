@@ -36,22 +36,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .eq("id", id)
     .single();
 
-  if (!data) return { title: "Blueprint – VibeStep" };
+  if (!data) return { title: "Blueprint – Axiom" };
 
   const title = data.title ?? "Startup Blueprint";
-  const desc = data.raw_idea?.slice(0, 160) ?? "A startup blueprint built with VibeStep";
+  const desc = data.raw_idea?.slice(0, 160) ?? "A product analysis built with Axiom";
 
   return {
-    title: `${title} — Blueprint`,
+    title: `${title} — Analysis`,
     description: desc,
     openGraph: {
-      title: `${title} — Blueprint | VibeStep`,
+      title: `${title} — Analysis | Axiom`,
       description: desc,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} — Blueprint`,
+      title: `${title} — Analysis`,
       description: desc,
     },
   };
@@ -94,8 +94,8 @@ export default async function SharePage({ params }: Props) {
       }}>
         <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, padding: "0 1.5rem" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
-            <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "white" }}>V</div>
-            <span style={{ fontSize: "0.95rem", fontWeight: 800, background: "linear-gradient(135deg,#c4b5fd,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>VibeStep</span>
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "white" }}>A</div>
+            <span style={{ fontSize: "0.95rem", fontWeight: 800, background: "linear-gradient(135deg,#c4b5fd,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Axiom</span>
           </Link>
           <Link href="/signup" style={{
             display: "inline-flex", alignItems: "center",
@@ -118,7 +118,7 @@ export default async function SharePage({ params }: Props) {
               background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.25)",
               color: "#a78bfa", padding: "4px 10px", borderRadius: 9999,
             }}>
-              Shared Blueprint
+              Shared Analysis
             </span>
             <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.25)" }}>
               Created {createdDate}
@@ -160,7 +160,7 @@ export default async function SharePage({ params }: Props) {
               boxShadow: "0 0 24px rgba(139,92,246,0.35)",
             }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 17l4 4 4-4M12 12v9"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
-              Copy this blueprint
+              Copy this analysis
             </Link>
             <CopyBlueprintButton url={`${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/share/${id}`} />
           </div>
@@ -240,15 +240,15 @@ export default async function SharePage({ params }: Props) {
           <div aria-hidden="true" style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "60%", height: 1, background: "linear-gradient(90deg,transparent,rgba(139,92,246,0.6),transparent)" }} />
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 12 }}>
-            <div style={{ width: 24, height: 24, borderRadius: 7, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "white" }}>V</div>
-            <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "rgba(255,255,255,0.35)", letterSpacing: "0.04em" }}>Built with VibeStep</span>
+            <div style={{ width: 24, height: 24, borderRadius: 7, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "white" }}>A</div>
+            <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "rgba(255,255,255,0.35)", letterSpacing: "0.04em" }}>Built with Axiom</span>
           </div>
 
           <h3 style={{ fontSize: "1.3rem", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 8px", color: "rgba(255,255,255,0.9)" }}>
-            Got a startup idea? Get your blueprint in 30s.
+            Got a build? Get product clarity in 30s.
           </h3>
           <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.35)", margin: "0 0 24px" }}>
-            Tech stack · Architecture · 10 atomic build steps. Free.
+            Risk detection · Architecture · Execution path. Free.
           </p>
           <Link href="/signup" style={{
             display: "inline-flex", alignItems: "center",
@@ -257,7 +257,7 @@ export default async function SharePage({ params }: Props) {
             padding: "12px 28px", borderRadius: 11, fontSize: "0.9rem", fontWeight: 700, textDecoration: "none",
             boxShadow: "0 0 28px rgba(139,92,246,0.4)",
           }}>
-            Get your free blueprint →
+            Get your free analysis →
           </Link>
         </div>
       </main>

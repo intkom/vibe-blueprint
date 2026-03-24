@@ -37,7 +37,7 @@ type Category = { keywords: string[]; headline: string; templates: Template[] };
 const SMART_CATEGORIES: Category[] = [
   {
     keywords: ["saas", "dashboard", "subscription", "b2b", "enterprise", "team", "admin", "business", "crm", "erp"],
-    headline: "Sounds like a B2B SaaS — here are blueprints that worked",
+    headline: "Sounds like a B2B SaaS — here are builds that worked",
     templates: [
       { label: "Team Analytics", text: "A SaaS analytics dashboard for marketing teams. Shows campaign performance, conversion funnels, and A/B test results. Teams of 5–20. Subscription at $49/seat/month." },
       { label: "Client Portal", text: "A white-label client portal for creative agencies. Clients view project progress, approve deliverables, and pay invoices. B2B, $99/month per agency with annual discount." },
@@ -46,7 +46,7 @@ const SMART_CATEGORIES: Category[] = [
   },
   {
     keywords: ["marketplace", "buy", "sell", "rent", "booking", "hire", "freelance", "gig", "p2p"],
-    headline: "Sounds like a marketplace — here are blueprints that worked",
+    headline: "Sounds like a marketplace — here are builds that worked",
     templates: [
       { label: "Services Marketplace", text: "A marketplace for niche professional services. Clients post briefs, vetted freelancers bid. Platform takes 15%. Focus on video/content production." },
       { label: "Equipment Rental", text: "A peer-to-peer equipment rental platform for photographers and filmmakers. Insurance included, calendar availability, Stripe, local pickup or shipping." },
@@ -55,7 +55,7 @@ const SMART_CATEGORIES: Category[] = [
   },
   {
     keywords: ["ai", "gpt", "llm", "generate", "automate", "intelligent", "chatbot", "ml", "claude", "openai"],
-    headline: "Sounds like an AI tool — here are blueprints that worked",
+    headline: "Sounds like an AI tool — here are builds that worked",
     templates: [
       { label: "AI Content Writer", text: "An AI writing assistant for content marketers. Paste a URL or topic, get a full SEO-optimized blog post with meta descriptions and headline variants. Integrates with WordPress." },
       { label: "AI Data Analyst", text: "An AI tool for non-technical analysts. Upload a CSV, ask questions in plain English, get instant charts and insights. Exports to Google Sheets. $29/month." },
@@ -64,7 +64,7 @@ const SMART_CATEGORIES: Category[] = [
   },
   {
     keywords: ["mobile", "ios", "android", "app", "health", "fitness", "workout", "habit", "wellness", "track"],
-    headline: "Sounds like a mobile or health app — here are blueprints that worked",
+    headline: "Sounds like a mobile or health app — here are builds that worked",
     templates: [
       { label: "Fitness Tracker", text: "A workout tracking app for strength athletes. Log exercises, weights, and reps. Auto-calculates progressive overload, strength curves, syncs with Apple Health. $7/month." },
       { label: "Habit Tracker", text: "A minimalist habit tracking app. Daily check-ins, streak visualization, weekly review prompts. Private by design. Annual subscription at $29/year." },
@@ -73,7 +73,7 @@ const SMART_CATEGORIES: Category[] = [
   },
   {
     keywords: ["developer", "dev", "api", "code", "github", "deploy", "backend", "frontend", "engineer", "cli", "sdk"],
-    headline: "Sounds like a developer tool — here are blueprints that worked",
+    headline: "Sounds like a developer tool — here are builds that worked",
     templates: [
       { label: "API Platform", text: "An API testing and documentation platform for small teams. Auto-generates docs from OpenAPI spec, collaborative test suites, environment variables, Slack failure alerts." },
       { label: "AI Code Reviewer", text: "An async code review tool. AI summarizes PR changes, flags security issues, suggests improvements before human review. GitHub App, $29/dev/month." },
@@ -159,10 +159,10 @@ function LoadingMessage({ messages }: { messages: string[] }) {
 }
 
 const TOOL_CTA: Record<ToolType, string> = {
-  validator:    "Validate this idea →",
-  stack:        "Build my tech blueprint →",
-  monetization: "Map my monetization →",
-  sprint:       "Generate build steps →",
+  validator:    "Run analysis →",
+  stack:        "Run analysis →",
+  monetization: "Run analysis →",
+  sprint:       "Run analysis →",
 };
 
 /* ── Main form ──────────────────────────────────────────── */
@@ -204,7 +204,7 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
       if (cat) {
         setSuggestions({ headline: cat.headline, templates: cat.templates });
       } else if (value.length >= 15) {
-        setSuggestions({ headline: "Here are some starting blueprints that worked", templates: DEFAULT_SUGGESTIONS });
+        setSuggestions({ headline: "Here are some starting builds that worked", templates: DEFAULT_SUGGESTIONS });
       } else {
         setSuggestions(null);
       }
@@ -277,10 +277,10 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <label htmlFor="idea" style={{ fontSize: "0.82rem", fontWeight: 600, color: "rgba(255,255,255,0.55)", letterSpacing: "0.01em" }}>
-            Describe your idea
+            Describe your build
           </label>
           <span style={{ fontSize: "0.72rem", color: charCount > 0 ? "rgba(167,139,250,0.5)" : "rgba(255,255,255,0.2)" }}>
-            {charCount > 0 ? `${charCount} chars` : "min. 20 chars"}
+            {charCount > 0 ? `${charCount} chars` : "be specific for better results"}
           </span>
         </div>
 
@@ -336,7 +336,7 @@ export function CreateProjectForm({ toolType = "sprint" }: { toolType?: ToolType
         <div style={{ animation: "fadeInUp 0.3s ease both" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 7 }}>
             <span style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>
-              Idea quality
+              Input clarity
             </span>
             <span style={{
               fontSize: "0.75rem", fontWeight: 700,

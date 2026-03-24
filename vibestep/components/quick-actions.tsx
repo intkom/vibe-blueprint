@@ -4,9 +4,9 @@ import Link from "next/link";
 
 const ACTIONS = [
   {
-    emoji: "🚀",
-    title: "New Blueprint",
-    sub: "Turn your idea into 10 build steps",
+    emoji: "⚡",
+    title: "New Analysis",
+    sub: "Analyze your build in 30 seconds",
     href: "/create",
     color: "#a78bfa",
     border: "rgba(139,92,246,0.2)",
@@ -16,9 +16,9 @@ const ACTIONS = [
     shadow: "rgba(139,92,246,0.18)",
   },
   {
-    emoji: "✅",
-    title: "Validate Idea",
-    sub: "Score your idea before building",
+    emoji: "🔍",
+    title: "Validate Build",
+    sub: "Score your idea before committing",
     href: "/validate",
     color: "#34d399",
     border: "rgba(52,211,153,0.2)",
@@ -28,9 +28,9 @@ const ACTIONS = [
     shadow: "rgba(52,211,153,0.14)",
   },
   {
-    emoji: "📋",
+    emoji: "📐",
     title: "Browse Templates",
-    sub: "Start from proven blueprints",
+    sub: "Start from proven build patterns",
     href: "/templates",
     color: "#60a5fa",
     border: "rgba(96,165,250,0.2)",
@@ -41,8 +41,8 @@ const ACTIONS = [
   },
   {
     emoji: "🤖",
-    title: "AI Co-Founder",
-    sub: "Chat with your AI advisor",
+    title: "AI Advisor",
+    sub: "Chat with your AI build advisor",
     href: "/create",
     color: "#fbbf24",
     border: "rgba(251,191,36,0.2)",

@@ -77,8 +77,8 @@ export function OnboardingWizard() {
 
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 40, justifyContent: "center" }}>
-          <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800, color: "white", boxShadow: "0 0 16px rgba(139,92,246,0.5)" }}>V</div>
-          <span style={{ fontSize: "1.1rem", fontWeight: 800, background: "linear-gradient(135deg,#c4b5fd,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>VibeStep</span>
+          <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg,#7c3aed,#5b21b6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800, color: "white", boxShadow: "0 0 16px rgba(139,92,246,0.5)" }}>A</div>
+          <span style={{ fontSize: "1.1rem", fontWeight: 800, background: "linear-gradient(135deg,#c4b5fd,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Axiom</span>
         </div>
 
         {/* Progress bar */}
@@ -132,9 +132,9 @@ export function OnboardingWizard() {
             {/* ── Step 1: Build type ── */}
             {step === 1 && (
               <div>
-                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>Welcome to VibeStep</p>
+                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>Welcome to Axiom</p>
                 <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>What are you building?</h2>
-                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>This helps us tailor your blueprint.</p>
+                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>This helps us tailor your analysis.</p>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 28 }}>
                   {BUILD_OPTIONS.map(opt => (
@@ -166,7 +166,7 @@ export function OnboardingWizard() {
               <div>
                 <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>Almost there</p>
                 <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>Your experience level?</h2>
-                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>We&apos;ll adjust the technical depth of your blueprint.</p>
+                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>We&apos;ll adjust the technical depth of your analysis.</p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
                   {EXP_OPTIONS.map(opt => (
@@ -272,9 +272,9 @@ export function OnboardingWizard() {
                     {pending ? (
                       <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
                         <span style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", animation: "spin 0.7s linear infinite", display: "inline-block" }} />
-                        Generating your blueprint…
+                        Analyzing your build…
                       </span>
-                    ) : "Generate my blueprint →"}
+                    ) : "Analyze my build →"}
                   </button>
                 </div>
               </form>

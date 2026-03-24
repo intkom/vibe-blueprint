@@ -119,7 +119,7 @@ export function UserAvatar() {
           <div style={{ padding: "6px" }}>
             {[
               { href: "/dashboard",  label: "Dashboard",  icon: "▦" },
-              { href: "/create",     label: "New idea",   icon: "✦" },
+              { href: "/create",     label: "New analysis",   icon: "✦" },
               { href: "/tools",      label: "Tools",      icon: "⚡" },
               { href: "/templates",  label: "Templates",  icon: "◈" },
               { href: "/settings",   label: "Settings",   icon: "⚙" },

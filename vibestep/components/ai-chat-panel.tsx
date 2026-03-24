@@ -98,7 +98,7 @@ export function AIChatPanel({ projectId, projectTitle, projectIdea, steps }: Pro
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const storageKey = `vibestep_chat_${projectId}`;
+  const storageKey = `axiom_chat_${projectId}`;
   const systemPrompt = buildSystemPrompt(projectTitle, projectIdea, steps);
 
   // Load from localStorage
