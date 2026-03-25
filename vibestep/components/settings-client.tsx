@@ -15,13 +15,15 @@ export function DisplayNameEditor({ initial, email }: { initial: string; email: 
     if (!name.trim() || name === initial) return;
     setSaving(true);
     try {
-      await fetch("/api/profile", {
+      const res = await fetch("/api/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ display_name: name.trim() }),
       });
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2500);
+      if (res.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2500);
+      }
     } finally {
       setSaving(false);
     }

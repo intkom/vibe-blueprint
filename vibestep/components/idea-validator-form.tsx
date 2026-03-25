@@ -71,7 +71,7 @@ export function IdeaValidatorForm() {
               fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.14em",
               textTransform: "uppercase", color: "rgba(255,255,255,0.28)",
             }}>
-              Describe what you.re building
+              Describe what you&apos;re building
             </span>
           </label>
           <textarea
