@@ -1,13 +1,11 @@
+"use client";
+
 import { AppHeader } from "@/components/app-header";
 import { IdeaValidatorForm } from "@/components/idea-validator-form";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Idea Validator – Axiom",
-  description: "Get a structured analysis of your build — scored across 7 dimensions with a clear verdict and next step recommendations.",
-};
+import { useTranslations } from "next-intl";
 
 export default function ValidatePage() {
+  const t = useTranslations("validate");
   return (
     <div style={{ minHeight: "100vh", background: "var(--vs-bg)", color: "var(--vs-text)", position: "relative", overflow: "hidden" }}>
 
@@ -36,7 +34,7 @@ export default function ValidatePage() {
               background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.25)",
               color: "#a78bfa", padding: "4px 12px", borderRadius: 9999,
             }}>
-              AI-Powered
+              {t("badge1")}
             </span>
             <span style={{
               fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.12em",
@@ -44,7 +42,7 @@ export default function ValidatePage() {
               background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.25)",
               color: "#fbbf24", padding: "4px 12px", borderRadius: 9999,
             }}>
-              15 second verdict
+              {t("badge2")}
             </span>
           </div>
 
@@ -55,15 +53,14 @@ export default function ValidatePage() {
             background: "linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.6))",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
           }}>
-            Should you build it?
+            {t("headline")}
           </h1>
 
           <p style={{
             fontSize: "0.95rem", color: "rgba(255,255,255,0.38)",
             lineHeight: 1.7, margin: 0, maxWidth: 560,
           }}>
-            Paste your idea. Get market size, top competitors, your unique angle,
-            the biggest risk, and a brutally honest verdict — all in under 15 seconds.
+            {t("subline")}
           </p>
         </div>
 
@@ -73,11 +70,11 @@ export default function ValidatePage() {
           gap: 8, marginBottom: 28,
         }}>
           {[
-            { icon: "📊", label: "Market size estimate" },
-            { icon: "⚔️", label: "Top 3 competitors" },
-            { icon: "🎯", label: "Your unique angle" },
-            { icon: "⚠️", label: "Biggest risk" },
-            { icon: "🏁", label: "Build / Pivot / Skip" },
+            { icon: "📊", label: t("featureMarket") },
+            { icon: "⚔️", label: t("featureCompetitors") },
+            { icon: "🎯", label: t("featureAngle") },
+            { icon: "⚠️", label: t("featureRisk") },
+            { icon: "🏁", label: t("featureVerdict") },
           ].map(item => (
             <div key={item.label} style={{
               display: "flex", alignItems: "center", gap: 8,

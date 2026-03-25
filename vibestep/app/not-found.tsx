@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function NotFound() {
+  const t = useTranslations("errors");
   return (
     <div style={{
       minHeight: "100vh", background: "var(--vs-bg)", color: "var(--vs-text)",
@@ -50,13 +54,13 @@ export default function NotFound() {
           fontSize: "1.6rem", fontWeight: 900, letterSpacing: "-0.025em",
           color: "rgba(255,255,255,0.92)", margin: "0 0 10px",
         }}>
-          Page not found
+          {t("notFound")}
         </h1>
         <p style={{
           fontSize: "0.92rem", color: "rgba(255,255,255,0.35)",
           lineHeight: 1.7, margin: "0 0 36px",
         }}>
-          This page doesn&apos;t exist or has been moved. Let&apos;s get you back on track.
+          {t("notFoundDesc")}
         </p>
 
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
@@ -68,7 +72,7 @@ export default function NotFound() {
             fontSize: "0.9rem", fontWeight: 600, textDecoration: "none",
             boxShadow: "0 0 22px rgba(139,92,246,0.35)",
           }}>
-            Go home
+            {t("goHome")}
           </Link>
           <Link href="/dashboard" style={{
             display: "inline-block",
@@ -77,7 +81,7 @@ export default function NotFound() {
             color: "rgba(255,255,255,0.55)", padding: "11px 26px", borderRadius: 11,
             fontSize: "0.9rem", fontWeight: 500, textDecoration: "none",
           }}>
-            Dashboard
+            {t("goDashboard")}
           </Link>
         </div>
       </div>

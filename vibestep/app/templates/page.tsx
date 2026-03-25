@@ -1,11 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Analysis Templates – Axiom",
-  description: "Start faster with 6 battle-tested build patterns. SaaS, AI tools, APIs, mobile apps — pick a template and go.",
-};
+import { useTranslations } from "next-intl";
 
 const TEMPLATES = [
   {
@@ -113,6 +110,7 @@ const DIFFICULTY_BADGE: Record<string, { bg: string; text: string; border: strin
 };
 
 export default function TemplatesPage() {
+  const t = useTranslations("templates");
   return (
     <div style={{ minHeight: "100vh", background: "#030014", color: "white", position: "relative", overflow: "hidden" }}>
       <div aria-hidden="true" style={{
@@ -135,7 +133,7 @@ export default function TemplatesPage() {
             background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.25)",
             color: "#a78bfa", padding: "5px 14px", borderRadius: 9999, marginBottom: 20,
           }}>
-            Analysis Templates
+            {t("badge")}
           </span>
           <h1 style={{
             fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 900, letterSpacing: "-0.03em",
@@ -143,21 +141,21 @@ export default function TemplatesPage() {
             background: "linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.6))",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
           }}>
-            Start with a proven build pattern
+            {t("headline")}
           </h1>
           <p style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.38)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
-            6 battle-tested templates built for common product patterns. Pick one, customize the idea, and get a full analysis in 30 seconds.
+            {t("subline")}
           </p>
         </div>
 
         {/* ── Grid ── */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.25rem" }}>
-          {TEMPLATES.map((t) => {
-            const diff = DIFFICULTY_BADGE[t.difficulty];
-            const idea = encodeURIComponent(t.idea);
+          {TEMPLATES.map((tmpl) => {
+            const diff = DIFFICULTY_BADGE[tmpl.difficulty];
+            const idea = encodeURIComponent(tmpl.idea);
             return (
               <div
-                key={t.id}
+                key={tmpl.id}
                 style={{
                   background: "rgba(255,255,255,0.025)",
                   backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
@@ -171,32 +169,32 @@ export default function TemplatesPage() {
                 {/* Top beam */}
                 <div aria-hidden="true" style={{
                   position: "absolute", top: 0, left: "20%", right: "20%", height: 1,
-                  background: `linear-gradient(90deg,transparent,${t.categoryColor}55,transparent)`,
+                  background: `linear-gradient(90deg,transparent,${tmpl.categoryColor}55,transparent)`,
                 }} />
 
                 {/* Emoji + category */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                  <span style={{ fontSize: "2rem" }}>{t.emoji}</span>
+                  <span style={{ fontSize: "2rem" }}>{tmpl.emoji}</span>
                   <span style={{
                     fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase",
-                    background: t.categoryBg, border: `1px solid ${t.categoryBorder}`,
-                    color: t.categoryColor, padding: "4px 10px", borderRadius: 9999,
+                    background: tmpl.categoryBg, border: `1px solid ${tmpl.categoryBorder}`,
+                    color: tmpl.categoryColor, padding: "4px 10px", borderRadius: 9999,
                   }}>
-                    {t.category}
+                    {tmpl.category}
                   </span>
                 </div>
 
                 {/* Title + description */}
                 <h2 style={{ fontSize: "1.05rem", fontWeight: 800, color: "rgba(255,255,255,0.9)", margin: "0 0 8px", letterSpacing: "-0.01em" }}>
-                  {t.title}
+                  {tmpl.title}
                 </h2>
                 <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.65, margin: "0 0 18px", flex: 1 }}>
-                  {t.description}
+                  {tmpl.description}
                 </p>
 
                 {/* Stack tags */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
-                  {t.stack.map(tag => (
+                  {tmpl.stack.map(tag => (
                     <span key={tag} style={{
                       fontSize: "0.65rem", fontWeight: 600,
                       background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
@@ -209,14 +207,14 @@ export default function TemplatesPage() {
 
                 {/* Meta row */}
                 <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
-                  <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.3)" }}>⏱ {t.timeEstimate}</span>
+                  <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.3)" }}>⏱ {tmpl.timeEstimate}</span>
                   <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.15)" }}>·</span>
                   <span style={{
                     fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.08em",
                     background: diff.bg, border: `1px solid ${diff.border}`,
                     color: diff.text, padding: "2px 8px", borderRadius: 9999,
-                  }}>{t.difficulty}</span>
-                  <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.3)", marginLeft: "auto" }}>{t.steps} steps</span>
+                  }}>{tmpl.difficulty}</span>
+                  <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.3)", marginLeft: "auto" }}>{tmpl.steps} steps</span>
                 </div>
 
                 {/* CTA */}
@@ -231,7 +229,7 @@ export default function TemplatesPage() {
                     letterSpacing: "0.01em",
                   }}
                 >
-                  Use this template →
+                  {t("useTemplate")}
                 </Link>
               </div>
             );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function GlobalError({
   error,
@@ -9,6 +10,7 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations("errors");
   useEffect(() => {
     console.error("Global error:", error);
   }, [error]);
@@ -52,13 +54,13 @@ export default function GlobalError({
           fontSize: "1.55rem", fontWeight: 900, letterSpacing: "-0.025em",
           color: "rgba(255,255,255,0.92)", margin: "0 0 10px",
         }}>
-          Something went wrong
+          {t("errorOccurred")}
         </h1>
         <p style={{
           fontSize: "0.9rem", color: "rgba(255,255,255,0.32)",
           lineHeight: 1.7, margin: "0 0 10px",
         }}>
-          An unexpected error occurred. This has been logged.
+          {t("errorDesc")}
         </p>
         {error.digest && (
           <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.16)", margin: "0 0 36px", fontFamily: "monospace" }}>
@@ -81,7 +83,7 @@ export default function GlobalError({
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-1px)"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)"; }}
           >
-            Try again
+            {t("tryAgain")}
           </button>
           <a
             href="/"
@@ -93,7 +95,7 @@ export default function GlobalError({
               fontSize: "0.9rem", fontWeight: 500, textDecoration: "none",
             }}
           >
-            Go home
+            {t("goHome")}
           </a>
         </div>
       </div>

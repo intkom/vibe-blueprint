@@ -4,11 +4,12 @@ import { useState, useRef, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { StreamEvent } from "@/app/api/analyze/route";
 import { UpgradeModal } from "@/components/upgrade-modal";
+import { useTranslations } from "next-intl";
 
 type InputMode = "idea" | "code" | "github";
 
-function scoreIdea(text: string): { score: number; tip: string | null } {
-  if (text.length < 10) return { score: 0, tip: null };
+function scoreIdea(text: string): { score: number; tipKey: string | null } {
+  if (text.length < 10) return { score: 0, tipKey: null };
   let score = 0;
   score += Math.min(30, Math.floor((text.length / 150) * 30));
   const hasAudience = /\b(for|users?|customers?|teams?|founders?|developers?|businesses?|clients?|creators?)\b/i.test(text);
@@ -20,12 +21,12 @@ function scoreIdea(text: string): { score: number; tip: string | null } {
   const hasBiz = /\b(subscription|freemium|per (user|seat|month)|one.time|revenue|pricing|\$)/i.test(text);
   if (hasBiz) score += 15;
   score = Math.min(100, score);
-  let tip: string | null = null;
-  if (!hasAudience) tip = "Add a target audience — who specifically will use this?";
-  else if (!hasProblem) tip = "Describe the core problem your product solves.";
-  else if (!hasSpec) tip = "Add specificity — tech stack, scale, or use case details.";
-  else if (!hasBiz) tip = "Mention a pricing model to strengthen the signal.";
-  return { score, tip };
+  let tipKey: string | null = null;
+  if (!hasAudience) tipKey = "tipAudience";
+  else if (!hasProblem) tipKey = "tipProblem";
+  else if (!hasSpec) tipKey = "tipSpecific";
+  else if (!hasBiz) tipKey = "tipPricing";
+  return { score, tipKey };
 }
 
 function getComplexity(text: string): { label: "Simple" | "Moderate" | "Detailed"; color: string } {
@@ -66,14 +67,17 @@ const EXAMPLES = [
   "A booking app for freelancers — clients can see availability, book sessions, pay upfront, and get automated reminders.",
 ];
 
-const INPUT_MODES: { key: InputMode; label: string; icon: string; desc: string }[] = [
-  { key: "idea", label: "Idea", icon: "💡", desc: "Describe your product idea in plain text" },
-  { key: "code", label: "Code", icon: "⌨", desc: "Paste code for security & architecture review" },
-  { key: "github", label: "GitHub", icon: "🔗", desc: "Analyze a public repository" },
-];
+// INPUT_MODES is built inside the component using t() - see below
 
 export function AnalysisCreateForm() {
+  const t = useTranslations("analyze");
   const router = useRouter();
+
+  const INPUT_MODES: { key: InputMode; label: string; icon: string; desc: string }[] = [
+    { key: "idea",   label: t("modeIdea"),   icon: "💡", desc: t("modeIdeaDesc")   },
+    { key: "code",   label: t("modeCode"),   icon: "⌨",  desc: t("modeCodeDesc")   },
+    { key: "github", label: t("modeGitHub"), icon: "🔗", desc: t("modeGitHubDesc") },
+  ];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const codeRef = useRef<HTMLTextAreaElement>(null);
   const [focused, setFocused] = useState(false);
@@ -671,9 +675,9 @@ export function AnalysisCreateForm() {
                   transition: "width 0.4s ease, background 0.4s ease",
                 }} />
               </div>
-              {ideaScore.tip && (
+              {ideaScore.tipKey && (
                 <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", margin: "6px 0 0", lineHeight: 1.5 }}>
-                  💡 {ideaScore.tip}
+                  💡 {t(ideaScore.tipKey as "tipAudience" | "tipProblem" | "tipSpecific" | "tipPricing")}
                 </p>
               )}
             </div>
@@ -732,7 +736,7 @@ export function AnalysisCreateForm() {
             <span style={{ fontSize: "1rem", flexShrink: 0 }}>🚧</span>
             <div>
               <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "rgba(251,191,36,0.85)", margin: "0 0 3px" }}>
-                GitHub integration — coming soon
+                {t("githubComingSoon")}
               </p>
               <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", margin: 0, lineHeight: 1.5 }}>
                 Paste a public repo URL and Axiom will clone, read, and analyze the full codebase. Currently in beta.
@@ -796,7 +800,7 @@ export function AnalysisCreateForm() {
           }} />
         )}
         <span style={{ position: "relative", zIndex: 1 }}>
-          {inputMode === "github" ? "Coming soon" : inputMode === "code" ? "Analyze code →" : "Run analysis →"}
+          {inputMode === "github" ? t("githubComingSoon") : t("button")}
         </span>
       </button>
     </form>

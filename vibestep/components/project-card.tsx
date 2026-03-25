@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { deleteProject } from "@/app/actions/projects";
+import { useTranslations } from "next-intl";
 
 export type ProjectRow = {
   id: string;
@@ -74,6 +75,9 @@ export function ProjectCard({
     if (score >= 21) return "#fb923c";
     return "#f87171";
   }
+
+  const tDash = useTranslations("dashboard");
+  const tSteps = useTranslations("steps");
 
   const [hover,    setHover]    = useState(false);
   const [delHover, setDelHover] = useState(false);
@@ -162,7 +166,7 @@ export function ProjectCard({
               animation: isDone ? "none" : "pulseGlow 2s ease-in-out infinite",
               flexShrink:0,
             }} />
-            {isDone ? "Complete" : "In Progress"}
+            {isDone ? tSteps("complete") : tSteps("inProgress")}
           </span>
           {hasAnalysis && healthScore !== undefined && (
             <span style={{
@@ -213,7 +217,7 @@ export function ProjectCard({
           <div style={{ marginBottom:20 }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
               <span style={{ fontSize:"0.75rem", color:"rgba(255,255,255,0.38)", fontWeight:500 }}>
-                {stats.completed} of {stats.total} steps complete
+                {tDash("progress", { done: stats.completed, total: stats.total })}
               </span>
               <span style={{
                 fontSize:"0.75rem", fontWeight:700,
@@ -256,7 +260,7 @@ export function ProjectCard({
             color: isDone ? "#34d399" : "#a78bfa",
             transition:"all 0.18s ease",
           }}>
-            {hasAnalysis ? "View Analysis →" : isDone ? "View analysis" : "Continue building"}
+            {hasAnalysis ? tDash("viewAnalysis") : isDone ? tDash("viewAnalysis") : tDash("continueBuilding")}
             <ArrowRight />
           </span>
         </div>

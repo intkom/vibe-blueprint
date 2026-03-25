@@ -2,25 +2,11 @@
 
 import { useState, useActionState, useRef } from "react";
 import { onboardAndCreate } from "@/app/actions/onboarding";
+import { useTranslations } from "next-intl";
 
 /* ── Types ── */
 type BuildType = "saas" | "mobile" | "devtool" | "ecommerce" | "ai" | "other";
 type ExpLevel  = "beginner" | "intermediate" | "expert";
-
-const BUILD_OPTIONS: { id: BuildType; emoji: string; label: string; sub: string }[] = [
-  { id: "saas",      emoji: "🖥",  label: "SaaS Product",    sub: "Subscription web app or tool"      },
-  { id: "mobile",    emoji: "📱",  label: "Mobile App",      sub: "iOS and/or Android"                },
-  { id: "devtool",   emoji: "⚡",  label: "Developer Tool",  sub: "API, CLI, SDK, or data platform"   },
-  { id: "ecommerce", emoji: "🛍",  label: "E-commerce",      sub: "Store, marketplace, or D2C brand"  },
-  { id: "ai",        emoji: "🧠",  label: "AI Application",  sub: "AI-first product or agent"         },
-  { id: "other",     emoji: "✨",  label: "Something else",  sub: "Marketplace, game, hardware, etc." },
-];
-
-const EXP_OPTIONS: { id: ExpLevel; emoji: string; label: string; sub: string }[] = [
-  { id: "beginner",     emoji: "🌱", label: "Beginner",     sub: "Learning as I go — keep it simple"         },
-  { id: "intermediate", emoji: "🔨", label: "Intermediate", sub: "Built a few things, know the basics"        },
-  { id: "expert",       emoji: "🚀", label: "Expert",       sub: "Ship fast, technical depth appreciated"     },
-];
 
 const IDEA_EXAMPLES = [
   "An AI meeting summariser for remote teams — joins calls, transcribes, and sends bullet points to Slack automatically.",
@@ -32,6 +18,23 @@ const TOTAL_STEPS = 4;
 
 /* ── Component ── */
 export function OnboardingWizard() {
+  const t = useTranslations("onboarding");
+
+  const BUILD_OPTIONS: { id: BuildType; emoji: string; label: string; sub: string }[] = [
+    { id: "saas",      emoji: "🖥",  label: t("saas"),       sub: t("saasDesc")       },
+    { id: "mobile",    emoji: "📱",  label: t("mobile"),     sub: t("mobileDesc")     },
+    { id: "devtool",   emoji: "⚡",  label: t("devTool"),    sub: t("devToolDesc")    },
+    { id: "ecommerce", emoji: "🛍",  label: t("ecommerce"),  sub: t("ecommerceDesc")  },
+    { id: "ai",        emoji: "🧠",  label: t("aiApp"),      sub: t("aiAppDesc")      },
+    { id: "other",     emoji: "✨",  label: t("other"),      sub: t("otherDesc")      },
+  ];
+
+  const EXP_OPTIONS: { id: ExpLevel; emoji: string; label: string; sub: string }[] = [
+    { id: "beginner",     emoji: "🌱", label: t("beginner"),     sub: t("beginnerDesc")     },
+    { id: "intermediate", emoji: "🔨", label: t("intermediate"), sub: t("intermediateDesc") },
+    { id: "expert",       emoji: "🚀", label: t("expert"),       sub: t("expertDesc")       },
+  ];
+
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
   const [buildTypes, setBuildTypes] = useState<Set<BuildType>>(new Set());
   const [expLevel, setExpLevel]   = useState<ExpLevel | null>(null);
@@ -112,7 +115,7 @@ export function OnboardingWizard() {
                 ))}
               </div>
               <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.25)", fontWeight: 600 }}>
-                Step {step} of 3
+                {step === 1 ? t("step1of3") : step === 2 ? t("step2of3") : t("step3of3")}
               </span>
             </div>
             <div style={{ height: 2, background: "rgba(255,255,255,0.06)", borderRadius: 9999, overflow: "hidden" }}>
@@ -159,20 +162,20 @@ export function OnboardingWizard() {
                 }}>✦</div>
 
                 <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 12px" }}>
-                  Welcome to Axiom
+                  {t("welcome")}
                 </p>
                 <h1 style={{ fontSize: "1.9rem", fontWeight: 900, letterSpacing: "-0.03em", margin: "0 0 12px", color: "rgba(255,255,255,0.95)", lineHeight: 1.2 }}>
-                  The AI that understands your build
+                  {t("welcomeSubline")}
                 </h1>
                 <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.38)", margin: "0 0 36px", lineHeight: 1.7 }}>
-                  Let&apos;s set up your workspace in 60 seconds. We&apos;ll personalize your analysis based on what you&apos;re building.
+                  {t("welcomeDesc")}
                 </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
                   {[
-                    { icon: "⚡", text: "Instant AI-powered build analysis" },
-                    { icon: "🎯", text: "Risk areas identified before you ship" },
-                    { icon: "🗺", text: "Step-by-step execution roadmap" },
+                    { icon: "⚡", text: t("feature1") },
+                    { icon: "🎯", text: t("feature2") },
+                    { icon: "🗺", text: t("feature3") },
                   ].map(f => (
                     <div key={f.text} style={{ display: "flex", alignItems: "center", gap: 12, textAlign: "left" }}>
                       <div style={{
@@ -201,7 +204,7 @@ export function OnboardingWizard() {
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)"; }}
                 >
-                  Get started →
+                  {t("getStarted")}
                 </button>
               </div>
             )}
@@ -210,13 +213,13 @@ export function OnboardingWizard() {
             {step === 1 && (
               <div>
                 <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>
-                  Step 1 of 3
+                  {t("step1of3")}
                 </p>
                 <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>
-                  What are you building?
+                  {t("step1Title")}
                 </h2>
                 <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 24px" }}>
-                  Select all that apply — we&apos;ll tailor your analysis.
+                  {t("step1Subline")}
                 </p>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24 }}>
@@ -271,7 +274,7 @@ export function OnboardingWizard() {
                     transition: "all 0.2s ease",
                   }}
                 >
-                  {buildTypes.size > 0 ? `Continue with ${buildTypes.size} selected →` : "Select at least one →"}
+                  {buildTypes.size > 0 ? t("continueSelected", { count: buildTypes.size }) : t("selectAtLeastOne")}
                 </button>
               </div>
             )}
@@ -280,13 +283,13 @@ export function OnboardingWizard() {
             {step === 2 && (
               <div>
                 <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>
-                  Step 2 of 3
+                  {t("step2of3")}
                 </p>
                 <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>
-                  Your experience level?
+                  {t("step2Title")}
                 </h2>
                 <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 28px" }}>
-                  We&apos;ll adjust the technical depth of your analysis.
+                  {t("step2Subline")}
                 </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
@@ -317,7 +320,7 @@ export function OnboardingWizard() {
                 <button type="button" onClick={() => goTo(1, "back")} style={{
                   background: "none", border: "none", color: "rgba(255,255,255,0.25)", fontSize: "0.78rem", cursor: "pointer", padding: 0,
                 }}>
-                  ← Back
+                  {t("back")}
                 </button>
               </div>
             )}
@@ -329,13 +332,13 @@ export function OnboardingWizard() {
                 <input type="hidden" name="experience_level" value={expLevel ?? ""} />
 
                 <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(167,139,250,0.55)", margin: "0 0 10px" }}>
-                  Step 3 of 3 — Last step
+                  {t("step3of3")}
                 </p>
                 <h2 style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.025em", margin: "0 0 6px", color: "rgba(255,255,255,0.95)" }}>
-                  Paste your first idea
+                  {t("step3Title")}
                 </h2>
                 <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.3)", margin: "0 0 20px" }}>
-                  See Axiom in action — describe it in plain English.
+                  {t("step3Subline")}
                 </p>
 
                 {state?.error && (
@@ -391,7 +394,7 @@ export function OnboardingWizard() {
                     color: "rgba(255,255,255,0.3)", padding: "12px 16px", borderRadius: 11,
                     fontSize: "0.82rem", cursor: "pointer", flexShrink: 0,
                   }}>
-                    ← Back
+                    {t("back")}
                   </button>
                   <button
                     type="submit"
@@ -410,9 +413,9 @@ export function OnboardingWizard() {
                     {pending ? (
                       <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
                         <span style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", animation: "spin 0.7s linear infinite", display: "inline-block" }} />
-                        Analyzing your build…
+                        {t("analyzing")}
                       </span>
-                    ) : "Analyze now →"}
+                    ) : t("analyzeNow")}
                   </button>
                 </div>
 
@@ -426,7 +429,7 @@ export function OnboardingWizard() {
                       color: "rgba(255,255,255,0.2)", cursor: "pointer", padding: 0,
                     }}
                   >
-                    I&apos;ll do this later →
+                    {t("analyzeLater")}
                   </button>
                 </div>
               </form>
@@ -435,7 +438,7 @@ export function OnboardingWizard() {
         </div>
 
         <p style={{ textAlign: "center", fontSize: "0.72rem", color: "rgba(255,255,255,0.15)", marginTop: 20 }}>
-          You can always change these preferences in settings.
+          {t("preferencesNote")}
         </p>
       </div>
 

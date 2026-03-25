@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { validateIdea, INITIAL_RESULT, type ValidateState } from "@/app/actions/validate";
+import { useTranslations } from "next-intl";
 
 /* ── Verdict styling ── */
 const VERDICT_STYLES = {
@@ -44,6 +45,7 @@ const EXAMPLES = [
 ];
 
 export function IdeaValidatorForm() {
+  const t = useTranslations("validate");
   const [state, formAction, isPending] = useActionState<ValidateState, FormData>(
     validateIdea,
     INITIAL_RESULT
@@ -140,7 +142,7 @@ export function IdeaValidatorForm() {
             transition: "all 0.2s ease",
           }}
         >
-          {isPending ? "Analyzing your idea…" : "Validate my idea →"}
+          {isPending ? t("loading") : t("button")}
         </button>
       </form>
 
@@ -220,7 +222,7 @@ export function IdeaValidatorForm() {
                 fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em",
                 textTransform: "uppercase", color: "rgba(255,255,255,0.22)", margin: "0 0 6px",
               }}>
-                Market Size
+                {t("marketSize")}
               </p>
               <p style={{
                 fontSize: "1.5rem", fontWeight: 900, color: "#a78bfa",
@@ -245,7 +247,7 @@ export function IdeaValidatorForm() {
                 fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em",
                 textTransform: "uppercase", color: "rgba(255,255,255,0.22)", margin: "0 0 6px",
               }}>
-                Your Angle
+                {t("uniqueAngle")}
               </p>
               <p style={{
                 fontSize: "0.82rem", color: "rgba(255,255,255,0.7)",
@@ -264,7 +266,7 @@ export function IdeaValidatorForm() {
                 fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em",
                 textTransform: "uppercase", color: "rgba(248,113,113,0.5)", margin: "0 0 6px",
               }}>
-                Biggest Risk
+                {t("biggestRisk")}
               </p>
               <p style={{
                 fontSize: "0.82rem", color: "#f87171",
@@ -284,7 +286,7 @@ export function IdeaValidatorForm() {
               fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em",
               textTransform: "uppercase", color: "rgba(255,255,255,0.22)", margin: "0 0 12px",
             }}>
-              Top Competitors
+              {t("competitors")}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
               {state.result.competitors.slice(0, 3).map((c, i) => (
