@@ -741,26 +741,11 @@ function FaqSection() {
 /* ─────────────────────────────────────────────────────────────
    Page
 ───────────────────────────────────────────────────────────── */
-const CYCLE_WORDS = ["your SaaS", "your mobile app", "your API", "your AI tool"]
-
 export default function Home() {
   const tLanding = useTranslations('landing')
   const tAuth    = useTranslations('auth')
   const { locale, setLocale } = useLocale()
-  const [cycleIdx, setCycleIdx] = useState(0)
-  const [cycleVisible, setCycleVisible] = useState(true)
   const [langOpen, setLangOpen] = useState(false)
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setCycleVisible(false)
-      setTimeout(() => {
-        setCycleIdx(i => (i + 1) % CYCLE_WORDS.length)
-        setCycleVisible(true)
-      }, 320)
-    }, 2600)
-    return () => clearInterval(t)
-  }, [])
 
   // Close lang dropdown on outside click
   useEffect(() => {
@@ -777,11 +762,7 @@ export default function Home() {
 
       <style>{`
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @keyframes cycleSlide {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 600px) {
+@media (max-width: 600px) {
           .lp-hero-h1 { font-size: 2.4rem !important; }
           .lp-cta-row { flex-direction: column !important; align-items: stretch !important; }
           .lp-stats-row { gap: 32px !important; }
@@ -882,35 +863,13 @@ export default function Home() {
           className="lp-hero-h1"
           style={{ fontSize: 'clamp(2.7rem,6vw,4.6rem)', fontWeight: 900, lineHeight: 1.07, marginBottom: 20, letterSpacing: '-0.03em', maxWidth: 820, marginLeft: 'auto', marginRight: 'auto', color: 'rgba(255,255,255,0.96)' }}
         >
-          {locale === 'en' ? (
-            <>
-              Understand{' '}
-              <span style={{
-                background: 'linear-gradient(135deg,#c4b5fd 0%,#a78bfa 55%,#818cf8 100%)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>
-                <span
-                  key={cycleIdx}
-                  style={{
-                    display: 'inline-block',
-                    opacity: cycleVisible ? 1 : 0,
-                    transform: cycleVisible ? 'translateY(0)' : 'translateY(8px)',
-                    transition: 'opacity 0.3s ease, transform 0.3s ease',
-                  }}
-                >
-                  {CYCLE_WORDS[cycleIdx]}
-                </span>
-              </span>
-              <br />before it breaks
-            </>
-          ) : (
-            <span style={{
-              background: 'linear-gradient(135deg,#c4b5fd 0%,#a78bfa 55%,#818cf8 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            }}>
-              {tLanding('headline')}
-            </span>
-          )}
+          Understand your product{' '}
+          <span style={{
+            background: 'linear-gradient(135deg,#c4b5fd 0%,#a78bfa 55%,#818cf8 100%)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          }}>
+            before it breaks
+          </span>
         </h1>
 
         <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.4)', maxWidth: 500, margin: '0 auto 18px', lineHeight: 1.78 }}>
