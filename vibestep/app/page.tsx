@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 import { SiteFooter } from '@/components/site-footer'
 import { SocialProofTicker } from '@/components/social-proof-ticker'
 import { ExitIntentPopup } from '@/components/exit-intent-popup'
+import { useTranslations } from 'next-intl'
+import { useLocale, LANGUAGES, type Locale } from '@/lib/i18n-provider'
 
 /* ─────────────────────────────────────────────────────────────
    Star field
@@ -742,8 +744,12 @@ function FaqSection() {
 const CYCLE_WORDS = ["your SaaS", "your mobile app", "your API", "your AI tool"]
 
 export default function Home() {
+  const tLanding = useTranslations('landing')
+  const tAuth    = useTranslations('auth')
+  const { locale, setLocale } = useLocale()
   const [cycleIdx, setCycleIdx] = useState(0)
   const [cycleVisible, setCycleVisible] = useState(true)
+  const [langOpen, setLangOpen] = useState(false)
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -755,6 +761,14 @@ export default function Home() {
     }, 2600)
     return () => clearInterval(t)
   }, [])
+
+  // Close lang dropdown on outside click
+  useEffect(() => {
+    if (!langOpen) return
+    const fn = () => setLangOpen(false)
+    document.addEventListener('mousedown', fn)
+    return () => document.removeEventListener('mousedown', fn)
+  }, [langOpen])
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--vs-bg)', color: 'var(--vs-text)', position: 'relative', overflowX: 'hidden' }}>
@@ -794,12 +808,63 @@ export default function Home() {
             <a href="#pricing" style={{ textDecoration: 'none', color: 'inherit', transition: 'color 0.14s' }} onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.72)' }} onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.4)' }}>Pricing</a>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Link href="/login" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.42)', padding: '8px 14px', borderRadius: 8, textDecoration: 'none', transition: 'color 0.14s' }}>Log in</Link>
+            {/* Globe language switcher */}
+            <div style={{ position: 'relative' }} onMouseDown={e => e.stopPropagation()}>
+              <button
+                type="button"
+                onClick={() => setLangOpen(o => !o)}
+                aria-label="Switch language"
+                style={{
+                  background: 'none', border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 8, cursor: 'pointer', padding: '7px 9px',
+                  color: 'rgba(255,255,255,0.45)', fontSize: '0.9rem', lineHeight: 1,
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  transition: 'all 0.14s',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.85)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(139,92,246,0.4)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.45)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.1)' }}
+              >
+                🌐 <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>{locale}</span>
+              </button>
+              {langOpen && (
+                <div style={{
+                  position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                  width: 192, background: 'rgba(6,3,22,0.98)',
+                  backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+                  border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12,
+                  boxShadow: '0 16px 48px rgba(0,0,0,0.8)', zIndex: 200, padding: 6,
+                }}>
+                  {LANGUAGES.map(lang => (
+                    <button key={lang.code} type="button"
+                      onClick={() => { setLocale(lang.code as Locale); setLangOpen(false) }}
+                      style={{
+                        width: '100%', textAlign: 'left',
+                        display: 'flex', alignItems: 'center', gap: 10,
+                        padding: '9px 12px', borderRadius: 8, border: 'none',
+                        background: locale === lang.code ? 'rgba(139,92,246,0.12)' : 'transparent',
+                        cursor: 'pointer',
+                      }}
+                      onMouseEnter={e => { if (locale !== lang.code) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)' }}
+                      onMouseLeave={e => { if (locale !== lang.code) (e.currentTarget as HTMLButtonElement).style.background = 'transparent' }}
+                    >
+                      <span style={{ fontSize: '1.1rem' }}>{lang.flag}</span>
+                      <span style={{ flex: 1 }}>
+                        <span style={{ display: 'block', fontSize: '0.83rem', fontWeight: locale === lang.code ? 600 : 400, color: locale === lang.code ? '#a78bfa' : 'rgba(255,255,255,0.7)' }}>{lang.native}</span>
+                        <span style={{ display: 'block', fontSize: '0.7rem', color: 'rgba(255,255,255,0.28)' }}>{lang.label}</span>
+                      </span>
+                      {locale === lang.code && <span style={{ color: '#a78bfa', fontSize: '0.8rem' }}>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link href="/login" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.42)', padding: '8px 14px', borderRadius: 8, textDecoration: 'none', transition: 'color 0.14s' }}>{tAuth('logIn')}</Link>
             <Link href="/signup" style={{ fontSize: '0.875rem', padding: '9px 20px', borderRadius: 10, background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', border: '1px solid rgba(139,92,246,0.4)', color: 'white', textDecoration: 'none', fontWeight: 600, boxShadow: '0 0 18px rgba(139,92,246,0.28)', transition: 'all 0.15s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 0 28px rgba(139,92,246,0.5)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 0 18px rgba(139,92,246,0.28)' }}
             >
-              Start free →
+              {tAuth('signUpFree')} →
             </Link>
           </div>
         </div>
@@ -817,28 +882,39 @@ export default function Home() {
           className="lp-hero-h1"
           style={{ fontSize: 'clamp(2.7rem,6vw,4.6rem)', fontWeight: 900, lineHeight: 1.07, marginBottom: 20, letterSpacing: '-0.03em', maxWidth: 820, marginLeft: 'auto', marginRight: 'auto', color: 'rgba(255,255,255,0.96)' }}
         >
-          Understand{' '}
-          <span style={{
-            background: 'linear-gradient(135deg,#c4b5fd 0%,#a78bfa 55%,#818cf8 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          }}>
-            <span
-              key={cycleIdx}
-              style={{
-                display: 'inline-block',
-                opacity: cycleVisible ? 1 : 0,
-                transform: cycleVisible ? 'translateY(0)' : 'translateY(8px)',
-                transition: 'opacity 0.3s ease, transform 0.3s ease',
-              }}
-            >
-              {CYCLE_WORDS[cycleIdx]}
+          {locale === 'en' ? (
+            <>
+              Understand{' '}
+              <span style={{
+                background: 'linear-gradient(135deg,#c4b5fd 0%,#a78bfa 55%,#818cf8 100%)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}>
+                <span
+                  key={cycleIdx}
+                  style={{
+                    display: 'inline-block',
+                    opacity: cycleVisible ? 1 : 0,
+                    transform: cycleVisible ? 'translateY(0)' : 'translateY(8px)',
+                    transition: 'opacity 0.3s ease, transform 0.3s ease',
+                  }}
+                >
+                  {CYCLE_WORDS[cycleIdx]}
+                </span>
+              </span>
+              <br />before it breaks
+            </>
+          ) : (
+            <span style={{
+              background: 'linear-gradient(135deg,#c4b5fd 0%,#a78bfa 55%,#818cf8 100%)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+            }}>
+              {tLanding('headline')}
             </span>
-          </span>
-          <br />before it breaks
+          )}
         </h1>
 
         <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.4)', maxWidth: 500, margin: '0 auto 18px', lineHeight: 1.78 }}>
-          Paste your idea. Get build health score, risk detection, and a 10-step execution path in 30 seconds.
+          {tLanding('subline')}
         </p>
         <p style={{ fontSize: '0.82rem', color: 'rgba(167,139,250,0.5)', margin: '0 auto 24px', fontWeight: 500 }}>
           Join 500+ builders who shipped with clarity
@@ -859,7 +935,7 @@ export default function Home() {
           onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '0 0 48px rgba(139,92,246,0.6)' }}
           onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 0 32px rgba(139,92,246,0.4)' }}
           >
-            Analyze my build free →
+            {tLanding('cta')}
           </Link>
           <a href="#demo" style={{
             fontSize: '1rem', padding: '14px 34px', borderRadius: 12,
@@ -870,7 +946,7 @@ export default function Home() {
           onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'rgba(255,255,255,0.06)'; el.style.color = 'rgba(255,255,255,0.78)' }}
           onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = 'rgba(255,255,255,0.55)' }}
           >
-            See a live demo →
+            {tLanding('howItWorks')} →
           </a>
         </div>
 

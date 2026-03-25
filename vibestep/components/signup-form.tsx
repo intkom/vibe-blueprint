@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { signup, type SignupState } from "@/app/signup/actions";
+import { useTranslations } from "next-intl";
 
 const initialState: SignupState = { error: null };
 
@@ -36,6 +37,7 @@ function Field({
 }
 
 export function SignupForm() {
+  const t = useTranslations('auth');
   const [state, formAction, pending] = useActionState(signup, initialState);
   const [btnHover, setBtnHover] = useState(false);
 
@@ -53,8 +55,8 @@ export function SignupForm() {
         </div>
       ) : null}
 
-      <Field id="email" name="email" type="email" label="Email address" placeholder="you@example.com" autoComplete="email" />
-      <Field id="password" name="password" type="password" label="Password" placeholder="At least 6 characters" autoComplete="new-password" />
+      <Field id="email" name="email" type="email" label={t('email')} placeholder="you@example.com" autoComplete="email" />
+      <Field id="password" name="password" type="password" label={t('password')} placeholder="At least 6 characters" autoComplete="new-password" />
       <Field id="confirm" name="confirm" type="password" label="Confirm password" placeholder="Same as above" autoComplete="new-password" />
 
       <button
@@ -82,9 +84,9 @@ export function SignupForm() {
               border: "2px solid rgba(255,255,255,0.25)", borderTopColor: "white",
               borderRadius: "50%", animation: "spin 0.8s linear infinite", flexShrink: 0,
             }} />
-            Creating account…
+            {t('signUp')}…
           </>
-        ) : "Create account →"}
+        ) : `${t('signUpFree')} →`}
       </button>
     </form>
   );

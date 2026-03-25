@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { login, type LoginState } from "@/app/login/actions";
+import { useTranslations } from "next-intl";
 
 const initialState: LoginState = { error: null };
 
@@ -45,6 +46,7 @@ function Field({
 }
 
 export function LoginForm({ urlError }: { urlError: string | null }) {
+  const t = useTranslations('auth');
   const [state, formAction, pending] = useActionState(login, initialState);
   const [btnHover, setBtnHover] = useState(false);
   const error = state.error ?? urlError;
@@ -64,8 +66,8 @@ export function LoginForm({ urlError }: { urlError: string | null }) {
         </div>
       ) : null}
 
-      <Field id="email" name="email" type="email" label="Email address" placeholder="you@example.com" autoComplete="email" />
-      <Field id="password" name="password" type="password" label="Password" placeholder="••••••••" autoComplete="current-password" />
+      <Field id="email" name="email" type="email" label={t('email')} placeholder="you@example.com" autoComplete="email" />
+      <Field id="password" name="password" type="password" label={t('password')} placeholder="••••••••" autoComplete="current-password" />
 
       <button
         type="submit"
@@ -97,9 +99,9 @@ export function LoginForm({ urlError }: { urlError: string | null }) {
               animation: 'spin 0.8s linear infinite',
               flexShrink: 0,
             }} />
-            Signing in…
+            {t('signIn')}…
           </>
-        ) : 'Sign in →'}
+        ) : `${t('signIn')} →`}
       </button>
     </form>
   );
