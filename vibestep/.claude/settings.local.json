@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc:*)",
-      "Bash(find /c/Users/Asus/vibestep/vibestep -name *.env* -o -name middleware*)"
+      "Bash(find /c/Users/Asus/vibestep/vibestep -name *.env* -o -name middleware*)",
+      "Bash(npx next:*)"
     ]
   }
 }
