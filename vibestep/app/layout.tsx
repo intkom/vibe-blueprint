@@ -6,6 +6,7 @@ import { NotificationToasts } from "@/components/notification-bell";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { GlobalSearch } from "@/components/global-search";
 import { Analytics } from "@vercel/analytics/react";
+import { I18nProvider } from "@/lib/i18n-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,15 +42,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full`}>
+    <html lang="en" dir="ltr" className={`${geistSans.variable} h-full`}>
       <body className="min-h-full antialiased">
-        <NotificationProvider>
-          {children}
-          <NotificationToasts />
-          <KeyboardShortcuts />
-          <GlobalSearch />
-          <Analytics />
-        </NotificationProvider>
+        <I18nProvider>
+          <NotificationProvider>
+            {children}
+            <NotificationToasts />
+            <KeyboardShortcuts />
+            <GlobalSearch />
+            <Analytics />
+          </NotificationProvider>
+        </I18nProvider>
       </body>
     </html>
   );

@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { signOut } from "@/app/actions/auth";
 import { NotificationsBell } from "@/components/notifications-bell";
+import { useTranslations } from "next-intl";
+import { useLocale, LANGUAGES, type Locale } from "@/lib/i18n-provider";
 
 /* ── Avatar helpers ─────────────────────────────────────── */
 const AVATAR_COLORS = ["#7c3aed","#2563eb","#059669","#d97706","#dc2626","#0891b2","#db2777","#4f46e5"];
@@ -23,24 +25,28 @@ function getInitials(email: string) {
   return local.substring(0, 2).toUpperCase();
 }
 
-const CENTER_NAV = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/tools",     label: "Analysis"  },
-  { href: "/templates", label: "Templates" },
-  { href: "/validate",  label: "Validate"  },
-];
-
-const AVATAR_MENU = [
-  { href: "/settings", label: "Settings", icon: "⚙" },
+const AVATAR_MENU_ITEMS = [
+  { href: "/settings", labelKey: "settings" as const, icon: "⚙" },
 ];
 
 export function AppHeader() {
-  const pathname                 = usePathname();
-  const [email,    setEmail]     = useState<string | null>(null);
-  const [dropOpen, setDropOpen]  = useState(false);
-  const [menuOpen, setMenuOpen]  = useState(false);
-  const [hovered,  setHovered]   = useState<string | null>(null);
-  const dropRef = useRef<HTMLDivElement>(null);
+  const pathname                   = usePathname();
+  const t                          = useTranslations("nav");
+  const { locale, setLocale }      = useLocale();
+  const [email,    setEmail]       = useState<string | null>(null);
+  const [dropOpen, setDropOpen]    = useState(false);
+  const [menuOpen, setMenuOpen]    = useState(false);
+  const [langOpen, setLangOpen]    = useState(false);
+  const [hovered,  setHovered]     = useState<string | null>(null);
+  const dropRef  = useRef<HTMLDivElement>(null);
+  const langRef  = useRef<HTMLDivElement>(null);
+
+  const CENTER_NAV = [
+    { href: "/dashboard", label: t("dashboard") },
+    { href: "/tools",     label: t("analysis")   },
+    { href: "/templates", label: t("templates")  },
+    { href: "/validate",  label: t("validate")   },
+  ];
 
   useEffect(() => {
     createClient().auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
@@ -49,6 +55,7 @@ export function AppHeader() {
   useEffect(() => {
     const fn = (e: MouseEvent) => {
       if (dropRef.current && !dropRef.current.contains(e.target as Node)) setDropOpen(false);
+      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
     };
     document.addEventListener("mousedown", fn);
     return () => document.removeEventListener("mousedown", fn);
@@ -66,7 +73,10 @@ export function AppHeader() {
         }
         @keyframes vsFadeIn { from{opacity:0} to{opacity:1} }
         .vs-nav-center { display:flex; }
-        @media(max-width:680px){ .vs-nav-center{ display:none; } }
+        @media(max-width:680px){
+          .vs-nav-center{ display:none; }
+          .vs-burger{ display:flex !important; }
+        }
       `}</style>
 
       <header style={{
@@ -153,11 +163,71 @@ export function AppHeader() {
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 5v14M5 12h14"/>
               </svg>
-              Analyze
+              {t("newIdea")}
             </Link>
 
             {/* Notifications */}
             <NotificationsBell />
+
+            {/* Globe language switcher */}
+            <div ref={langRef} style={{ position: "relative" }}>
+              <button
+                type="button"
+                onClick={() => setLangOpen(o => !o)}
+                aria-label="Switch language"
+                title="Switch language"
+                style={{
+                  background: "none", border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: 8, cursor: "pointer", padding: "6px 8px",
+                  color: "rgba(255,255,255,0.5)", fontSize: "0.95rem", lineHeight: 1,
+                  display: "flex", alignItems: "center", gap: 4,
+                  transition: "all 0.14s ease",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.85)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(139,92,246,0.4)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.5)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
+              >
+                🌐
+                <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" }}>{locale}</span>
+              </button>
+
+              {langOpen && (
+                <div style={{
+                  position: "absolute", top: "calc(100% + 8px)", right: 0,
+                  width: 192,
+                  background: "rgba(6,3,22,0.98)",
+                  backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+                  border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12,
+                  boxShadow: "0 16px 48px rgba(0,0,0,0.8)",
+                  zIndex: 200, padding: 6,
+                  animation: "vsDropIn 0.18s cubic-bezier(0.34,1.56,0.64,1) both",
+                  transformOrigin: "top right",
+                }}>
+                  {LANGUAGES.map(lang => (
+                    <button
+                      key={lang.code}
+                      type="button"
+                      onClick={() => { setLocale(lang.code as Locale); setLangOpen(false); }}
+                      style={{
+                        width: "100%", textAlign: "left",
+                        display: "flex", alignItems: "center", gap: 10,
+                        padding: "9px 12px", borderRadius: 8, border: "none",
+                        background: locale === lang.code ? "rgba(139,92,246,0.12)" : "transparent",
+                        cursor: "pointer", transition: "background 0.14s",
+                      }}
+                      onMouseEnter={e => { if (locale !== lang.code) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.05)"; }}
+                      onMouseLeave={e => { if (locale !== lang.code) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+                    >
+                      <span style={{ fontSize: "1.1rem" }}>{lang.flag}</span>
+                      <span style={{ flex: 1 }}>
+                        <span style={{ display: "block", fontSize: "0.83rem", fontWeight: locale === lang.code ? 600 : 400, color: locale === lang.code ? "#a78bfa" : "rgba(255,255,255,0.7)" }}>{lang.native}</span>
+                        <span style={{ display: "block", fontSize: "0.7rem", color: "rgba(255,255,255,0.28)" }}>{lang.label}</span>
+                      </span>
+                      {locale === lang.code && <span style={{ color: "#a78bfa", fontSize: "0.8rem" }}>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Avatar */}
             <div ref={dropRef} style={{ position:"relative" }}>
@@ -213,7 +283,7 @@ export function AppHeader() {
 
                   {/* Settings link */}
                   <div style={{ padding:"6px" }}>
-                    {AVATAR_MENU.map(item => (
+                    {AVATAR_MENU_ITEMS.map(item => (
                       <Link key={item.href} href={item.href}
                         onClick={() => setDropOpen(false)}
                         style={{
@@ -233,7 +303,7 @@ export function AppHeader() {
                           display:"flex", alignItems:"center", justifyContent:"center",
                           fontSize:"0.65rem", transition:"background 0.14s",
                         }}>{item.icon}</span>
-                        {item.label}
+                        {t(item.labelKey)}
                       </Link>
                     ))}
 
@@ -259,7 +329,7 @@ export function AppHeader() {
                           display:"flex", alignItems:"center", justifyContent:"center",
                           fontSize:"0.7rem", transition:"background 0.14s",
                         }}>↗</span>
-                        Sign out
+                        {t("signOut")}
                       </button>
                     </form>
                   </div>

@@ -4,7 +4,7 @@ import { AppHeader } from "@/components/app-header";
 import { ReferralSection } from "@/components/referral-section";
 import { AchievementBadges } from "@/components/achievement-badges";
 import { EmailPreferencesForm } from "@/components/email-preferences-form";
-import { DisplayNameEditor, PreferencesSection, DangerZone } from "@/components/settings-client";
+import { DisplayNameEditor, PreferencesSection, DangerZone, LanguageSwitcher } from "@/components/settings-client";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -223,6 +223,9 @@ export default async function SettingsPage() {
         {/* ── PREFERENCES ── */}
         <Section title="Preferences">
           <PreferencesSection defaultModel="haiku" />
+          <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            <LanguageSwitcher />
+          </div>
           <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
             <p style={{ fontSize: "0.72rem", fontWeight: 700, color: "rgba(255,255,255,0.25)", textTransform: "uppercase", letterSpacing: "0.1em", margin: "0 0 12px" }}>
               Email notifications

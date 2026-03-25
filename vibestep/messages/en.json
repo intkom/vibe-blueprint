@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "newIdea": "New Analysis",
+    "validate": "Validate",
+    "templates": "Templates",
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "analysis": "Analysis"
+  },
+  "landing": {
+    "headline": "Understand your product before it breaks",
+    "subline": "Paste your idea. Get build health score, risk detection, and execution path in 30 seconds.",
+    "cta": "Analyze my build free →",
+    "howItWorks": "How it works"
+  },
+  "dashboard": {
+    "greeting": "Good morning",
+    "newAnalysis": "+ New Analysis",
+    "totalProjects": "Total analyses",
+    "inProgress": "In progress",
+    "completed": "Completed",
+    "noProjects": "No analyses yet",
+    "noProjectsDesc": "Your first analysis is 30 seconds away"
+  },
+  "analyze": {
+    "headline": "What are you building?",
+    "placeholder": "Describe your idea, stack, or build...",
+    "button": "Analyze my build →",
+    "loading": "Axiom is analyzing your build...",
+    "stage1": "Reading your build...",
+    "stage2": "Detecting risk areas...",
+    "stage3": "Mapping your audience...",
+    "stage4": "Building execution path...",
+    "stage5": "Calculating build health..."
+  },
+  "analysis": {
+    "healthScore": "Build Health Score",
+    "productTruth": "Product Truth",
+    "riskAreas": "Risk Areas",
+    "executionPath": "Execution Path",
+    "failurePoints": "Failure Points",
+    "markComplete": "Mark as addressed →",
+    "startStep": "Start this step →",
+    "generateCode": "Generate code →"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "email": "Email address",
+    "password": "Password",
+    "continueGoogle": "Continue with Google",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signUpFree": "Sign up free",
+    "logIn": "Log in"
+  },
+  "settings": {
+    "title": "Account & Preferences",
+    "language": "Language",
+    "selectLanguage": "Select language",
+    "saveChanges": "Save changes",
+    "account": "Account",
+    "preferences": "Preferences",
+    "dangerZone": "Danger Zone"
+  }
+}

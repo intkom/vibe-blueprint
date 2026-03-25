@@ -6,10 +6,14 @@ export async function PATCH(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await req.json() as { display_name?: string };
+  const body = await req.json() as { display_name?: string; language?: string };
   const updates: Record<string, string> = {};
   if (typeof body.display_name === "string" && body.display_name.trim()) {
     updates.display_name = body.display_name.trim().slice(0, 50);
+  }
+  const VALID_LOCALES = ["en", "ka", "ru", "az"];
+  if (typeof body.language === "string" && VALID_LOCALES.includes(body.language)) {
+    updates.language = body.language;
   }
 
   if (Object.keys(updates).length === 0) {

@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "dashboard": "İdarə paneli",
+    "newIdea": "Yeni analiz",
+    "validate": "Yoxlama",
+    "templates": "Şablonlar",
+    "settings": "Parametrlər",
+    "signOut": "Çıxış",
+    "analysis": "Analiz"
+  },
+  "landing": {
+    "headline": "Məhsulunuzu sınmadan əvvəl anlayın",
+    "subline": "İdeyanızı yapışdırın. 30 saniyəyə build health score, risk aşkarlanması və icra planı əldə edin.",
+    "cta": "Pulsuz analiz et →",
+    "howItWorks": "Necə işləyir"
+  },
+  "dashboard": {
+    "greeting": "Salam",
+    "newAnalysis": "+ Yeni analiz",
+    "totalProjects": "Cəmi analizlər",
+    "inProgress": "Davam edir",
+    "completed": "Tamamlandı",
+    "noProjects": "Hələ analiz yoxdur",
+    "noProjectsDesc": "İlk analiziniz 30 saniyə uzaqlıqdadır"
+  },
+  "analyze": {
+    "headline": "Nə qurursunuz?",
+    "placeholder": "İdeyanızı, stack və ya build-i təsvir edin...",
+    "button": "Analiz et →",
+    "loading": "Axiom build-inizi analiz edir...",
+    "stage1": "Build-inizi oxuyur...",
+    "stage2": "Riskləri aşkar edir...",
+    "stage3": "Auditoriya xəritəsi çıxarır...",
+    "stage4": "İcra planı qurur...",
+    "stage5": "Build health hesablayır..."
+  },
+  "analysis": {
+    "healthScore": "Build Health Score",
+    "productTruth": "Məhsul həqiqəti",
+    "riskAreas": "Risk sahələri",
+    "executionPath": "İcra yolu",
+    "failurePoints": "Uğursuzluq nöqtələri",
+    "markComplete": "Həll edildi kimi işarələ →",
+    "startStep": "Bu addımı başlat →",
+    "generateCode": "Kod yarat →"
+  },
+  "auth": {
+    "signIn": "Daxil ol",
+    "signUp": "Qeydiyyat",
+    "email": "E-poçt ünvanı",
+    "password": "Şifrə",
+    "continueGoogle": "Google ilə davam et",
+    "noAccount": "Hesabınız yoxdur?",
+    "hasAccount": "Artıq hesabınız var?",
+    "signUpFree": "Pulsuz qeydiyyat",
+    "logIn": "Daxil ol"
+  },
+  "settings": {
+    "title": "Hesab və parametrlər",
+    "language": "Dil",
+    "selectLanguage": "Dil seçin",
+    "saveChanges": "Dəyişiklikləri saxla",
+    "account": "Hesab",
+    "preferences": "Parametrlər",
+    "dangerZone": "Təhlükəli zona"
+  }
+}

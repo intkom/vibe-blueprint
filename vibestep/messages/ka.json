@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "dashboard": "სამუშაო მაგიდა",
+    "newIdea": "ახალი ანალიზი",
+    "validate": "ვალიდაცია",
+    "templates": "შაბლონები",
+    "settings": "პარამეტრები",
+    "signOut": "გამოსვლა",
+    "analysis": "ანალიზი"
+  },
+  "landing": {
+    "headline": "გაიგე შენი პროდუქტი სანამ გაფუჭდება",
+    "subline": "ჩასვი შენი იდეა. მიიღე build health score, რისკების აღმოჩენა და შესრულების გეგმა 30 წამში.",
+    "cta": "გაანალიზე უფასოდ →",
+    "howItWorks": "როგორ მუშაობს"
+  },
+  "dashboard": {
+    "greeting": "გამარჯობა",
+    "newAnalysis": "+ ახალი ანალიზი",
+    "totalProjects": "სულ ანალიზები",
+    "inProgress": "მიმდინარე",
+    "completed": "დასრულებული",
+    "noProjects": "ანალიზი არ არის",
+    "noProjectsDesc": "შენი პირველი ანალიზი 30 წამშია"
+  },
+  "analyze": {
+    "headline": "რას ქმნი?",
+    "placeholder": "აღწერე შენი იდეა, stack ან build...",
+    "button": "გაანალიზე →",
+    "loading": "Axiom აანალიზებს შენს build-ს...",
+    "stage1": "კითხულობს შენს build-ს...",
+    "stage2": "პოულობს რისკებს...",
+    "stage3": "ასახავს აუდიტორიას...",
+    "stage4": "ქმნის შესრულების გეგმას...",
+    "stage5": "ითვლის build health-ს..."
+  },
+  "analysis": {
+    "healthScore": "Build Health Score",
+    "productTruth": "პროდუქტის სიმართლე",
+    "riskAreas": "სარისკო სფეროები",
+    "executionPath": "შესრულების გეგმა",
+    "failurePoints": "წარუმატებლობის წერტილები",
+    "markComplete": "მონიშნე შესრულებულად →",
+    "startStep": "დაიწყე ეს ნაბიჯი →",
+    "generateCode": "კოდის გენერაცია →"
+  },
+  "auth": {
+    "signIn": "შესვლა",
+    "signUp": "რეგისტრაცია",
+    "email": "ელ-ფოსტა",
+    "password": "პაროლი",
+    "continueGoogle": "გაგრძელება Google-ით",
+    "noAccount": "არ გაქვს ანგარიში?",
+    "hasAccount": "უკვე გაქვს ანგარიში?",
+    "signUpFree": "უფასო რეგისტრაცია",
+    "logIn": "შესვლა"
+  },
+  "settings": {
+    "title": "ანგარიში და პარამეტრები",
+    "language": "ენა",
+    "selectLanguage": "აირჩიე ენა",
+    "saveChanges": "შენახვა",
+    "account": "ანგარიში",
+    "preferences": "პარამეტრები",
+    "dangerZone": "საშიში ზონა"
+  }
+}

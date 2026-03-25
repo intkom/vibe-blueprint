@@ -2,6 +2,8 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, LANGUAGES, type Locale } from "@/lib/i18n-provider";
+import { useTranslations } from "next-intl";
 
 /* ── Display Name Editor ── */
 export function DisplayNameEditor({ initial, email }: { initial: string; email: string }) {
@@ -88,6 +90,52 @@ export function DisplayNameEditor({ initial, email }: { initial: string; email: 
           read-only
         </span>
       </div>
+    </div>
+  );
+}
+
+/* ── Language Switcher (standalone) ── */
+export function LanguageSwitcher() {
+  const t = useTranslations("settings");
+  const { locale, setLocale } = useLocale();
+
+  return (
+    <div>
+      <p style={{ fontSize: "0.72rem", fontWeight: 700, color: "rgba(255,255,255,0.25)", textTransform: "uppercase", letterSpacing: "0.1em", margin: "0 0 12px" }}>
+        {t("language")}
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }}>
+        {LANGUAGES.map(lang => {
+          const active = locale === lang.code;
+          return (
+            <button
+              key={lang.code}
+              type="button"
+              onClick={() => setLocale(lang.code as Locale)}
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "10px 14px", borderRadius: 10, cursor: "pointer",
+                background: active ? "rgba(139,92,246,0.14)" : "rgba(255,255,255,0.03)",
+                border: active ? "1px solid rgba(139,92,246,0.4)" : "1px solid rgba(255,255,255,0.07)",
+                transition: "all 0.15s",
+                textAlign: "left",
+              } as React.CSSProperties}
+              onMouseEnter={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)"; }}
+              onMouseLeave={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.03)"; }}
+            >
+              <span style={{ fontSize: "1.3rem" }}>{lang.flag}</span>
+              <span style={{ flex: 1 }}>
+                <span style={{ display: "block", fontSize: "0.84rem", fontWeight: active ? 700 : 500, color: active ? "#a78bfa" : "rgba(255,255,255,0.7)" }}>{lang.native}</span>
+                <span style={{ display: "block", fontSize: "0.7rem", color: "rgba(255,255,255,0.28)" }}>{lang.label}</span>
+              </span>
+              {active && <span style={{ color: "#a78bfa", fontSize: "0.9rem", flexShrink: 0 }}>✓</span>}
+            </button>
+          );
+        })}
+      </div>
+      <p style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.2)", margin: "8px 0 0", lineHeight: 1.5 }}>
+        Changes apply instantly and persist across sessions.
+      </p>
     </div>
   );
 }
